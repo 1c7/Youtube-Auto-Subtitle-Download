@@ -51,7 +51,8 @@ The tools help you download youtube auto subtitle.
 
 
 <br>
-当然你也可以下载上面的Tempermonkey_Code.js, 然后黏贴到你的Tempermonkey里..
+__当然, 你也可以下载上面的 Tempermonkey_Code.js__   
+__然后复制里面的代码黏贴到你的 Tempermonkey 里__   
 <br><br><br><br>
 
 ---
