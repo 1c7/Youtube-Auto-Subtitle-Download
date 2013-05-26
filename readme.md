@@ -4,6 +4,7 @@
 #### Description
 The tools help you download youtube auto subtitle.
 
+<br>
 #### Usage
 
 1. install [Tempermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon)
@@ -40,7 +41,7 @@ The tools help you download youtube auto subtitle.
 
 
 
-
+<br>
 #### 使用方法:
 
 
@@ -205,8 +206,7 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 #### 成功!!!!!!
 #### 可以拿到自动字幕!!!!!!
 #### 这就是拿xml自动字幕的技巧..不过这依赖于youtube程序员的yt.getConfig("TTS_URL"), 如果它改了, 比如换了个名字, 那我们也需要改.. 不过他们不太可能会更改.
-
-
+<br>
 
 
 
@@ -234,7 +234,11 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 
 
 
-
+### 整个程序的流程是这样的:
+1. 拿到xml字幕地址
+2. 用get方式访问, 拿到xml内容
+3. 拿Javascript解析成srt格式
+4. 下载.
 
 
 
