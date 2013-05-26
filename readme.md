@@ -28,17 +28,11 @@ The tools help you download youtube auto subtitle.
 
 #### 程序说明:  
 
-这个TemperMonkey脚本可以帮助你下载Youtube自动字幕.  
+这个TemperMonkey脚本可以帮助你下载Youtube__自动__字幕.  
 程序只负责下载自动字幕. 如果你想下载的视频已经有字幕了. 那么你可以去:  
 
 * [http://www.yousub.net/](http://www.yousub.net/)
 * [http://mo.dbxdb.com/](http://mo.dbxdb.com/)
-
-<br>
-之所以写这个程序, 是因为这个下载自动字幕的网站挂了:  
-[www.serpsite.com/youtube-subtitles-download-tool/](www.serpsite.com/youtube-subtitles-download-tool/)    
-不知道什么时候会恢复, 也许永远不会恢复了, 也许明天就恢复了..不知道 = =  
-
 
 
 <br>
@@ -52,10 +46,12 @@ The tools help you download youtube auto subtitle.
 3. 当你看Youtube视频的时候, 你会发现页面下面会有这个按钮  
 ![youtube-button](markdown_img/youtube-button.png)  
 
-4. 点击它即可下载自动字幕文件(格式srt).
+4. 点击这个按钮就能下载自动字幕文件(格式srt).
 
 
 
+<br>
+当然你也可以下载上面的Tempermonkey_Code.js, 然后黏贴到你的Tempermonkey里..
 <br><br><br><br>
 
 ---
@@ -63,10 +59,9 @@ The tools help you download youtube auto subtitle.
 
 <br><br>
 #### 程序原理:  
-<br>
 
 如果你用谷歌开发者工具->Network, 你会发现,  
-不论是点击视频的CC图标, 调出语言选择,  
+不论是点击视频的CC图标, 调出字幕选择    
 ![Youtube-CC-icon](markdown_img/cc.png)  
 
 <br>
@@ -78,12 +73,12 @@ The tools help you download youtube auto subtitle.
 ![two_ajax_request](markdown_img/2ajax.png)  
 
 <br>
-点击第一个请求():  
+第1个请求:  
 ![first_ajax](markdown_img/first-ajax.png)  
 你会发现原来这是语言列表, 对我们来说这没用. 不管他.
 
 <br>
-来看第二个:  
+来看第1个请求:  
 ![second_ajax](markdown_img/second-ajax.png)  
 很明显, 这是xml格式的自动字幕. 要的就是这个.
 
@@ -233,11 +228,11 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 	// 你可以在控制台访问这个地址看看.
 
 
-
+<br>
 ### 整个程序的流程是这样的:
-1. 拿到xml字幕地址
-2. 用get方式访问, 拿到xml内容
-3. 拿Javascript解析成srt格式
+1. 拿到xml字幕地址.
+2. 用get方式访问这个地址, 拿到xml内容.
+3. 拿Javascript解析成srt格式.
 4. 下载.
 
 
@@ -245,6 +240,5 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 <br>
 <br>
 <br>		
-<br>
 <br>
 <br>
