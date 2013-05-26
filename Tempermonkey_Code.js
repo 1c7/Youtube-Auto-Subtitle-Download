@@ -5,7 +5,6 @@
 // @description  Help you download Youtube Auto Subtitle.
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
-// @copyright    2012+, You
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
 

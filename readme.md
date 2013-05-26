@@ -1,7 +1,28 @@
+## English
 
-[未完成, 请勿阅读, 等程序完成后会移走这行提示的.]
+the tools help you download youtube auto subtitle.
 
-Youtube自动字幕下载.  
+### Usage
+
+1. install [Tempermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon)
+
+2. install [Script](http://userscripts.org/scripts/show/168581)
+
+3. when you Watch Youtube video, you will see this  
+![youtube-button](markdown_img/youtube-button.png)  
+
+4. click it, download Auto subtitle file(format is srt).
+
+
+<br>
+
+---
+
+<br>
+
+## 中文
+
+这个TemperMonkey脚本可以帮助你下载Youtube自动字幕.  
 程序只负责下载自动字幕. 如果你想下载的视频已经有字幕了. 那么你可以去:  
 
 * [http://www.yousub.net/](http://www.yousub.net/)
@@ -13,37 +34,39 @@ Youtube自动字幕下载.
 不知道什么时候会恢复, 也许永远不会恢复了, 也许明天就恢复了..不知道 = =  
 
 
----
-
-## 使用方法:
+### 使用方法:
 
 
+1. 安装 [Tempermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon)
 
+2. 安装 [Script](http://userscripts.org/scripts/show/168581)
 
+3. 当你看Youtube视频的时候, 你会发现页面下面会有这个按钮  
+![youtube-button](markdown_img/youtube-button.png)  
 
-
-
-
-
-
+4. 点击它即可下载自动字幕文件(格式srt).
 
 
 
+<br><br><br><br><br><br>
 
-### 我们获取Youtube自动字幕的方式:  
+
+
+
+### 程序原理(我们获取Youtube自动字幕的方式):  
 (建议想弄懂原理的程序员阅读)  
 
 
 如果你用谷歌开发者工具->Network, 你会发现, 
-不论是点击视频的CC图标, 调出语言选择,
+不论是点击视频的CC图标, 调出语言选择,  
 ![Youtube-CC-icon](markdown_img/cc.png)  
 
 <br>
-或是点击下面的"解说词":
+或是点击下面的"解说词":  
 ![Youtube-](markdown_img/jieshuoci.png)  
 
 <br>
-都会发出2个ajax请求:
+都会发出2个ajax请求:  
 ![two_ajax_request](markdown_img/2ajax.png)  
 
 <br>
@@ -52,7 +75,7 @@ Youtube自动字幕下载.
 你会发现原来这是语言列表, 对我们来说这没用. 不管他.
 
 <br>
-来看第二个:
+来看第二个:  
 ![second_ajax](markdown_img/second-ajax.png)  
 很明显, 这是xml格式的自动字幕. 要的就是这个.
 
@@ -94,7 +117,7 @@ sparams=asr_langs%2Ccaps%2Cv%2Cexpire
 ![TTS_URL](markdown_img/TTS_URL.png)  
 很明显这是个url, 但我们现在还不知道它们是干嘛的, 不论如何, 我们先拿到这个url再说.
 
-console.log(yt.getConfig("TTS_URL"));
+console.log(yt.getConfig("TTS_URL"));  
 ![TTS_URL](markdown_img/console.log.TTS_URL.png)  
 
 访问, 我们得到一片空白(页面上毛都没有, 也不报404).  
@@ -179,7 +202,7 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 
 ----
 
-## 结论:
+### 结论:
 在Youtube 视频页面下面运行 console.log(yt.getConfig("TTS_URL"));
 拿到URL之后拼接上
 &type=track
@@ -205,52 +228,6 @@ http://www.youtube.com/api/timedtext?caps=asr&v=f8-UKqGZ_hs&expire=1369489805&as
 	if (!url){
 		throw "没有英文自动字幕";  // 停止继续执行
 	}
-
-
----
-
-
-
-
-### 流程
-1. 通过javascript获得xml自动字幕地址.
-2. 把这个地址用ajax发给后台.
-3. 后台解析xml变成srt, 下载.  
-
-
-
----
-
-
-
-tempermonkey version[first]
-website version
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
