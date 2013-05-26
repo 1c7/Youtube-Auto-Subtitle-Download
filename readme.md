@@ -17,6 +17,11 @@ The tools help you download youtube auto subtitle.
 4. click it, download Auto subtitle file(format is srt).
 
 
+
+<br>
+
+ps: [step2 script] and [Tempermonkey_Code.js on above] are same thing.
+
 <br>
 
 ---
