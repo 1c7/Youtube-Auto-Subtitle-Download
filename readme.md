@@ -59,7 +59,7 @@ __然后复制里面的代码黏贴到你的 Tempermonkey 里__
 
 
 <br><br>
-#### 程序原理:  
+## 程序原理:  
 
 如果你用谷歌开发者工具->Network, 你会发现,  
 不论是点击视频的CC图标, 调出字幕选择    
@@ -123,7 +123,7 @@ sparams=asr_langs%2Ccaps%2Cv%2Cexpire
 
 <br>
 <br>
-### 不过这个问题最后是这样解决的:
+#### 不过这个问题最后是这样解决的:
 
 我们在字幕里搜索这个 &signature, 看到了这个:
 ![TTS_URL](markdown_img/TTS_URL.png)   
