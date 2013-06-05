@@ -3,6 +3,11 @@
 
 #### Description
 The tools help you download youtube auto subtitle.
+__only auto subtitle__
+if you want download not auto subtitle, you should go:   
+
+* [http://www.yousub.net/](http://www.yousub.net/)
+* [http://mo.dbxdb.com/](http://mo.dbxdb.com/)
 
 <br>
 #### Usage
@@ -33,7 +38,7 @@ ps: [step2 script] and [Tempermonkey_Code.js on above] are same thing.
 
 #### 程序说明:  
 
-这个TemperMonkey脚本可以帮助你下载Youtube__自动__字幕.  
+这个TemperMonkey脚本可以帮助你下载Youtube自动字幕.  
 程序只负责下载自动字幕. 如果你想下载的视频已经有字幕了. 那么你可以去:  
 
 * [http://www.yousub.net/](http://www.yousub.net/)
@@ -60,11 +65,39 @@ __当然, 你也可以下载上面的 Tempermonkey_Code.js__
 __然后复制里面的代码黏贴到你的 Tempermonkey 里__   
 <br><br><br><br>
 
----
 
+#### 目录说明:
+
+
+* __youtube-auto-subtitle-download/__  
+这里面放的js文件是tempermonkey脚本, 跟上面链接的那个脚本是一样的.  
+就是用来下自动字幕的脚本   
 
 <br><br>
-## 程序原理:  
+
+* __markdown_img/__  
+放介绍里面那些用到的图片...
+
+<br><br>
+
+* __download_youtube_caption/__  
+有个脚本叫做 [Download YouTube Captions](http://userscripts.org/scripts/show/50003)
+这个tempermonkey脚本是用来下载youtube字幕的(不能下自动字幕)  
+安装量有13万..
+<br>
+这个脚本的缺点在于  
+下载的时候不是真正的下载, 就是在新标签页面打开而已..你得自己复制到文件里. 保存成srt.   
+所以我就改了改. 现在可以直接下载了. 不是在新标签页面里打开了.   
+我fork了作者的github库, 然后发了一个pull request. 不知道他接受不.  
+(这段说明写于发pull request之后的五分钟内..)  
+如果他不接受的话..你们可以拿这个目录里的脚本拿去用..   
+
+
+
+---
+
+<br><br><br><br><br><br>
+## 程序原理(有兴趣的程序员可以看看):  
 
 如果你用谷歌开发者工具->Network, 你会发现,  
 不论是点击视频的CC图标, 调出字幕选择    
