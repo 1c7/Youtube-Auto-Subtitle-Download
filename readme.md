@@ -2,14 +2,13 @@
 
 
 #### Description
-The tools help you download youtube auto subtitle.
-__only auto subtitle__
+The tools help you download youtube auto subtitle.  
+__only auto subtitle__  
 if you want download not auto subtitle, you should go:   
 
-* [http://www.yousub.net/](http://www.yousub.net/)
-* [http://mo.dbxdb.com/](http://mo.dbxdb.com/)
+* [http://www.yousub.net/](http://www.yousub.net/)  
+* [http://mo.dbxdb.com/](http://mo.dbxdb.com/)  
 
-<br>
 #### Usage
 
 1. install [Tempermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon)
@@ -76,14 +75,15 @@ __然后复制里面的代码黏贴到你的 Tempermonkey 里__
 <br><br>
 
 * __markdown_img/__  
-放介绍里面那些用到的图片...
+放介绍里面那些用到的图片...  
 
 <br><br>
 
 * __download_youtube_caption/__  
 有个脚本叫做 [Download YouTube Captions](http://userscripts.org/scripts/show/50003)
 这个tempermonkey脚本是用来下载youtube字幕的(不能下自动字幕)  
-安装量有13万..
+安装量有13万..  
+
 <br>
 这个脚本的缺点在于  
 下载的时候不是真正的下载, 就是在新标签页面打开而已..你得自己复制到文件里. 保存成srt.   
