@@ -10,8 +10,10 @@
 
 
 // 作者: 郑诚
-// 作者邮箱: 1003211008@qq.com  guokrfans@gmail.com
+// 作者邮箱: 1003211008@qq.com
 // 作者微博: http://weibo.com/u/2004104451
+
+
 
 
 
@@ -29,12 +31,10 @@ $(document).ready(function(){
     $("#YT_auto").css('margin-top','2px');  
     $("#YT_auto").css('margin-left','4px'); 
     // 有点没对齐..加点边距对齐一下..
-    
-    
+  
     
     set_button_href();
 
-    
 });
 
 
@@ -45,11 +45,13 @@ $(document).ready(function(){
 // 拿到xml字幕url并发给后台的函数
 function set_button_href(){
     
-    var url = unsafeWindow.yt.getConfig('TTS_URL');
+    var TTS_URL = unsafeWindow.yt.getConfig('TTS_URL');
     // 拿到youtube代码里的TTS_URL值.
     
+    var TITLE = unsafeWindow.ytplayer.config.args.title;
+    // 拿到视频标题
     
-    if (!url){
+    if (!TTS_URL){
         $("#YT_auto").text("Can't Find Any Auto Subtitle | 没有英文自动字幕");
         throw "Can't Find Any Auto Subtitle | 没有英文自动字幕";
     }
@@ -59,12 +61,9 @@ function set_button_href(){
     // 用throw退出没啥特殊理由..就是看到这样管用而已.
     
 
-    var xml = url + "&type=track" + "&lang=en" + "&name" + "&kind=asr";
+    var xml = TTS_URL + "&type=track" + "&lang=en" + "&name" + "&kind=asr";
     // 拼xml字幕链接地址
-    console.log(xml);
-    
-    
-    
+
     
 
     $.get(xml).done(function(r){ 
@@ -142,7 +141,7 @@ function set_button_href(){
         
         document.getElementById('YT_auto').setAttribute(
             'download',
-            get_yt_video_name() + '.srt'
+            '(auto)' + TITLE + '.srt'
         );
         // 设置文件名, 别问我为什么这样能成功, 我也不知道...不过他就是管用....囧..
 
@@ -265,51 +264,11 @@ function process_time(s){
 
 
 
-
-
-
-
-
 // 获得数字的长度...
 // 比如输入0000, 返回4.
 function getlength(number) {
     return number.toString().length;
 }
-
-
-
-
-// 拿视频标题的函数, 
-function get_yt_video_name(){
-        
-    var meta_tag_array =  document.getElementsByTagName('meta');
-    // 拿到meta标签的数组.
-
-    for (var i=0; i<meta_tag_array.length; i++){
-
-        if (meta_tag_array[i].getAttribute('name') == 'title'){
-            return meta_tag_array[i].getAttribute('content');
-        }
-
-    }
-    // 遍历, 如果meta标签的name属性等于title, 那么我们就拿这个标签的content属性
-    // 因为它是视频的标题.
-
-
-    // 原本我们可以用:
-    // console.log(document.getElementsByTagName('meta')[0].getAttribute('content'));
-    // 一句代码搞定.
-    // 但是我担心youtube的前端工程师把meta标签的位置一改, 我们的程序就悲剧了. 所以用循环来搞.
-    //--------
-}
-
-
-
-
-
-
-
-
 
 
 
