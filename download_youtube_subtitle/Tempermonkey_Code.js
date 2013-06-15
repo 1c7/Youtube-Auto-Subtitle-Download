@@ -3,7 +3,8 @@
 // @namespace      http://userscripts.org/users/tim
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
-// @author         Tim Smart
+// @Original Author  Tim Smart(https://github.com/tim-smart)
+// @Modified by      1c7(https://github.com/1c7)
 // @copyright      2009 Tim Smart; 2011 gw111zz
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 
@@ -220,5 +221,4 @@ function loadCaptions (select) {
     
     
 })();
-
 
