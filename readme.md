@@ -9,7 +9,7 @@ http://userscripts.org/scripts/show/168581
 
 
 <br>
-### 说明
+#### 说明
 __需要用 Chrome 浏览器__  
 因为这2个脚本都要运行在 Tampermonkey 里,  
 Tampermonkey 是 Chrome 上一个插件,  
@@ -54,13 +54,11 @@ http://mo.dbxdb.com/
 
 ## English
 
-
-### Youtube Subtitle Downloader:
+#### Youtube Subtitle Downloader:
 http://userscripts.org/scripts/show/170867  
 
 
-
-### Youtube Auto Subtitle Downloader:
+#### Youtube Auto Subtitle Downloader:
 http://userscripts.org/scripts/show/168581
 
 
