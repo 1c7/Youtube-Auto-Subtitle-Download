@@ -1,10 +1,10 @@
 ## 中文
 
 
-### 下载字幕的脚本:
+#### 下载字幕的脚本:
 http://userscripts.org/scripts/show/170867  
 
-### 下载自动字幕的脚本:
+#### 下载自动字幕的脚本:
 http://userscripts.org/scripts/show/168581
 
 
