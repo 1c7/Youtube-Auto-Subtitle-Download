@@ -1,11 +1,9 @@
 ## 中文
 
-<br>
+
 ### 下载字幕的脚本:
 http://userscripts.org/scripts/show/170867  
 
-
-<br>
 ### 下载自动字幕的脚本:
 http://userscripts.org/scripts/show/168581
 
@@ -56,12 +54,12 @@ http://mo.dbxdb.com/
 
 ## English
 
-<br>
+
 ### Youtube Subtitle Downloader:
 http://userscripts.org/scripts/show/170867  
 
 
-<br>
+
 ### Youtube Auto Subtitle Downloader:
 http://userscripts.org/scripts/show/168581
 
@@ -71,11 +69,6 @@ http://userscripts.org/scripts/show/168581
 <br>
 <br>
 <br>
-
-
-
-
-
 
 
 
