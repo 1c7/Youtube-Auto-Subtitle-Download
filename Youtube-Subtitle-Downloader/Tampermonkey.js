@@ -9,11 +9,13 @@
 // ==/UserScript==
 
 
+
+
+
 var PLAYER              = unsafeWindow.document.getElementById('movie_player'),
-    VIDEO_ID            = unsafeWindow.yt.getConfig('VIDEO_ID'),
+    VIDEO_ID            = unsafeWindow.ytplayer.config.args.video_id,
     TITLE               = unsafeWindow.ytplayer.config.args.title,
     caption_array = [];
-
 
 
 
@@ -126,7 +128,7 @@ function getlength(number) {
 
 // 下载字幕用的函数.
 function download_subtitle (selector) {
-    
+
     var caption = caption_array[selector.selectedIndex - 1];
     if (!caption) return;
     language_name_1c7 = caption.lang_name;
@@ -138,7 +140,7 @@ function download_subtitle (selector) {
                           + '&v=' + VIDEO_ID;    
 
     
-    $.get(url).done(function(r){ 
+    jQuery.get(url).done(function(r){ 
         var text = r.getElementsByTagName('text');
         // 拿到所有的text节点
             
@@ -207,15 +209,9 @@ function download_subtitle (selector) {
         for_download_a_tag.setAttribute("download", title);
         for_download_a_tag.setAttribute( "href", "data:text/plain;charset=utf-8," + escape(result)  );
         // 拿到那个用于下载的a标签 并设置2个属性, result必须escape不然文件里会没有换行符
-        
-        
-        // http://stackoverflow.com/questions/7914684/trigger-right-click-using-pure-javascript
-        if (document.createEvent) {
-            var ev = document.createEvent('HTMLEvents');
-            ev.initEvent('click', true, false);
-            for_download_a_tag.dispatchEvent(ev);
-        }
-        // 触发那个a标签的点击事件
+
+        for_download_a_tag.click();
+        // 触发a标签的点击事件
         
         
         // ----------------------------------------------------------------
