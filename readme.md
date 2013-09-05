@@ -10,14 +10,17 @@ http://userscripts.org/scripts/show/168581
 
 <br>
 #### 使用说明
-点进去链接就行了 可以在那边安装的  右上角有个绿色的Install(安装)  点那个就行了 
+点进去链接就行了 可以在那边安装的  右上角有个绿色的Install(安装)  点那个就行了  
+
 这俩脚本只能在 Chrome浏览器 + Tampermonkey扩展 或 Firefox浏览器 + Greasemonkey扩展 下运行  
 如果你没安装扩展 但用了Chrome/Firefox浏览器 那个网站好像会给你提示自动安装的  记不太清了...  
-
 经测试, 在 Chrome27 + Tampermonkey 以及 Firefox23 + Greasemonkey 下, 2个脚本均运行正常  
 
+
+<br>
+#### 问题反馈
 有问题, 意见或是建议 可以来微博 [@糖醋陈皮](http://www.weibo.com/u/2004104451?wvr=5&) 给我留言(最好是发私信)  
-或是开个Github issue (如果你有Github帐号的话)  
+或是开个 Github issue (如果你有Github帐号的话)  
 
 
 
