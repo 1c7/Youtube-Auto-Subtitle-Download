@@ -1,4 +1,5 @@
-这俩脚本都是我写的 放Github上挂个链接.. 好方便大家Google到 下面这俩就是链接了  
+这俩脚本都是我写的 放Github上挂个链接.. 好方便大家Google到 下面这俩就是链接了 
+<br>
 
 #### 下载Youtube字幕的脚本:
 http://userscripts.org/scripts/show/170867  
@@ -9,11 +10,13 @@ http://userscripts.org/scripts/show/168581
 
 <br>
 #### 使用说明
-点进去链接就行了 可以在那边安装的  
-这俩脚本只能在 Chrome + Tampermonkey 或 Firefox + Greasemonkey 下运行  
-经测试, 在 Chrome27 + Tampermonkey 以及 Firefox23 + Greasemonkey 下, 2个脚本均运行正常.  
+点进去链接就行了 可以在那边安装的  右上角有个绿色的Install(安装)  点那个就行了 
+这俩脚本只能在 Chrome浏览器 + Tampermonkey扩展 或 Firefox浏览器 + Greasemonkey扩展 下运行  
+如果你没安装扩展 但用了Chrome/Firefox浏览器 那个网站好像会给你提示自动安装的  记不太清了...  
 
-有问题可以来微博 [@糖醋陈皮](http://www.weibo.com/u/2004104451?wvr=5&) 给我留言  
+经测试, 在 Chrome27 + Tampermonkey 以及 Firefox23 + Greasemonkey 下, 2个脚本均运行正常  
+
+有问题, 意见或是建议 可以来微博 [@糖醋陈皮](http://www.weibo.com/u/2004104451?wvr=5&) 给我留言(最好是发私信)  
 或是开个Github issue (如果你有Github帐号的话)  
 
 
