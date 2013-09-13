@@ -165,7 +165,7 @@ function download_subtitle (selector) {
             
             
             // ==== 开始处理数据, 把数据保存到result里. ====
-            result = result + index + '\n';
+            result = result + index + escape('\n');
             // 把序号加进去
                 
             
@@ -183,11 +183,11 @@ function download_subtitle (selector) {
             
             
             var end_time = process_time( parseFloat(start) + parseFloat(dur) );
-            result = result + end_time + ' \n';
+            result = result + end_time + escape('\n');
             // 拿到 结束时间 之后往result字符串里存一下
             
             
-            result = result + content + '\n\n';
+            result = result + content + escape('\n\n');
             // 加字幕内容
             
         }
@@ -207,7 +207,7 @@ function download_subtitle (selector) {
         
         var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
         for_download_a_tag.setAttribute("download", title);
-        for_download_a_tag.setAttribute( "href", "data:text/plain;charset=utf-8," + escape(result)  );
+        for_download_a_tag.setAttribute( "href", "data:text/plain;charset=utf-8," + result  );
         // 拿到那个用于下载的a标签 并设置2个属性, result必须escape不然文件里会没有换行符
 
         for_download_a_tag.click();
@@ -311,7 +311,6 @@ function load_language_list (select) {
     // 这个元素用于下载.
 
 })();
-
 
 
 
