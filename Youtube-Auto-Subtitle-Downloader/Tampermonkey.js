@@ -16,7 +16,6 @@
 
 
 
-
 $(document).ready(function(){
     
     $('#watch7-sentiment-actions')
@@ -52,7 +51,7 @@ function set_button_href(){
     
     if (!TTS_URL){
         $("#YT_auto").text("Can't Find Any Auto Subtitle | 没有英文自动字幕");
-        throw "Can't Find Any Auto Subtitle | 没有英文自动字幕";
+        throw "No Subtitle | 没字幕";
     }
     // 拿不到xml字幕地址的话
     // 就在console里面说一声, 
@@ -64,6 +63,17 @@ function set_button_href(){
     // 拼xml字幕链接地址
 
     
+    
+    $.get(xml).done(function(ret){
+        if(ret === ""){
+            $("#YT_auto").text("Can't Find Any Auto Subtitle | 没有英文自动字幕");
+            throw "No Subtitle | 没字幕";
+        }
+    });
+    // 之前的几行是通过判断 TTS_URL，判断视频有没有自动字幕
+    // 但我发现有的视频有 TTS_URL 但拼接xml字幕地址并访问后是空的。 所以我们这里多加一道 判断下返回的内容是否为空。
+    
+                    
 
     $.get(xml).done(function(r){ 
         
