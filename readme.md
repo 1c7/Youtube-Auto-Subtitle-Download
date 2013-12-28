@@ -7,35 +7,35 @@ http://userscripts.org/scripts/show/168581
 
 
 <br>
-#### 使用说明
-点进去链接就行了 可以在那边安装的  右上角有个绿色的Install(安装)  点那个就行了  
-
-这俩脚本只能在 Chrome浏览器 + Tampermonkey扩展 或 Firefox浏览器 + Greasemonkey扩展 下运行  
-如果你没安装扩展 但用了Chrome/Firefox浏览器 那个网站好像会给你提示自动安装的  记不太清了...  
-经测试, 在 Chrome27 + Tampermonkey 以及 Firefox23 + Greasemonkey 下, 2个脚本均运行正常  
+#### 使用方法
+1. 点进去链接就行了, 可以在那边安装的  
+1. 右上角有个绿色的 Install(安装) 点那个就行了 
 
 
 <br>
-#### 问题反馈
-有问题, 意见或是建议 可以来微博 [@糖醋陈皮](http://www.weibo.com/u/2004104451?wvr=5&) 给我留言(最好是发私信)  
-或是开个 Github issue (如果你有Github帐号的话)  
+#### 其他说明
+这俩脚本只能在 __Chrome浏览器 + Tampermonkey扩展__ 或 __Firefox浏览器 + Greasemonkey扩展__ 下运行  
+
+<br>
+#### 有问题, 意见或建议
+可以给我发邮件 ( guokrfans@gmail.com )   
+可以来微博 [@糖醋陈皮](http://www.weibo.com/u/2004104451?wvr=5&) 给我留言或私信.  
+可以开个 Github issue (如果你有 Github 帐号的话)  
 
 
 
 <br>
 #### 为啥有字幕和自动字幕之分?  
-在一般网站上 视频只有两种状态...有字幕/没字幕  
+一般网站上视频只有两种状态...有字幕/没字幕  
 但Youtube有语音识别技术(目前只支持英文)  
-所以有的视频会有机器识别的自动字幕(英文的), 准确率在70~95%左右, 具体取决于主持人的发音清不清晰..  
-
-
+所以有的视频会有机器识别的自动字幕(英文的), 准确率在70~95%左右.
 
 
 <br>
 ### PS: 有些网站也提供了下载字幕功能:
-(它们不能下载自动字幕, 也不像脚本那么方便 可以直接在视频页下载) <br>
-http://www.yousub.net/  
-http://mo.dbxdb.com/  
+http://www.yousub.net/  (只能下普通字幕)  
+http://mo.dbxdb.com/    (只能下普通字幕)  
+http://www.serpsite.com/youtube-subtitles-download-tool/  (可以下自动字幕)  
 <br>
 
 
