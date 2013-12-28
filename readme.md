@@ -1,6 +1,3 @@
-这俩脚本都是我写的 放Github上挂个链接.. 好方便大家Google到 下面这俩就是链接了 
-<br>
-<br>
 
 #### 下载Youtube字幕的脚本:
 http://userscripts.org/scripts/show/170867  
