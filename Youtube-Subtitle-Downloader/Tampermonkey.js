@@ -8,7 +8,7 @@
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
 
-
+// 1c7(郑诚), 联系邮箱: guokrfans@gmail.com  新浪微博:@糖醋陈皮
 
 
 
@@ -138,6 +138,9 @@ function download_subtitle (selector) {
                           + '&lang=' + caption.lang_code 
                           + '&name=' + caption.name 
                           + '&v=' + VIDEO_ID;    
+    
+    // console.log(url);
+    // 加了这句之后, 下载字幕时控制台会输出字幕的url地址.
 
     
     jQuery.get(url).done(function(r){ 
@@ -153,8 +156,9 @@ function download_subtitle (selector) {
             var index = i+1;
             // 这个是字幕的索引, 从1开始的, 但是因为我们的循环是从0开始的, 所以加个1
             
-            var content = text[i].textContent;
-            // 字幕内容
+            var content = text[i].textContent.replace(/\n/g, " ");
+            // content 保存的是字幕内容 - 这里把换行换成了空格, 因为 Youtube 显示的多行字幕中间会有个\n, 如果不加这个replace. 两行的内容就会黏在一起.
+            
             
             var start = text[i].getAttribute('start');
             // 获得开始时间, 比如start="7.97", 我们现在就获得了7.97
@@ -311,8 +315,6 @@ function load_language_list (select) {
     // 这个元素用于下载.
 
 })();
-
-
 
 
 
