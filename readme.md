@@ -33,9 +33,9 @@ http://userscripts.org/scripts/show/168581
 
 <br>
 ### PS: 有些网站也提供了下载字幕功能:
-(它们不能下载自动字幕, 也不像脚本那么方便 可以直接在视频页下载) <br>
-http://www.yousub.net/  
-http://mo.dbxdb.com/  
+http://www.yousub.net/  (只能下普通字幕)  
+http://mo.dbxdb.com/    (只能下普通字幕)  
+http://www.serpsite.com/youtube-subtitles-download-tool/  (可以下自动字幕)  
 <br>
 
 
