@@ -1,14 +1,14 @@
 
-#### 下载Youtube字幕的脚本:
+#### 下载 Youtube 字幕:
 http://userscripts.org/scripts/show/170867  
 
-#### 下载Youtube自动字幕的脚本:
+#### 下载 Youtube 自动字幕:
 http://userscripts.org/scripts/show/168581  
 
 
 <br>
 #### 使用方法
-1. 点进去链接就行了, 可以在那边安装的  
+1. 点链接进去, 可以在那边安装的.  
 1. 右上角有个绿色的 Install(安装) 点那个就行了 
 
 
