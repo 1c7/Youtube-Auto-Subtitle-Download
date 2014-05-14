@@ -1,4 +1,13 @@
 
+usersciprt 最近好像挂掉了. 不太清楚怎么回事.
+各位要用脚本的可以直接进相应的文件夹然后复制黏贴到 Tampermonkey 里.
+:D
+
+
+---
+
+
+
 #### 下载 Youtube 字幕:
 http://userscripts.org/scripts/show/170867  
 
