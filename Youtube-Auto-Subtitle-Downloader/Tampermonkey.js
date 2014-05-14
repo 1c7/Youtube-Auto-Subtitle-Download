@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name        Youtube Auto Subtitle Downloader
-// @namespace   http://use.i.E.your.homepage/
 // @description  Help you download Youtube Auto Subtitle.
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
@@ -8,11 +7,11 @@
 // ==/UserScript==
 
 
+// Author: Cheng Zheng
+// Author Email: guokrfans@gmail.com
+
 // 作者: 郑诚
-// 作者邮箱: 1003211008@qq.com  guokrfans@gmail.com
-// 作者微博: http://weibo.com/u/2004104451
-
-
+// 作者邮箱: guokrfans@gmail.com
 
 
 
