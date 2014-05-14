@@ -8,8 +8,13 @@
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
 
-// 1c7(郑诚), 联系邮箱: guokrfans@gmail.com  新浪微博:@糖醋陈皮
+// Author: Cheng Zheng
+// Author Email: guokrfans@gmail.com
+// Author Github: https://github.com/1c7
 
+// 作者: 郑诚
+// 作者邮箱: guokrfans@gmail.com
+// 作者 Github: https://github.com/1c7
 
 
 var PLAYER              = unsafeWindow.document.getElementById('movie_player'),
