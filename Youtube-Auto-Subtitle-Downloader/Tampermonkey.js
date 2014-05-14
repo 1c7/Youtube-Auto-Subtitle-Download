@@ -9,10 +9,11 @@
 
 // Author: Cheng Zheng
 // Author Email: guokrfans@gmail.com
+// Author Github: https://github.com/1c7
 
 // 作者: 郑诚
 // 作者邮箱: guokrfans@gmail.com
-
+// 作者 Github: https://github.com/1c7
 
 
 $(document).ready(function(){
