@@ -1,4 +1,4 @@
-
+<!--
 usersciprt 最近好像挂掉了(2014年5月左右). 不太清楚怎么回事. <br/>
 各位要用脚本的可以直接点下面的链接，然后把源代码复制黏贴到 Tampermonkey 里. <br/>
 
@@ -10,21 +10,21 @@ usersciprt 最近好像挂掉了(2014年5月左右). 不太清楚怎么回事. <
 
 ---
 
-<!--
+-->
 
 #### 下载 Youtube 字幕:
-http://userscripts.org/scripts/show/170867  
+http://userscripts.org:8080/scripts/show/170867  
   
 
 #### 下载 Youtube 自动字幕:
-http://userscripts.org/scripts/show/168581  
+http://userscripts.org:8080/scripts/show/168581  
 
 <br>
 #### 使用方法
 1. 点链接进去, 可以在那边安装的.  
 1. 右上角有个绿色的 Install(安装) 点那个就行了 
 
--->
+
 
 <br>
 #### 其他说明
@@ -72,7 +72,7 @@ http://www.serpsite.com/youtube-subtitles-download-tool/  (可以下自动字幕
 ## English
 <br>
 
-
+<!--
 usersciprt.org server seem like down for couple week, i don't know what happen. <br/>
 Please click the link in the following, and copy&paste source code into you tampermonkey. <br/>
 
@@ -81,18 +81,18 @@ Please click the link in the following, and copy&paste source code into you tamp
 
 :D <br/>
 
-<!--
+
 ---
+-->
 
 
 #### Youtube Subtitle Downloader:
-http://userscripts.org/scripts/show/170867  
+http://userscripts.org:8080/scripts/show/170867  
 
 
 #### Youtube Auto Subtitle Downloader:
-http://userscripts.org/scripts/show/168581
+http://userscripts.org:8080/scripts/show/168581
 
--->
 
 
 
