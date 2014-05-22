@@ -14,6 +14,7 @@
 
 // 作者: 郑诚
 // 作者邮箱: guokrfans@gmail.com
+// 作者微博: @糖醋陈皮 ( http://weibo.com/p/1005052004104451 )
 // 作者 Github: https://github.com/1c7
 
 
