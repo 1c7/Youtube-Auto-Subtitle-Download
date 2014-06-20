@@ -25,6 +25,10 @@ http://userscripts.org:8080/scripts/show/168581
 1. 右上角有个绿色的 Install(安装) 点那个就行了 
 
 
+<br>
+#### 有时候userscript会抽风，这点我也没办法
+手工安装请参照： http://www.zhihu.com/question/19647719/answer/16843974  
+
 
 <br>
 #### 其他说明
