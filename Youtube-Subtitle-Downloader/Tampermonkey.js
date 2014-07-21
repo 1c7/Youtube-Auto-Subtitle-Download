@@ -8,14 +8,8 @@
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
 
-// Author: Cheng Zheng
-// Author Email: guokrfans@gmail.com
-// Author Github: https://github.com/1c7
+// 1c7(郑诚), 联系邮箱: guokrfans@gmail.com  新浪微博:@糖醋陈皮
 
-// 作者: 郑诚
-// 作者邮箱: guokrfans@gmail.com
-// 作者微博: @糖醋陈皮 ( http://weibo.com/p/1005052004104451 )
-// 作者 Github: https://github.com/1c7
 
 
 var PLAYER              = unsafeWindow.document.getElementById('movie_player'),
@@ -210,21 +204,10 @@ function download_subtitle (selector) {
         // 字幕里会有html实体字符..所以我们替换掉
         
 
-        // ----------------------------------------------------------------
-        
-        
-        var for_download_a_tag = document.getElementById('ForSubtitleDownload');
-        
-        var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
-        for_download_a_tag.setAttribute("download", title);
-        for_download_a_tag.setAttribute( "href", "data:text/plain;charset=utf-8," + result  );
-        // 拿到那个用于下载的a标签 并设置2个属性, result必须escape不然文件里会没有换行符
 
-        for_download_a_tag.click();
-        // 触发a标签的点击事件
-        
-        
-        // ----------------------------------------------------------------
+        var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
+        downloadFile(title,result);
+		// 下载
 
             
             
@@ -324,6 +307,16 @@ function load_language_list (select) {
 
 
 
-
-
+// 下面这个函数不是我写的。我之前写的那种下载方法在 Chrome 更新之后失效了。不能指定下载时的文件名。
+// 后来搜索了下找到这个解决方案就直接复制过来用了。
+// 复制自： http://www.alloyteam.com/2014/01/use-js-file-download/
+function downloadFile(fileName, content){
+    var aLink = document.createElement('a');
+    var blob = new Blob([content]);
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent("click", false, false);
+    aLink.download = fileName;
+    aLink.href = URL.createObjectURL(blob);
+    aLink.dispatchEvent(evt);
+}
 
