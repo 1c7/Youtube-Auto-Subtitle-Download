@@ -19,20 +19,39 @@
 
 $(document).ready(function(){
     
+    //------------------------------------
+    //
+    //  往页面上加个按钮
+    //
+    //------------------------------------
     $('#watch7-sentiment-actions')
     .append('<a id="YT_auto">Download Youtube Auto Subtitle | 下载Youtube自动字幕</a>');
-    // 往页面上加个按钮
+
     
     
-    $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip');
-    // 样式, 这些样式是Youtube自带的.
+    //------------------------------------
+    //
+    //  调整一下样式
+    //
+    //------------------------------------
+    $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 这些样式是Youtube自带的.
     
     $("#YT_auto").css('margin-top','2px');  
     $("#YT_auto").css('margin-left','4px'); 
     // 有点没对齐..加点边距对齐一下..
   
     
-    set_button_href();
+    
+    
+    //------------------------------------
+    //
+    //  点击就下载
+    //
+    //------------------------------------
+    $("#YT_auto").click(function(){
+        download_subtitle();
+    });
+
 
 });
 
@@ -41,8 +60,7 @@ $(document).ready(function(){
 
 
 
-// 拿到xml字幕url并发给后台的函数
-function set_button_href(){
+function download_subtitle(){
     
     var TTS_URL = unsafeWindow.yt.getConfig('TTS_URL');
     // 拿到youtube代码里的TTS_URL值.
@@ -146,24 +164,8 @@ function set_button_href(){
         result = result.replace(/&gt;/g, '>');
         result = result.replace(/&#39;/g, "'");
         
+        downloadFile(TITLE+".srt",escape(result));
 
-        
-        
-        document.getElementById('YT_auto').setAttribute(
-            'download',
-            '(auto)' + TITLE + '.srt'
-        );
-        // 设置文件名, 别问我为什么这样能成功, 我也不知道...不过他就是管用....囧..
-
-        
-        document.getElementById('YT_auto').setAttribute(
-            'href',
-            'data:Content-type: text/plain, ' + escape(result)
-        );
-        // 开始下载
-        
-        
-        
     });
     
     
@@ -172,7 +174,18 @@ function set_button_href(){
 
 
 
-
+// 下面这个函数不是我写的。我之前写的那种下载方法在 Chrome 更新之后失效了。不能指定下载时的文件名。
+// 后来搜索了下找到这个解决方案就直接复制过来用了。
+// 复制自： http://www.alloyteam.com/2014/01/use-js-file-download/
+function downloadFile(fileName, content){
+    var aLink = document.createElement('a');
+    var blob = new Blob([content]);
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent("click", false, false);
+    aLink.download = fileName;
+    aLink.href = URL.createObjectURL(blob);
+    aLink.dispatchEvent(evt);
+}
 
 
 // 处理时间. 比如 start="671.33"  start="37.64"  start="12" start="23.029"
@@ -279,8 +292,6 @@ function process_time(s){
 function getlength(number) {
     return number.toString().length;
 }
-
-
 
 
 
