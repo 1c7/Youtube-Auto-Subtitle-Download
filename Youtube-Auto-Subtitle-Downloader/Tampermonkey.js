@@ -164,7 +164,7 @@ function download_subtitle(){
         result = result.replace(/&gt;/g, '>');
         result = result.replace(/&#39;/g, "'");
         
-        downloadFile(TITLE+".srt",escape(result));
+        downloadFile(TITLE+".srt",result);
 
     });
     
