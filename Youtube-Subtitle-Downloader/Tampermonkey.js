@@ -169,7 +169,7 @@ function download_subtitle (selector) {
             
             
             // ==== 开始处理数据, 把数据保存到result里. ====
-            result = result + index + escape('\n');
+            result = result + index + '\n';
             // 把序号加进去
                 
             
@@ -187,17 +187,14 @@ function download_subtitle (selector) {
             
             
             var end_time = process_time( parseFloat(start) + parseFloat(dur) );
-            result = result + end_time + escape('\n');
+            result = result + end_time + '\n';
             // 拿到 结束时间 之后往result字符串里存一下
             
             
-            result = result + content + escape('\n\n');
+            result = result + content + '\n\n';
             // 加字幕内容
             
         }
-        
-        
-        
         
         
         result = result.replace(/&#39;/g, "'");
