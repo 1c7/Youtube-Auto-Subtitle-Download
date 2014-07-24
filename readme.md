@@ -1,11 +1,9 @@
 
 
-#### Download Youtube Subtitle
-[Source Code](https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/Youtube-Subtitle-Downloader/Tampermonkey.js)
+Download Youtube Subtitle: [Source Code](https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/Youtube-Subtitle-Downloader/Tampermonkey.js)
  
 
-#### Download Youtube Auto Subtitle
-[Source Code](https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/Youtube-Auto-Subtitle-Downloader/Tampermonkey.js)  
+Download Youtube Auto Subtitle: [Source Code](https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/Youtube-Auto-Subtitle-Downloader/Tampermonkey.js)  
 
 
 <br>
