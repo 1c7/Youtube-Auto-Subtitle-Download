@@ -15,13 +15,15 @@ Download Youtube Auto Subtitle: [Source Code](https://raw.githubusercontent.com/
 <br>
 #### Remember  
 If you don't see download button appear on youtube page.   
-__refresh the web page.__
+__Refresh the web page.__
 
 
 <br>
-#### FAQ
-__Why download button disappear?__
-just click refresh. everything gonna be fine.
+#### after install both program, it look like this:  
+
+
+
+
 
 <br>
 ### PS: Some website also can download subtitle
