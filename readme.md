@@ -8,9 +8,14 @@ Download Youtube Auto Subtitle: [Source Code](https://raw.githubusercontent.com/
 
 <br>
 #### Usage
-1. Copy all source code in the link above.
-2. Paste into your tampermonkey
-3. Click "save"
+1. Copy __all source code__ in the link above.
+2. Paste into your [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (it's a Chrome extensions) 
+3. Click "Save"
+
+<br>
+#### Remember  
+If you don't see download button appear on youtube page.   
+__refresh the web page.__
 
 
 <br>
