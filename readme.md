@@ -20,7 +20,7 @@ __Refresh the web page.__
 
 <br>
 #### after install both program, it look like this:  
-
+![after install](img_for_readme.png)    
 
 
 
