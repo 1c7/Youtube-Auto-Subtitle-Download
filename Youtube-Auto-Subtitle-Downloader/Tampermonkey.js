@@ -3,7 +3,7 @@
 // @description  Help you download Youtube Auto Subtitle.
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
-// @require      http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
 // ==/UserScript==
 
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
     //  往页面上加个按钮
     //
     //------------------------------------
-    $('#watch7-sentiment-actions')
+    $("#eow-title")
     .append('<a id="YT_auto">Download Youtube Auto Subtitle | 下载Youtube自动字幕</a>');
 
     
@@ -292,7 +292,5 @@ function process_time(s){
 function getlength(number) {
     return number.toString().length;
 }
-
-
 
 
