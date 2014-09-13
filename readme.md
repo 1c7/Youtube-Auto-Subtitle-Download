@@ -1,9 +1,15 @@
+
+
 中文安装教程:  http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
 
+---
 
-English:
 
+## English:
+
+<br>
+#### Program
 Download Youtube Subtitle: [Source Code](https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/Youtube-Subtitle-Downloader/Tampermonkey.js)
  
 
