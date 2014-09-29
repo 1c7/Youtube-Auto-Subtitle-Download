@@ -7,15 +7,16 @@
 // ==/UserScript==
 
 
-// Author: Cheng Zheng
-// Author Email: guokrfans@gmail.com
-// Author Github: https://github.com/1c7
+// Author : Cheng Zheng
+// Author Email : guokrfans@gmail.com
+// Author Github : https://github.com/1c7
+// Last update  :  2014/9/29
 
-// 作者: 郑诚
-// 作者邮箱: guokrfans@gmail.com
-// 作者微博: @糖醋陈皮 ( http://weibo.com/p/1005052004104451 )
-// 作者 Github: https://github.com/1c7
-
+// 作者 : 郑诚
+// 作者邮箱 : guokrfans@gmail.com
+// 作者 Github : https://github.com/1c7
+// 作者微博 : @糖醋陈皮 ( http://weibo.com/p/1005052004104451 )
+// 最近一次升级 : 2014/9/29
 
 $(document).ready(function(){
     
@@ -39,8 +40,25 @@ $(document).ready(function(){
     $("#YT_auto").css('margin-top','2px');  
     $("#YT_auto").css('margin-left','4px'); 
     // 有点没对齐..加点边距对齐一下..
-  
+    $("#YT_auto").css('border','1px solid rgb(0, 183, 90)');
+    $("#YT_auto").css('cursor','pointer');
+    $("#YT_auto").css('color','rgb(255, 255, 255)');
+    $("#YT_auto").css('border-top-left-radius','3px');
+    $("#YT_auto").css('border-top-right-radius','3px');
+    $("#YT_auto").css('border-bottom-right-radius','3px');
+    $("#YT_auto").css('border-bottom-left-radius','3px');
+    $("#YT_auto").css('background-color','#00B75A');
+    // 为了美观的 css 样式
+
+    $("#YT_auto").hover(function() {
+       $(this).css("background-color","rgb(0, 163, 80)");
+       $(this).css("border","1px solid rgb(0, 183, 90)");
+    });
+    // 鼠标悬浮时改变一下背景颜色;
     
+    $("#YT_auto").mouseout(function() {
+       $(this).css("background-color","#00B75A");
+    });
     
     
     //------------------------------------
