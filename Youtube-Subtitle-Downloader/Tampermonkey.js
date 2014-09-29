@@ -3,12 +3,16 @@
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
 // @author         Tim Smart
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2013 1c7(郑诚);
+// @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
 
-// 1c7(郑诚), 联系邮箱: guokrfans@gmail.com  新浪微博:@糖醋陈皮
+
+
+// Thrid Author : Cheng Zheng, 
+// Email : guokrfans@gmail.com
+// Last update :  2014/9/29
 
 
 
@@ -222,7 +226,8 @@ function load_language_list (select) {
         controls = document.getElementById('watch7-headline');  // 装视频标题的div
 
     
-    div.setAttribute( 'style', 'display: inline-block;' );
+    div.setAttribute( 'style', 'display: inline-block; margin-bottom: 10px; display: inline-block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: #00B75A;margin-left: 4px; ');
+
     
     select.id       = 'captions_selector';
     select.disabled = true;
