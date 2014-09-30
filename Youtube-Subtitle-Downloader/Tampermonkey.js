@@ -6,6 +6,9 @@
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @version 0.0.1.20140930025401
+// @namespace https://greasyfork.org/users/5711
+// @description download youtube COMPLETE subtitle
 // ==/UserScript==
 
 
@@ -162,7 +165,7 @@ function download_subtitle (selector) {
 
         var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
         downloadFile(title,result);
-		// 下载
+        // 下载
 
             
             
@@ -226,11 +229,12 @@ function load_language_list (select) {
         controls = document.getElementById('watch7-headline');  // 装视频标题的div
 
     
-    div.setAttribute( 'style', 'display: inline-block; margin-bottom: 10px; display: inline-block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: #00B75A;margin-left: 4px; ');
+    div.setAttribute( 'style', 'margin-bottom: 10px; display: inline-block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: #00B75A;margin-left: 4px; ');
 
     
     select.id       = 'captions_selector';
     select.disabled = true;
+    select.setAttribute( 'style', 'border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); background-color: #00B75A;');
     
     option.textContent = 'Loading...';
     option.selected    = true;

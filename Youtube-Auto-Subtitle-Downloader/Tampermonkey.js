@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Youtube Auto Subtitle Downloader
-// @description  Help you download Youtube Auto Subtitle.
+// @description  download youtube AUTO subtitle.
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
@@ -212,49 +212,27 @@ function process_time(s){
     
     s = s.toFixed(3);
     // 超棒的函数, 可以把不论是整数还是小数它都给你弄成3位小数形式的数字.
-    // 输入12, 输出12.000
+    // 举个柚子: 
+    // 671.33 -> 671.330
+    // 671 -> 671.000
     // 注意, 这个函数会四舍五入. 具体可以去读文档
-    
+
     
     var array = s.split('.');
     // 把开始时间根据句号分割
-    // start="671.33" 会分割成数组: [671, 33]
+    // 671.330 会分割成数组: [671, 330]
     
 
-    
     var Hour = 0;
     var Minute = 0;
-    var Second = array[0];
-    var MilliSecond = array[1];
-    // 待会把这几个拼好就行, 先声明一下, 
-    // 最后格式是这样的: 00:00:00,090    00:00:08,460    00:10:29,350
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // 我们来处理毫秒, 如果毫秒的长度小于3. 我们就加0给它补成三位数, 因为srt的字幕格式都是这样的: 00:00:00,090 --> 00:00:01,850
-    // 最后的毫秒总是3个数字.
-    if (getlength(MilliSecond) == 1){
-        MilliSecond = '00' + MilliSecond;
-    }
-    else if(getlength(MilliSecond) == 2){
-        MilliSecond = '0' + MilliSecond;
-    }
+    var Second = array[0];   // 671
+    var MilliSecond = array[1];  // 330
+    // 先声明一下变量, 待会把这几个拼好就行了。
 
         
         
-    // 现在我们来处理秒数.
-    // 示例数据: start="778.81   start="741.56"   start="0.59"
-    // srt里秒数都是两位数的
-    if (Second < 10){
-        Second = '0' + Second;
-    }
-    else if(Second > 60){
+    // 我们来处理秒数.  把"分钟"和"小时"除出来。
+    if(Second >= 60){
 
         Minute = Math.floor(Second / 60);
         Second = Second - Minute * 60;
@@ -267,48 +245,20 @@ function process_time(s){
     } 
         
         
-    // 现在我们来处理分钟
-    if (getlength(Minute) == 1){
+    // 处理分钟，如果位数不够两位就变成两位，下面两个if语句的作用也是一样。
+    if (Minute < 10){
         Minute = '0' + Minute;
     }       
         
-        
-    // 现在我们来处理小时
-    if (getlength(Hour) == 1){
+    // 处理小时
+    if (Hour < 10){
         Hour = '0' + Hour;
     }
   
-
-    
-    
-    // 我们再来处理一遍秒数, 因为现在的输出格式都是这样的:
-    /*
-    00:08:59,075
-    00:09:3,022
-    00:09:6,095
-    00:09:10,045
-    */
-    
-    if (getlength(Second) == 1){
+    // 处理秒
+    if (Second < 10){
         Second = '0' + Second;
     }
 
-    
-        
-       
     return Hour + ':' + Minute + ':' + Second + ',' + MilliSecond;
-    // 返回最后的结果
 }
-
-
-
-
-
-
-// 获得数字的长度...
-// 比如输入0000, 返回4.
-function getlength(number) {
-    return number.toString().length;
-}
-
-
