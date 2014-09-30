@@ -5,15 +5,20 @@
 <br>
 
 ---
+
 <br>
 
+### English 
 First, you need use [Chrome](https://www.google.com/chrome/browser/) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (it's a Chrome extension)    
+
 
 Then:
 
-https://greasyfork.org/scripts/5368-youtube-subtitle-downloader
- 
-https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader
+https://greasyfork.org/scripts/5368-youtube-subtitle-downloader    
+(download youtube COMPLETE subtitle)   
+
+https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader    
+(download youtube AUTO subtitle)   
 
 
 <br>
