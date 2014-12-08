@@ -6,7 +6,7 @@
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version 0.0.1.20140930025401
+// @version       0.2
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
 // ==/UserScript==
@@ -95,7 +95,7 @@ function download_subtitle (selector) {
     language_name_1c7 = caption.lang_name;
 
     
-    var url = 'http://video.google.com/timedtext?hl=' + caption.lang_code 
+    var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code 
                           + '&lang=' + caption.lang_code 
                           + '&name=' + caption.name 
                           + '&v=' + VIDEO_ID;    
@@ -165,7 +165,7 @@ function download_subtitle (selector) {
 
         var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
         downloadFile(title,result);
-        // 下载
+		// 下载
 
             
             
@@ -187,7 +187,7 @@ function load_language_list (select) {
     
     GM_xmlhttpRequest({
         method: 'GET',
-        url:    'http://video.google.com/timedtext?hl=en&v=' + VIDEO_ID + '&type=list',
+        url:    'https://video.google.com/timedtext?hl=en&v=' + VIDEO_ID + '&type=list',
         onload: function( xhr ) {
             
             var caption, option, caption_info,
