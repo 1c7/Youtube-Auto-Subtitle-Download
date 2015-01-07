@@ -6,7 +6,7 @@
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version       0.2
+// @version       0.3
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
 // ==/UserScript==
@@ -30,7 +30,7 @@ var PLAYER              = unsafeWindow.document.getElementById('movie_player'),
 // 我们处理成srt的时间, 比如 00:00:00,090    00:00:08,460    00:10:29,350
 function process_time(s){
     
-    s = s.toFixed(3);
+    s = parseFloat(s).toFixed(3);
     // 超棒的函数, 可以把不论是整数还是小数它都给你弄成3位小数形式的数字.
     // 举个柚子: 
     // 671.33 -> 671.330
@@ -100,7 +100,7 @@ function download_subtitle (selector) {
                           + '&name=' + caption.name 
                           + '&v=' + VIDEO_ID;    
     
-    // console.log(url);
+    console.log(url);
     // 加了这句之后, 下载字幕时控制台会输出字幕的url地址.
 
     
@@ -122,12 +122,13 @@ function download_subtitle (selector) {
             
             
             var start = text[i].getAttribute('start');
-            // 获得开始时间, 比如start="7.97", 我们现在就获得了7.97
+            //console.log(start);
             
-            var dur = text[i].getAttribute('dur');
-            // 获得持续时间, 比如dur="3.75", 我们现在就获得了3.75
-            
-            
+            var end = $(text[i+1]).attr('start');
+            if(!end){
+            	end = start + 5;
+            }
+			//console.log(end);            
             
             // ==== 开始处理数据, 把数据保存到result里. ====
             result = result + index + '\n';
@@ -137,6 +138,7 @@ function download_subtitle (selector) {
             
             var start_time = process_time( parseFloat(start) );
             result = result + start_time;
+            //console.log(start_time);
             // 拿到 开始时间 之后往result字符串里存一下
             
             
@@ -147,8 +149,9 @@ function download_subtitle (selector) {
             
             
             
-            var end_time = process_time( parseFloat(start) + parseFloat(dur) );
+            var end_time = process_time( parseFloat(end) );
             result = result + end_time + '\n';
+            //console.log(end_time);
             // 拿到 结束时间 之后往result字符串里存一下
             
             
