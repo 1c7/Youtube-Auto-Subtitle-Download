@@ -1,16 +1,19 @@
 // ==UserScript==
 // @name        Youtube Auto Subtitle Downloader
-// @description  download youtube AUTO subtitle.
+// @description  download youtube AUTO subtitle. (this only work on Chrome, because I don't have time for firefox compatibility, if you have time please feel free to fork github repo and send a pull request : https://github.com/1c7/Youtube-Auto-Subtitle-Download
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
 // ==/UserScript==
 
 
+
 // Author : Cheng Zheng
 // Author Email : guokrfans@gmail.com
 // Author Github : https://github.com/1c7
 // Last update  :  2014/9/29
+// other comment are written in chinese
+// if you need help, just open a github issue :D
 
 // 作者 : 郑诚
 // 作者邮箱 : guokrfans@gmail.com
@@ -64,6 +67,7 @@ $(document).ready(function(){
     //------------------------------------
     //
     //  点击就下载
+    //  click and download
     //
     //------------------------------------
     $("#YT_auto").click(function(){
@@ -208,6 +212,8 @@ function downloadFile(fileName, content){
 
 // 处理时间. 比如 start="671.33"  start="37.64"  start="12" start="23.029"
 // 我们处理成srt的时间, 比如 00:00:00,090    00:00:08,460    00:10:29,350
+// input format:  671.33
+// output format: 00:02:03,111
 function process_time(s){
     
     s = s.toFixed(3);
