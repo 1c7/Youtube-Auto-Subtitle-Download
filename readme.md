@@ -1,5 +1,4 @@
-2015年7月26号更新，今天在 Gmail 收到用户反馈说格式有问题。  
-应该是 Youtube 改了格式导致解析失败。5天内我会修复该问题。（最近忙 Sorry）  
+
 <br>
 中文安装教程:  http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 <br>
@@ -22,7 +21,7 @@ First, you need use [Chrome](https://www.google.com/chrome/browser/) and [Tamper
 
 Then:
 
-https://greasyfork.org/scripts/5368-youtube-subtitle-downloader    
+https://greasyfork.org/zh-CN/scripts/5368-youtube-subtitle-downloader-v2 
 (download youtube COMPLETE subtitle)   
 
 https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader    
@@ -36,7 +35,7 @@ __Refresh__
 
 
 <br>
-#### after install both program, it look like this:  
+#### After install both program, it look like this:  
 ![after install](img_for_readme.png)    
 
 
