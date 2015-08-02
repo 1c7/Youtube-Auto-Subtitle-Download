@@ -1,21 +1,32 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader
+// @name           Youtube Subtitle Downloader v2
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
-// @author         Tim Smart
+// @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version       0.3
+// @version        2
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
 // ==/UserScript==
 
 
+/*
+    
+    Third Author :  Cheng Zheng
+    Email :         guokrfans@gmail.com
+    Last update :   2015/7/30
+    
+    
+    Github:  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+    
+    
+    Code comment are written in Chinese.
+    If you need help, just let me know.
+    
+*/
 
-// Thrid Author : Cheng Zheng, 
-// Email : guokrfans@gmail.com
-// Last update :  2014/9/29
 
 
 
@@ -26,8 +37,14 @@ var PLAYER              = unsafeWindow.document.getElementById('movie_player'),
 
 
 
-// 处理时间. 比如 start="671.33"  start="37.64"  start="12" start="23.029"
-// 我们处理成srt的时间, 比如 00:00:00,090    00:00:08,460    00:10:29,350
+
+/*
+    process_time 这个函数是为了处理时间格式.
+    因为 Youtube 没直接提供 srt 的格式， 
+    Youtube 提供的格式类似这样: start="671.33"  start="37.64"  start="12" start="23.029"
+    671.33 这个是字幕开始的时间, 单位是秒. 小数点后是毫秒.
+    我们处理成 srt 格式的时间, 比如 00:00:00,090    00:00:08,460    00:10:29,350
+*/
 function process_time(s){
     
     s = parseFloat(s).toFixed(3);
@@ -131,7 +148,7 @@ function download_subtitle (selector) {
 			//console.log(end);            
             
             // ==== 开始处理数据, 把数据保存到result里. ====
-            result = result + index + '\n';
+            result = result + index + '\r\n';
             // 把序号加进去
                 
             
@@ -150,12 +167,12 @@ function download_subtitle (selector) {
             
             
             var end_time = process_time( parseFloat(end) );
-            result = result + end_time + '\n';
+            result = result + end_time + '\r\n';
             //console.log(end_time);
             // 拿到 结束时间 之后往result字符串里存一下
             
             
-            result = result + content + '\n\n';
+            result = result + content + '\r\n\r\n';
             // 加字幕内容
             
         }
@@ -167,7 +184,8 @@ function download_subtitle (selector) {
 
 
         var title =  '(' + language_name_1c7 + ')' + TITLE + '.srt';
-        downloadFile(title,result);
+        
+        downloadFile(title, result);
 		// 下载
 
             
@@ -178,7 +196,6 @@ function download_subtitle (selector) {
     
 
 
-    
     
     selector.options[0].selected = true;
     // 下载完之后把选项框选回第一个元素. 也就是 Download captions.
@@ -223,9 +240,7 @@ function load_language_list (select) {
 
 
 
-
-(function () {
-    
+function inject_our_script(){
     var div      = document.createElement('div'), 
         select   = document.createElement('select'),
         option   = document.createElement('option'),
@@ -265,8 +280,61 @@ function load_language_list (select) {
     var body = document.getElementsByTagName('body')[0];
     body.appendChild(a);
     // 这个元素用于下载.
+}
 
+
+
+
+
+/*
+
+重点总结先：我没能解决必须手动刷新出按钮的问题。具体原因如下。
+
+Youtube 的跳转方式是 Ajax, 而 Tampermonkey 的注入方式是刷新才注入.
+这就造成了换了视频之后还得手动刷新一遍才行.
+
+为了不手动刷新，那必须有一种办法检测页面是否 Ajax 刷新了。如果刷新了就马上注入。
+但是别忘了，你直接点左上角 LOGO 也是 Ajax 载入，然后首页当然不是播放页，我们就不用注入了。
+
+所以，
+1. 得检测是否 Ajax 刷新完成了
+2. 得检测是否是播放页。其他页面注入没用。
+
+
+试过的一些方法如下：
+1. 检测标题的 change event.
+
+这个是 Youtube 标题
+<span id="eow-title" class="watch-title " dir="ltr" title="Why Do We Wear Clothes?">
+    Why Do We Wear Clothes?
+</span>
+
+但实际发现监听 change 没用, 这个是 Form Event.
+https://api.jquery.com/change/   
+
+
+如下这个也没用.
+$(document).ajaxComplete(function() {
+  alert("asdasd");
+});
+
+没用
+$(unsafeWindow.document).ajaxComplete(function() {
+  alert("asdasd");
+});
+
+
+
+*/
+
+(function () {
+
+     inject_our_script();
+    
 })();
+
+
+
 
 
 
@@ -282,3 +350,9 @@ function downloadFile(fileName, content){
     aLink.href = URL.createObjectURL(blob);
     aLink.dispatchEvent(evt);
 }
+
+
+
+
+
+
