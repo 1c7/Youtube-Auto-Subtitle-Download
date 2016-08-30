@@ -13,7 +13,7 @@ First, you need use [Chrome](https://www.google.com/chrome/browser/)(Web browser
 
 Then, Open 2 link below and Install:
 
-[Youtube Subtitle Downloader v4](https://greasyfork.org/zh-CN/scripts/5368-youtube-subtitle-downloader-v2)<br/>
+[Youtube Subtitle Downloader v4](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
 [Youtube Auto Subtitle Downloader v3](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
 
 <br>
