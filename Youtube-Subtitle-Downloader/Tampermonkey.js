@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v4
+// @name           Youtube Subtitle Downloader v5
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
 // @author         Cheng Zheng
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2013 Cheng Zheng;
+// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2016 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        4
+// @version        5
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
@@ -15,19 +15,17 @@
 /*
     Third Author :  Cheng Zheng
     Email        :  guokrfans@gmail.com
-    Last update  :  2016/August/20
+    Last update  :  2016/Sep/3
     Github       :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
 
-    Code comment are written in Chinese. If you need help, just let me know.
+    Code comments are written in Chinese. If you need help, just let me know.
 */
+
+// Page first time load
+(function () { init(); })();
 
 // Page jump
 window.addEventListener("spfdone", function(e) { init(); });
-
-// Page first time load
-(function () {
-    init();
-})();
 
 function init(){
     unsafeWindow.VIDEO_ID            = unsafeWindow.ytplayer.config.args.video_id;
@@ -102,7 +100,6 @@ function download_subtitle (selector) {
             // 把序号加进去
             var start_time = process_time( parseFloat(start) );
             result = result + start_time;
-            //console.log(start_time);
             // 拿到 开始时间 之后往result字符串里存一下
             result = result + ' --> ';
             // 标准srt时间轴: 00:00:01,850 --> 00:00:02,720
@@ -117,6 +114,7 @@ function download_subtitle (selector) {
         // 字幕里会有html实体字符..所以我们替换掉
 
         var title =  '(' + language_name_1c7 + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
+        result =  escape(result);
         downloadFile(title, result);
         // 下载
 
@@ -203,6 +201,29 @@ function process_time(s){
 }
 
 function downloadFile(fileName, content){
+    var TITLE = unsafeWindow.ytplayer.config.args.title; // 拿视频标题
+    var version = getChromeVersion(); // 拿 Chrome 版本
+
+    // dummy element for download
+    if ($('#youtube-subtitle-downloader-dummy-element-for-download').length > 0) {
+    }else{
+        $("body").append('<a id="youtube-subtitle-downloader-dummy-element-for-download"></a>');
+    }
+    var dummy = $('#youtube-subtitle-downloader-dummy-element-for-download');
+
+    // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
+    if (version > 52){
+        dummy.attr('download', fileName);
+        dummy.attr('href','data:Content-type: text/plain,' + content);
+        dummy[0].click();
+    } else {
+        downloadViaBlob(fileName, content);
+    }
+}
+
+// 复制自： http://www.alloyteam.com/2014/01/use-js-file-download/
+// Chrome 53 之后这个函数失效。52有效。
+function downloadViaBlob(fileName, content){
     var aLink = document.createElement('a');
     var blob = new Blob([content]);
     var evt = document.createEvent("HTMLEvents");
@@ -210,4 +231,10 @@ function downloadFile(fileName, content){
     aLink.download = fileName;
     aLink.href = URL.createObjectURL(blob);
     aLink.dispatchEvent(evt);
+}
+
+//http://stackoverflow.com/questions/4900436/how-to-detect-the-installed-chrome-version
+function getChromeVersion() {
+    var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+    return raw ? parseInt(raw[2], 10) : false;
 }
