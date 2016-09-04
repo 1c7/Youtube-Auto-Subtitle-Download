@@ -135,6 +135,8 @@ function get_subtitle(){
             result = result.replace(/&gt;/g, '>');
             result = result.replace(/&#39;/g, "'");
             a = escape(result);
+            /* Somehow YouTube have decided to encode their subtitle. We need to decode it. */
+            a = decodeURIComponent(a);
         }
     });
     return a;
