@@ -1,5 +1,4 @@
-### Download Youtube Subtitle (Late update: 2016-September-10)
-
+### Download Youtube Subtitle (Last update: 2016-September-11)
 
 <br>
 #### After install, it Look like this:
@@ -34,3 +33,4 @@ Then, Open 2 link below and Install:
 http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
 <br>
+代码的最新版本以 greasyfork 为准，因为不一定每次我都记得更新 Github 这边。
