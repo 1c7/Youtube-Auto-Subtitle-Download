@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v4
-// @description  download youtube AUTO subtitle.(Only work on Chrome, because I don't have time for Firefox compatibility, if you have time please feel free to fork Github repo and send a pull request : https://github.com/1c7/Youtube-Auto-Subtitle-Download
+// @name        Youtube Auto Subtitle Downloader v5
+// @description  download youtube AUTO subtitle
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      4
+// @version      5
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
@@ -134,7 +134,7 @@ function get_subtitle(){
             result = result.replace(/&lt;/g, '<');
             result = result.replace(/&gt;/g, '>');
             result = result.replace(/&#39;/g, "'");
-            a = escape(result);
+            a = result;
         }
     });
     return a;
