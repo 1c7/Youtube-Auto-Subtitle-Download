@@ -1,22 +1,17 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v5
+// @name        Youtube Auto Subtitle Downloader v6
 // @description  download youtube AUTO subtitle
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      5
+// @version      6
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
 // Author : Cheng Zheng
-// Author Email : guokrfans@gmail.com
-// Author Github : https://github.com/1c7
-// Last update  :  2016/8/20
-
-// 作者 : 郑诚
-// 邮箱 : guokrfans@gmail.com
+// Email : guokrfans@gmail.com
 // Github : https://github.com/1c7
-// 最近一次升级 : 2016/8/20
+// Last update  :  2016/9/12
 
 // Page first time load
 $(document).ready(function(){  init(); });
@@ -61,7 +56,7 @@ function init(){
         );
         document.getElementById('YT_auto').setAttribute(
             'href',
-            'data:Content-type: text/plain,' + get_subtitle()
+            'data:Content-type: text/plain,' + escape(get_subtitle())
         );
     } else {
         $("#YT_auto").click(function(){
