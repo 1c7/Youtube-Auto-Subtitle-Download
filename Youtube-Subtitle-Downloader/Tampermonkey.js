@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v6
+// @name           Youtube Subtitle Downloader v7
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2016 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        6
+// @version        7
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
@@ -15,7 +15,7 @@
 /*
     Third Author :  Cheng Zheng
     Email        :  guokrfans@gmail.com
-    Last update  :  2016/Sep/3
+    Last update  :  2016/Sep/12
     Github       :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
 
     Code comments are written in Chinese. If you need help, just let me know.
@@ -213,7 +213,7 @@ function downloadFile(fileName, content){
     // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
     if (version > 52){
         dummy.attr('download', fileName);
-        dummy.attr('href','data:Content-type: text/plain,' + content);
+        dummy.attr('href','data:Content-type: text/plain,' + escape(content));
         dummy[0].click();
     } else {
         downloadViaBlob(fileName, content);
