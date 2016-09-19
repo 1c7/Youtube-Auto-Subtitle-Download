@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v7
+// @name           Youtube Subtitle Downloader v8
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2016 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        7
+// @version        8
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
@@ -96,7 +96,7 @@ function download_subtitle (selector) {
                 end = start + 5;
             }
             // ==== 开始处理数据, 把数据保存到result里. ====
-            result = result + index + '\r\n';
+            result = result + index + escape('\r\n');
             // 把序号加进去
             var start_time = process_time( parseFloat(start) );
             result = result + start_time;
@@ -105,9 +105,9 @@ function download_subtitle (selector) {
             // 标准srt时间轴: 00:00:01,850 --> 00:00:02,720
             // 我们现在加个中间的箭头..
             var end_time = process_time( parseFloat(end) );
-            result = result + end_time + '\r\n';
+            result = result + end_time + escape('\r\n');
             // 拿到 结束时间 之后往result字符串里存一下
-            result = result + content + '\r\n\r\n';
+            result = result + content + escape('\r\n\r\n');
             // 加字幕内容
         }
         result = result.replace(/&#39;/g, "'");
@@ -213,7 +213,7 @@ function downloadFile(fileName, content){
     // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
     if (version > 52){
         dummy.attr('download', fileName);
-        dummy.attr('href','data:Content-type: text/plain,' + escape(content));
+        dummy.attr('href','data:Content-type: text/plain,' + content);
         dummy[0].click();
     } else {
         downloadViaBlob(fileName, content);
