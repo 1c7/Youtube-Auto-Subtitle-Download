@@ -24,6 +24,10 @@ Then, Open 2 link below and Install:
 ## Russian
 [Russian Youtube Auto Subtitle Downloader v1](https://greasyfork.org/en/scripts/24088-russian-youtube-auto-subtitle-downloader-v1)
 
+<br>
+## Japanese
+[Japanese Youtube Auto Subtitle Downloader v1](https://greasyfork.org/en/scripts/24089-japanese-youtube-auto-subtitle-downloader-v1)
+
 
 <br>
 ## Youtube 字幕下载工具
