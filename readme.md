@@ -1,4 +1,4 @@
-### Download Youtube Subtitle (Last update: 2016-September-11)
+### Download Youtube Subtitle
 
 <br>
 #### After install, it Look like this:
@@ -20,17 +20,15 @@ Then, Open 2 link below and Install:
 [@cnbeining](https://github.com/cnbeining)    
 [@772807886](https://github.com/772807886)    
 
+<br>
+## Russian
+[Russian Youtube Auto Subtitle Downloader v1](https://greasyfork.org/en/scripts/24088-russian-youtube-auto-subtitle-downloader-v1)
+
 
 <br>
----
-<br>
-
 ### Youtube 字幕下载工具
 
-这里 2 个工具都是用来下载 Youtube 字幕的.
-
+这里 2 个工具都是用来下载 Youtube 字幕的.  
 安装和使用可参照:
 http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
-<br>
-代码的最新版本以 greasyfork 为准，因为不一定每次我都记得更新 Github 这边。
