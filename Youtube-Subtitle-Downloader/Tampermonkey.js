@@ -76,7 +76,7 @@ function inject_our_script(){
 function download_subtitle (selector) {
     var caption = caption_array[selector.selectedIndex - 1];
     if (!caption) return;
-    language_name_1c7 = caption.lang_name;
+    var language_name_1c7 = caption.lang_name;
 
     var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + VIDEO_ID;
 
