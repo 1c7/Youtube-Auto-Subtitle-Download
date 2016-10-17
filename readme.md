@@ -1,12 +1,12 @@
-### Download Youtube Subtitle
+## Download Youtube Subtitle
 
 <br>
 #### After install, it Look like this:
-(yep, two program, one for auto subtitle, one for complete subtitle)
+(Yep, two program, one for auto subtitle, one for complete subtitle.)
 ![after install](img_for_readme.png)
 
 <br>
-#### Usage
+## Usage
 First, you need use [Chrome](https://www.google.com/chrome/browser/)(Web browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Tampermonkey is Chrome extension)
 
 
@@ -26,7 +26,7 @@ Then, Open 2 link below and Install:
 
 
 <br>
-### Youtube 字幕下载工具
+## Youtube 字幕下载工具
 
 这里 2 个工具都是用来下载 Youtube 字幕的.  
 安装和使用可参照:
