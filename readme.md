@@ -17,8 +17,8 @@ Then, Open 2 link below and Install:
 
 <br/>
 ## Contributor (Thanks!)
-[@cnbeining](https://github.com/cnbeining)
-[@772807886](https://github.com/772807886)
+[@cnbeining](https://github.com/cnbeining)    
+[@772807886](https://github.com/772807886)    
 
 
 <br>
