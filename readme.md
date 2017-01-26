@@ -3,7 +3,7 @@
 <br>
 #### After install, it Look like this:
 (Yep, two program, one for auto subtitle, one for complete subtitle.)
-![after install](img_for_readme.png)
+![1](img_for_readme.png)
 
 <br>
 ## Usage
@@ -15,6 +15,13 @@ Then, Open 2 link below and Install:
 [Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
 [Youtube Auto Subtitle Downloader](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
 
+You would saw this:  
+![2](install-1.png)
+
+After click install, you would saw this(just click the little "install" button again.):  
+![3](install.png)
+
+<br/>
 <br/>
 ## Contributor (Thanks!)
 [@cnbeining](https://github.com/cnbeining)    
@@ -36,3 +43,6 @@ Then, Open 2 link below and Install:
 安装和使用可参照:
 http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
+<br>
+## Reference(Thank you!)  
+https://github.com/sterpe/yt-timedtext2srt
