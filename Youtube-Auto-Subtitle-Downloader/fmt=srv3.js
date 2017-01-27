@@ -8,10 +8,10 @@
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
-// Author : Cheng Zheng
-// Email : guokrfans@gmail.com
-// Github : https://github.com/1c7
-// Last update  :  2017/Jan/27
+// Author      : Cheng Zheng
+// Email       : guokrfans@gmail.com
+// Github      : https://github.com/1c7
+// Last update : 2017/Jan/26
 
 // Page first time load
 $(document).ready(function(){  init(); });
@@ -20,11 +20,11 @@ $(document).ready(function(){  init(); });
 window.addEventListener("spfdone", function(e) { init(); });
 
 function init(){
-    //  加按钮
+    //  Add button to page
     $("#eow-title").append('<a id="YT_auto"> Download Youtube Auto Subtitle | 下载 Youtube 自动字幕</a>');
 
-    //  调样式
-    $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 样式是 Youtube 自带的.
+    //  Adjust style
+    $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip');
     $("#YT_auto").css('margin-top','2px')
         .css('margin-left','4px')
         .css('border','1px solid rgb(0, 183, 90)')
@@ -36,7 +36,7 @@ function init(){
         .css('border-bottom-left-radius','3px')
         .css('background-color','#00B75A');
 
-    // 鼠标悬浮时改背景颜色;
+    // Change background color when hover
     $("#YT_auto").hover(function() {
         $(this).css("background-color","rgb(0, 163, 80)")
             .css("border","1px solid rgb(0, 183, 90)");
@@ -45,10 +45,11 @@ function init(){
         $(this).css("background-color","#00B75A");
     });
 
-    var TITLE = unsafeWindow.ytplayer.config.args.title; // 拿视频标题
-    var version = getChromeVersion(); // 拿 Chrome 版本
+    var TITLE = unsafeWindow.ytplayer.config.args.title; // get Video Title
+    var version = getChromeVersion();
 
-    // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
+    // Different logic base on different Chrome version，
+    // Chrome 52 and 53 need a different way to download video.
     if (version > 52){
         document.getElementById('YT_auto').setAttribute(
             'download',
@@ -60,7 +61,7 @@ function init(){
         );
     } else {
         $("#YT_auto").click(function(){
-            downloadFile(TITLE+".srt",get_subtitle());
+            downloadFile(TITLE+".srt", get_subtitle());
         });
     }
 }
@@ -72,56 +73,62 @@ function get_subtitle(){
         return false;
     }
     var xml = TTS_URL + "&kind=asr&lang=en&fmt=srv1";    // fmt is very important
-    var a = "<content will be replace>";
-
+    var final_result = "";
     $.ajax({
         url: xml,
         type: 'get',
-        async: false,
+        async: false, // without this, function would return before ajax is done and success. would cause return empty string.
         success: function(r) {
+            console.log(r);
             if(r === ""){
                 $("#YT_auto").text("No Auto Subtitle | 没有英文自动字幕");
                 return false;
             }
-            var text = r.getElementsByTagName('text');
-            var result = ""; // store final SRT result
-            var len = text.length;
-            for(var i=0; i<len; i++){
-                var index = i+1;
-                var content = text[i].textContent.toString();
-                content = content.replace(/(<([^>]+)>)/ig,""); // remove all html tag.
-                var start = text[i].getAttribute('start');
-                var end = "";
+            var result = ""; // store final result.
 
-                if (i+1 >= len){
-                    end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-                }else{
-                    end = text[i+1].getAttribute('start');
+            var text = r.getElementsByTagName('p');
+            for(var i=0; i<text.length; i++){
+                var index = i+1; // for SRT index number
+                var p_element = text[i];
+
+                // get Text first.
+                var content = "";
+                // if it has child element, process. otherwise, ignore.
+                if (p_element.getElementsByTagName("s").length > 0){
+                    for (var j=0; j<p_element.getElementsByTagName("s").length; j++){
+                        content = content + p_element.childNodes[j].childNodes[0].data;
+                    }
+                } else {
+                    continue;
                 }
 
-                // ==== 开始处理数据, 把数据保存到result里. ====
+                var start = p_element.getAttribute('t');
+                start = start / 1000;
+                var dur = p_element.getAttribute('d');
+                dur = dur / 1000;
+
                 var new_line = "%0D%0A";
+                // ==== 开始处理数据, 把数据保存到result里. ====
                 result = result + index + new_line;
-                // SRT index
+                // 把序号加进去
 
                 var start_time = process_time( parseFloat(start) );
                 result = result + start_time;
-                // 拿到 开始时间 后往 result 里存
+                // 拿到 开始时间 之后往result字符串里存一下
 
                 result = result + ' --> ';
                 // 标准 srt 时间轴: 00:00:01,850 --> 00:00:02,720
-                // 现在加中间的箭头
+                // 我们现在加个中间的箭头..
 
-                var end_time = process_time( parseFloat(end) );
+                var end_time = process_time( parseFloat(start) + parseFloat(dur) );
                 result = result + end_time + new_line;
-                // 拿到 结束时间 后往 result 里存
+                // 拿到 结束时间 之后往result字符串里存一下
 
                 result = result + content + new_line + new_line;
                 // 加字幕内容
             }
             // ==== srt字幕我们已经完全处理好了, 保存在result里了, 我们现在保存到用户的电脑里就行了. ====
             // 保存javascript字符到用户电脑里
-            result = result.replace(/(<div><br>)*<\/div>/g, '\n');
             result = result.replace(/<div>/g, '');
             /* replaces some html entities */
             result = result.replace(/&nbsp;/g, ' ');
@@ -129,10 +136,10 @@ function get_subtitle(){
             result = result.replace(/&lt;/g, '<');
             result = result.replace(/&gt;/g, '>');
             result = result.replace(/&#39;/g, "'");
-            a = result;
-        }
+            final_result = result;
+        }// success function end
     });
-    return a;
+    return final_result;
 }
 
 // Copy from: http://www.alloyteam.com/2014/01/use-js-file-download/
