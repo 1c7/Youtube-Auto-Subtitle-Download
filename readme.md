@@ -1,11 +1,9 @@
 # Download Youtube Subtitle
 
-<br>
-#### After install, it Look like this:
+### After install, it Look like this:
 (Yep, two program, one for auto subtitle, one for complete subtitle.)
 ![1](img_for_readme.png)
 
-<br>
 ## Usage
 First, you need use [Chrome](https://www.google.com/chrome/browser/)(Web browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Tampermonkey is a Chrome extension)
 
@@ -25,7 +23,7 @@ Thanks for using this. I hope it save your time.
 Have a nice day ;)    
 
 
-<br/>
+
 <br/>
 ## Contributor (Thanks!)
 [@cnbeining](https://github.com/cnbeining)    
