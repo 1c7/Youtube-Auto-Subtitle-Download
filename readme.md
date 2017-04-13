@@ -34,11 +34,11 @@ Have a nice day ;)
 这里 2 个工具都是用来下载 Youtube 字幕的.  
 安装和使用可参照:
 http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566  
-感谢使用，新春愉快。
+感谢使用.
 
 ### Reference(Thank you!)  
 https://github.com/sterpe/yt-timedtext2srt
 
 ### 整体逻辑 Overall code logic
-其实代码的整体逻辑就是利用 Tampermonkey 可以注入到页面，从而读到页面里的 js 变量这样的优势。    
-直接从 yt 里面读取到自动字幕的地址，然后做一个格式转换就行了（不管 Youtube 给的什么格式，想办法转成标准的 SRT 格式即可）  
+利用 Tampermonkey 可以注入到页面读到页面里 js 变量这样的优势。    
+直接从 yt 里面读自动字幕的地址，然后做一个格式转换就行了（不管 Youtube 给的什么格式，想办法转成标准的 SRT 格式即可）  
