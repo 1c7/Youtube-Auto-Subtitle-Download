@@ -39,6 +39,6 @@ http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 ### Reference(Thank you!)  
 https://github.com/sterpe/yt-timedtext2srt
 
-### 整体逻辑 Overall code logic
-利用 Tampermonkey 可以注入到页面读到页面里 js 变量这样的优势。    
-直接从 yt 里面读自动字幕的地址，然后做一个格式转换就行了（不管 Youtube 给的什么格式，想办法转成标准的 SRT 格式即可）  
+### How does it work?
+https://youtu.be/SSNrUTuryDg
+in this youtube video, I explain how subtitle downloader work.
