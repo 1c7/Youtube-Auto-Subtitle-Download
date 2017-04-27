@@ -1,17 +1,16 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v7
+// @name        Youtube Auto Subtitle Downloader v8
 // @description  download youtube AUTO subtitle
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      7
+// @version      8
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
-// Author : Cheng Zheng
-// Email : guokrfans@gmail.com
-// Github : https://github.com/1c7
-// Last update  :  2017/Jan/27
+// Author  : Cheng Zheng
+// Email   : guokrfans@gmail.com
+// Github  : https://github.com/1c7
 
 // Page first time load
 $(document).ready(function(){  init(); });
@@ -20,10 +19,10 @@ $(document).ready(function(){  init(); });
 window.addEventListener("spfdone", function(e) { init(); });
 
 function init(){
-    //  加按钮
-    $("#eow-title").append('<a id="YT_auto"> Download Youtube Auto Subtitle | 下载 Youtube 自动字幕</a>');
+    // Put button on page
+    $("#eow-title").append('<a id="YT_auto"> Get (auto-generated) Subtitle | 下载自动字幕</a>');
 
-    //  调样式
+    // Style
     $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 样式是 Youtube 自带的.
     $("#YT_auto").css('margin-top','2px')
         .css('margin-left','4px')
@@ -36,7 +35,7 @@ function init(){
         .css('border-bottom-left-radius','3px')
         .css('background-color','#00B75A');
 
-    // 鼠标悬浮时改背景颜色;
+    // Change color when hover
     $("#YT_auto").hover(function() {
         $(this).css("background-color","rgb(0, 163, 80)")
             .css("border","1px solid rgb(0, 183, 90)");
@@ -45,10 +44,10 @@ function init(){
         $(this).css("background-color","#00B75A");
     });
 
-    var TITLE = unsafeWindow.ytplayer.config.args.title; // 拿视频标题
-    var version = getChromeVersion(); // 拿 Chrome 版本
+    var TITLE = unsafeWindow.ytplayer.config.args.title;
+    var version = getChromeVersion();
 
-    // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
+    // use different way to download, dependent on Chrome version
     if (version > 52){
         document.getElementById('YT_auto').setAttribute(
             'download',
@@ -66,12 +65,13 @@ function init(){
 }
 
 function get_subtitle(){
-    var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try this: yt.config.get("TTS_URL");
+    var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
+    var METADATA_LANGUAGE = yt.getConfig("METADATA_LANGUAGE"); // get "en" or "de" or.... just language code
     if (!TTS_URL){
         $("#YT_auto").text("No Auto Subtitle | 没有英文自动字幕");
         return false;
     }
-    var xml = TTS_URL + "&kind=asr&lang=en&fmt=srv1";    // fmt is very important
+    var xml = TTS_URL + "&kind=asr&lang="+METADATA_LANGUAGE+"&fmt=srv1"; // fmt is very important, there are srv2 and srv3 too.
     var a = "<content will be replace>";
 
     $.ajax({
