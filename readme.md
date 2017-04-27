@@ -1,5 +1,9 @@
 # Download Youtube Subtitle
 
+If you read following install instruction but still feel confused,  
+you can watch this video I made: https://youtu.be/_e9pGKO-V24  
+(same as text tutorial down below)  
+
 ### After install, it Look like this:
 (Yep, two program, one for auto subtitle, one for complete subtitle.)
 ![1](img_for_readme.png)
