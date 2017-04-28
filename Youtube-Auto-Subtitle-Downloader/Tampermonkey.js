@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v8
+// @name        Youtube Auto Subtitle Downloader v9
 // @description  download youtube AUTO subtitle
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      8
+// @version      9
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
@@ -20,7 +20,7 @@ window.addEventListener("spfdone", function(e) { init(); });
 
 function init(){
     // Put button on page
-    $("#eow-title").append('<a id="YT_auto"> Get (auto-generated) Subtitle | 下载自动字幕</a>');
+    $("#eow-title").append('<a id="YT_auto"> == Get (auto-generated) Subtitle | 下载自动字幕 == </a>');
 
     // Style
     $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 样式是 Youtube 自带的.
@@ -66,21 +66,24 @@ function init(){
 
 function get_subtitle(){
     var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
-    var METADATA_LANGUAGE = yt.getConfig("METADATA_LANGUAGE"); // get "en" or "de" or.... just language code
+    var data_url = new URL(decodeURIComponent(ytplayer.config.args.caption_tracks).split('u=')[1]);
+    var searchParams = new URLSearchParams(data_url.search);
+    var lang_code = searchParams.get('lang');
+    
     if (!TTS_URL){
-        $("#YT_auto").text("No Auto Subtitle | 没有英文自动字幕");
+        $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
         return false;
     }
-    var xml = TTS_URL + "&kind=asr&lang="+METADATA_LANGUAGE+"&fmt=srv1"; // fmt is very important, there are srv2 and srv3 too.
-    var a = "<content will be replace>";
+    var xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
 
+    var a = "<content will be replace>";
     $.ajax({
         url: xml,
         type: 'get',
         async: false,
         success: function(r) {
             if(r === ""){
-                $("#YT_auto").text("No Auto Subtitle | 没有英文自动字幕");
+                $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
                 return false;
             }
             var text = r.getElementsByTagName('text');
