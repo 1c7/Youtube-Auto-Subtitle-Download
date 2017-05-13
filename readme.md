@@ -46,3 +46,7 @@ https://github.com/sterpe/yt-timedtext2srt
 ### How does it work?
 https://youtu.be/SSNrUTuryDg
 in this youtube video, I explain how subtitle downloader work.
+
+
+## Buy me a coffee? 
+https://www.paypal.me/1c7
