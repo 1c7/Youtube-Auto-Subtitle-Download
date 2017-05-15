@@ -52,8 +52,11 @@ in this youtube video, I explain how subtitle downloader work.
 https://www.paypal.me/1c7
 
 ## 啊 感谢，太有用了，很省我时间，可以给你打赏点钱么？
-当然可以！
+当然可以！     
 <img src="https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/weixin.png" alt="alt text" width="380">
+<img src="https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/alipay.jpg" alt="alt text" width="380">
+
+（这 2 个付款二维码是 2017 年 5 月加上的。从 2014 年开始到 2017 年这个项目都没赚钱。然后我时不时更新，修 bug，做客服在知乎和 Greasyfork 回答问题。动力当然是因为写的东西有人用，挺开心的。加这个二维码当然不是指望能赚多少钱，只是一种动力来源，Motivation，每个月能看到 1，2 块钱代表还有人用。打赏不打赏你随意，开心就好。金额不用多大，发个 1分钱类似冒个泡刷个存在感也挺好玩的。）
+前面放2个小图，不知道能不能扫，后面放大图。
 ![1](weixin.png)
 ![1](alipay.jpg)
-（这 2 个付款二维码是 2017 年 5 月加上的。从 2014 年开始到 2017 年这个项目都没赚钱。然后我时不时更新，修 bug，做客服在知乎和 Greasyfork 回答问题。动力当然是因为写的东西有人用，挺开心的。加这个二维码当然不是指望能赚多少钱，只是一种动力来源，Motivation，每个月能看到 1，2 块钱代表还有人用。打赏不打赏你随意，开心就好。金额不用多大，发个 1分钱类似冒个泡刷个存在感也挺好玩的。）
