@@ -60,3 +60,6 @@ https://www.paypal.me/1c7
 前面放2个小图，不知道能不能扫，后面放大图。
 ![1](weixin.png)
 ![1](alipay.jpg)
+
+# thanks
+感谢“向涛涛”在支付宝上打赏了2块钱。哈哈。
