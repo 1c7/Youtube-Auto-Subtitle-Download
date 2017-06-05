@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v9
+// @name        Youtube Auto Subtitle Downloader v10
 // @description  download youtube AUTO subtitle
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      9
+// @version      10
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
@@ -35,15 +35,6 @@ function init(){
         .css('border-bottom-left-radius','3px')
         .css('background-color','#00B75A');
 
-    // Change color when hover
-    $("#YT_auto").hover(function() {
-        $(this).css("background-color","rgb(0, 163, 80)")
-            .css("border","1px solid rgb(0, 183, 90)");
-    });
-    $("#YT_auto").mouseout(function() {
-        $(this).css("background-color","#00B75A");
-    });
-
     var TITLE = unsafeWindow.ytplayer.config.args.title;
     var version = getChromeVersion();
 
@@ -66,24 +57,29 @@ function init(){
 
 function get_subtitle(){
     var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
+    console.log(TTS_URL);
     var data_url = new URL(decodeURIComponent(ytplayer.config.args.caption_tracks).split('u=')[1]);
     var searchParams = new URLSearchParams(data_url.search);
     var lang_code = searchParams.get('lang');
-    
+
     if (!TTS_URL){
-        $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
+        noAutoSubtitleHint();
         return false;
     }
     var xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
+    console.log(xml);
 
     var a = "<content will be replace>";
     $.ajax({
         url: xml,
         type: 'get',
         async: false,
+        error: function(r){
+          noAutoSubtitleHint();
+        },
         success: function(r) {
             if(r === ""){
-                $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
+                noAutoSubtitleHint();
                 return false;
             }
             var text = r.getElementsByTagName('text');
@@ -136,6 +132,12 @@ function get_subtitle(){
         }
     });
     return a;
+}
+
+// if there are no subtitle, change text and style tell user that.
+function noAutoSubtitleHint(){
+  $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
+  $("#YT_auto").css("background-color","rgb(0, 0, 0)").css('border','1px solid rgb(0, 0, 0)');
 }
 
 // Copy from: http://www.alloyteam.com/2014/01/use-js-file-download/
