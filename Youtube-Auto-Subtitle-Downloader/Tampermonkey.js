@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Youtube Auto Subtitle Downloader v10
-// @description  download youtube AUTO subtitle
+// @description  download youtube AUTO subtitle (now support all language, including Russian, Japanese, German, French, etc..
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
@@ -57,7 +57,6 @@ function init(){
 
 function get_subtitle(){
     var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
-    console.log(TTS_URL);
     var data_url = new URL(decodeURIComponent(ytplayer.config.args.caption_tracks).split('u=')[1]);
     var searchParams = new URLSearchParams(data_url.search);
     var lang_code = searchParams.get('lang');
@@ -67,7 +66,6 @@ function get_subtitle(){
         return false;
     }
     var xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
-    console.log(xml);
 
     var a = "<content will be replace>";
     $.ajax({
