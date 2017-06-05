@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v10
+// @name        Youtube Auto Subtitle Downloader v11
 // @description  download youtube AUTO subtitle (now support all language, including Russian, Japanese, German, French, etc..
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      10
+// @version      11
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
