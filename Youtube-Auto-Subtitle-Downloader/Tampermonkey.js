@@ -1,29 +1,46 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v11
-// @description  download youtube AUTO subtitle (now support all language, including Russian, Japanese, German, French, etc..
+// @name        Youtube Auto Subtitle Downloader v12
+// @description  download youtube AUTO subtitle (support all auto-generated language, Russian, Japanese, German, French, etc..
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      11
+// @version      12
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
 // Author  : Cheng Zheng
-// Email   : guokrfans@gmail.com
+// Email   : guokrfans@gmail.com ( if you get any problem just email me, I am happy to help )
 // Github  : https://github.com/1c7
+
+// Test video
+// everytime I change the script, I should test following video to make it work properly
+
+// English
+// https://www.youtube.com/watch?v=DPFJROWdkQ8   (2 subtitle: English auto-generated + Arabic)
+// https://www.youtube.com/watch?v=kkPN55JNQnY   Xbox Elite Wireless Controller - The World's Most Advanced Controller
+
+// German
+// https://www.youtube.com/watch?v=2-xbQ7ydHWo   Deutsch Lernen Mit Videos | German Learning Videos | Zu Hause |
+
+// France
+// https://www.youtube.com/watch?v=bb4zvZdrMz4    Easy French 1 - à Paris!
+
+// Russian
+// https://www.youtube.com/watch?v=JEF1Ro56wIU   Жизнь в Америке?
+
+// ===============================================
 
 // Page first time load
 $(document).ready(function(){  init(); });
-
 // Page jump
-window.addEventListener("spfdone", function(e) { init(); });
+window.addEventListener('spfdone', function(e) { init(); });
 
 function init(){
     // Put button on page
-    $("#eow-title").append('<a id="YT_auto"> == Get (auto-generated) Subtitle | 下载自动字幕 == </a>');
+    $('#eow-title').append('<a id="YT_auto"> == Get (auto-generated) Subtitle | 下载自动字幕 == </a>');
 
     // Style
-    $("#YT_auto").addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 样式是 Youtube 自带的.
+    $('#YT_auto').addClass('start yt-uix-button yt-uix-button-text yt-uix-tooltip'); // 样式是 Youtube 自带的.
     $("#YT_auto").css('margin-top','2px')
         .css('margin-left','4px')
         .css('border','1px solid rgb(0, 183, 90)')
@@ -55,84 +72,127 @@ function init(){
     }
 }
 
+// basic logic here is:
+// 1. get subtitle URL.
+// 2. ajax that URL to get subtitle.
+// 3. if the URL 404, probably because lang_code wrong.
+// 4. try ajax URL again, but this time with 'en' lang_code.
+// 5. if it work, then work, if it doesn't, ┑(￣Д ￣)┍
+// 6. finally get subtitle & convert to SRT & make it download-able
+// 7. smile.
 function get_subtitle(){
     var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
     var data_url = new URL(decodeURIComponent(ytplayer.config.args.caption_tracks).split('u=')[1]);
     var searchParams = new URLSearchParams(data_url.search);
     var lang_code = searchParams.get('lang');
+    console.log("Auto Subtitle Download: lang_code is " + lang_code);
 
     if (!TTS_URL){
+        console.log("Auto Subtitle Download: No TTS_URL");
         noAutoSubtitleHint();
         return false;
     }
-    var xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
+    // following 2 line is to get a URL, URL is important, is where we get the subtitle from.
+    var lang_code_xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
+    var en_xml = TTS_URL + "&kind=asr&lang=en&fmt=srv1";
 
-    var a = "<content will be replace>";
+    var SRT_subtitle = "<content will be replace>";
     $.ajax({
-        url: xml,
+        url: lang_code_xml,
         type: 'get',
         async: false,
         error: function(r){
-          noAutoSubtitleHint();
+          console.log("Auto Subtitle Download: Ajax Error");
+          SRT_subtitle = tryAjaxAgainWithENlang_code(en_xml);
         },
         success: function(r) {
-            if(r === ""){
-                noAutoSubtitleHint();
-                return false;
-            }
-            var text = r.getElementsByTagName('text');
-            var result = ""; // store final SRT result
-            var len = text.length;
-            for(var i=0; i<len; i++){
-                var index = i+1;
-                var content = text[i].textContent.toString();
-                content = content.replace(/(<([^>]+)>)/ig,""); // remove all html tag.
-                var start = text[i].getAttribute('start');
-                var end = "";
-
-                if (i+1 >= len){
-                    end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-                }else{
-                    end = text[i+1].getAttribute('start');
-                }
-
-                // ==== 开始处理数据, 把数据保存到result里. ====
-                var new_line = "%0D%0A";
-                result = result + index + new_line;
-                // SRT index
-
-                var start_time = process_time( parseFloat(start) );
-                result = result + start_time;
-                // 拿到 开始时间 后往 result 里存
-
-                result = result + ' --> ';
-                // 标准 srt 时间轴: 00:00:01,850 --> 00:00:02,720
-                // 现在加中间的箭头
-
-                var end_time = process_time( parseFloat(end) );
-                result = result + end_time + new_line;
-                // 拿到 结束时间 后往 result 里存
-
-                result = result + content + new_line + new_line;
-                // 加字幕内容
-            }
-            // ==== srt字幕我们已经完全处理好了, 保存在result里了, 我们现在保存到用户的电脑里就行了. ====
-            // 保存javascript字符到用户电脑里
-            result = result.replace(/(<div><br>)*<\/div>/g, '\n');
-            result = result.replace(/<div>/g, '');
-            /* replaces some html entities */
-            result = result.replace(/&nbsp;/g, ' ');
-            result = result.replace(/&amp;/g, '&');
-            result = result.replace(/&lt;/g, '<');
-            result = result.replace(/&gt;/g, '>');
-            result = result.replace(/&#39;/g, "'");
-            a = result;
+          SRT_subtitle = parseYoutubeXMLToSRT(r);
         }
     });
-    return a;
+    return SRT_subtitle;
 }
 
-// if there are no subtitle, change text and style tell user that.
+// if we can't get English auto-subtitle. there a chance that lang_code is wrong.
+// Example: https://www.youtube.com/watch?v=DPFJROWdkQ8
+// video got english auto-subtitle. but lang_code is ar, mean Arabic.
+// should try again, this time just use "en" as lang_code
+function tryAjaxAgainWithENlang_code(en_xml){
+  if (en_xml === ''){
+    return false;
+  }
+  var final_result = '';
+  $.ajax({
+      url: en_xml,
+      type: 'get',
+      async: false,
+      error: function(r){
+        noAutoSubtitleHint();
+        console.log('Auto Subtitle Download: tryAjaxAgainWithENlang_code Ajax Error');
+      },
+      success: function(r) {
+        final_result = parseYoutubeXMLToSRT(r);
+      }
+  });
+  return final_result;
+}
+
+// Youtube return XML. we want SRT,
+// so this function input Youtube XML format, output proper SRT format.
+function parseYoutubeXMLToSRT(youtube_xml_string){
+  if(youtube_xml_string === ""){
+    return false;
+  }
+
+  var text = youtube_xml_string.getElementsByTagName('text');
+  var result = ""; // store final SRT result
+  var len = text.length;
+  for(var i=0; i<len; i++){
+      var index = i+1;
+      var content = text[i].textContent.toString();
+      content = content.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
+      var start = text[i].getAttribute('start');
+      var end = "";
+
+      if (i+1 >= len){
+          end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
+      }else{
+          end = text[i+1].getAttribute('start');
+      }
+
+      // ==== 开始处理数据, 把数据保存到result里. ====
+      var new_line = "%0D%0A";
+      result = result + index + new_line;
+      // SRT index
+
+      var start_time = process_time( parseFloat(start) );
+      result = result + start_time;
+      // 拿到 开始时间 后往 result 里存
+
+      result = result + ' --> ';
+      // 标准 srt 时间轴: 00:00:01,850 --> 00:00:02,720
+      // 现在加中间的箭头
+
+      var end_time = process_time( parseFloat(end) );
+      result = result + end_time + new_line;
+      // 拿到 结束时间 后往 result 里存
+
+      result = result + content + new_line + new_line;
+      // 加字幕内容
+  }
+  // ==== srt字幕我们已经完全处理好了, 保存在result里了, 我们现在保存到用户的电脑里就行了. ====
+  // 保存javascript字符到用户电脑里
+  result = result.replace(/(<div><br>)*<\/div>/g, '\n');
+  result = result.replace(/<div>/g, '');
+  /* replaces some html entities */
+  result = result.replace(/&nbsp;/g, ' ');
+  result = result.replace(/&amp;/g, '&');
+  result = result.replace(/&lt;/g, '<');
+  result = result.replace(/&gt;/g, '>');
+  result = result.replace(/&#39;/g, "'");
+  return result;
+}
+
+// if there are no subtitle, tell user that by change text and button style.
 function noAutoSubtitleHint(){
   $("#YT_auto").text("No Auto Subtitle | 没有自动字幕");
   $("#YT_auto").css("background-color","rgb(0, 0, 0)").css('border','1px solid rgb(0, 0, 0)');
@@ -156,10 +216,15 @@ function getChromeVersion() {
     return raw ? parseInt(raw[2], 10) : false;
 }
 
-// Process Time. Example: start="671.33"  start="37.64"  start="12" start="23.029"
+// Convert Time Format
+// Example: start="671.33"  start="37.64"  start="12" start="23.029"
 // turn to SRT time format, like: 00:00:00,090    00:00:08,460    00:10:29,350
+// from this format: 671.33
+//   to this format: 00:10:29,350
+// (easy task, Youtube return only second,
+// we just use some division to get Hours & Minute and put them back all together)
 function process_time(s){
-    // s == second
+    // s mean second
     s = s.toFixed(3);
     // 超棒的函数, 不论是整数还是小数都给弄成3位小数形式
     // 举个柚子:
