@@ -61,8 +61,8 @@ https://www.paypal.me/1c7
 ![1](weixin.png)
 ![1](alipay.jpg)
 
-# thanks
-* 感谢“向涛涛”在支付宝上打赏了2元！   
+# Thanks！感谢！
+* 感谢“向涛涛”在支付宝上打赏了2元！
 
 * 感谢“昊“在支付宝打赏了10元！
 
