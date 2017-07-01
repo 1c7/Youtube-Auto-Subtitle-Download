@@ -1,4 +1,5 @@
 # Download Youtube Subtitle
+### (Only support the classic Youtube, the new material design is not support, PR is welcome)
 
 If you read following install instruction but still feel confused,  
 you can watch this video I made: https://youtu.be/_e9pGKO-V24  
