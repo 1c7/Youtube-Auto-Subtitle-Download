@@ -1,5 +1,5 @@
 # Download Youtube Subtitle (auto-generated & closed)
-Here is 2 little script(Tampermonkey) help you download Youtube subtitle directly on the video play page (1 second)   
+Here is 2 little script help you download Youtube subtitle directly on the video play page (1 click - half second)   
 (file format .srt)     
 so you don't have to copy&paste Youtube URL into some website & watch ad & then get the file (at least 5 second)  
 
