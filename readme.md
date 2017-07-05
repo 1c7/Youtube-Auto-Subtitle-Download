@@ -1,15 +1,11 @@
 # Download Youtube Subtitle
-### (Only support the classic Youtube, the new material design is not support, PR is welcome)
 
-If you read following install instruction but still feel confused,  
-you can watch this video I made: https://youtu.be/_e9pGKO-V24  
-(same as text tutorial down below)  
 
-### After install, it Look like this:
+## How does it look like?
 (Yep, two program, one for auto subtitle, one for complete subtitle.)
 ![1](img_for_readme.png)
 
-## Usage
+## How Do I install it?
 First, you need use [Chrome](https://www.google.com/chrome/browser/)(Web browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Tampermonkey is a Chrome extension)
 
 
@@ -26,6 +22,15 @@ After click green button, you would saw this (click the little "Install" button 
 
 Thanks for using this. I hope it save your time.    
 Have a nice day ;)    
+
+### If you still feel confused about how to use it
+you can watch this video I made: https://youtu.be/_e9pGKO-V24  
+
+
+### Support
+Support the classic Youtube, not the new material design (yet), PR is welcome.
+
+
 
 ### Background
 * Creator: Cheng Zheng
