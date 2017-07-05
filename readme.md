@@ -3,7 +3,7 @@
 
 ### How does it look like?
 ![1](img_for_readme.png)
-2 little green button
+👆 2 little green button. 👆
 one for (auto-generated subtitle), one for (closed subtitle)
 
 ### How Do I install it?
