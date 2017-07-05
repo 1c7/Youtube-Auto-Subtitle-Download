@@ -15,10 +15,10 @@ Step 2: click 2 link down below and install both of them:
 [Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
 [Youtube Auto Subtitle Downloader](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
 
-You would saw this (Click green "Install this script" button to install):  
+You would see this (Click green "Install this script" button)  
 ![2](install-1.png)
 
-After click green button, you would saw this (click the little "Install" button again to confirm):  
+then you would see this (click "Install" again to confirm):  
 ![3](install.png)
 
 Step 3: there are no step 3  
