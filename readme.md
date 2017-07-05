@@ -1,15 +1,16 @@
-# Download Youtube Subtitle
+# Download Youtube Subtitle (auto-generated subtitle & closed subtitle)
 
 
-## How does it look like?
-(Yep, two program, one for auto subtitle, one for complete subtitle.)
+### How does it look like?
 ![1](img_for_readme.png)
+2 little green button
+one for (auto-generated subtitle), one for (closed subtitle)
 
-## How Do I install it?
-First, you need use [Chrome](https://www.google.com/chrome/browser/)(Web browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Tampermonkey is a Chrome extension)
+### How Do I install it?
+Step 1: you need [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
 
 
-Then, Open these 2 link below and Install both script:
+Step 2: click 2 link down below and install both of them:
 
 [Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
 [Youtube Auto Subtitle Downloader](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
@@ -20,20 +21,22 @@ You would saw this (Click green "Install this script" button to install):
 After click green button, you would saw this (click the little "Install" button again to confirm):  
 ![3](install.png)
 
+Step 3: there are no step 3  
+
 Thanks for using this. I hope it save your time.    
 Have a nice day ;)    
 
-### If you still feel confused about how to use it
-you can watch this video I made: https://youtu.be/_e9pGKO-V24  
+### But I still feel confused, do you have video demonstrate? 
+yes: https://youtu.be/_e9pGKO-V24  
 
 
 ### Support
-Support the classic Youtube, not the new material design (yet), PR is welcome.
+it work on "classic" Youtube, not the "new material design" Youtube (yet), PR is welcome.
 
 
 
-### Background
-* Creator: Cheng Zheng
+### Project Background
+* Creator: Cheng Zheng (born in 1995, Chinese)
 * When? around 2014
 * Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
 * is Createor still maintaing this? Yes!
