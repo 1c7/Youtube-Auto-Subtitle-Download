@@ -1,4 +1,4 @@
-# Download Youtube Subtitle (auto-generated subtitle & closed subtitle)
+## Download Youtube Subtitle (auto-generated subtitle & closed subtitle)
 
 
 ### How does it look like?
@@ -6,7 +6,7 @@
 👆 2 little green button. 👆
 one for (auto-generated subtitle), one for (closed subtitle)
 
-### How Do I install it?
+### How Do I Install?
 Step 1: you need [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
 
 
@@ -23,8 +23,7 @@ then you would see this (click "Install" again to confirm):
 
 Step 3: there are no step 3  
 
-Thanks for using this. I hope it save your time.    
-Have a nice day ;)    
+Thanks for using. I hope it save your time.  Have a nice day ;)    
 
 ### But I still feel confused, do you have video demonstrate? 
 yes: https://youtu.be/_e9pGKO-V24  
