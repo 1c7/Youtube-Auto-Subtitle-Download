@@ -3,16 +3,16 @@ Here is 2 little script(Tampermonkey) help you download Youtube subtitle directl
 (file format .srt)     
 so you don't have to copy&paste Youtube URL into some website & watch ad & then get the file (at least 5 second)  
 
-### How does it look like?
+## How does it look like?
 ![1](img_for_readme.png)
 👆 2 little green button. 👆
 one for (auto-generated subtitle), one for (closed subtitle)
 
-### How Do I Install?
-Step 1: you need [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
+## How Do I Install?
+### Step 1: you need [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
 
 
-Step 2: click 2 link down below and install both of them:
+### Step 2: click 2 link down below and install both of them:
 
 [Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
 [Youtube Auto Subtitle Downloader](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
@@ -23,7 +23,7 @@ You would see this (Click green "Install this script" button)
 then you would see this (click "Install" again to confirm):  
 ![3](install.png)
 
-Step 3: there are no step 3  
+### Step 3: there are no step 3  
 
 Thanks for using. I hope it save your time.  Have a nice day ;)    
 
