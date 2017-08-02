@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Youtube Auto Subtitle Downloader v12
-// @description  download youtube AUTO subtitle (support all auto-generated language, Russian, Japanese, German, French, etc..
+// @name        Youtube Auto Subtitle Downloader v14
+// @description  download youtube AUTO subtitle (v14 support all language)
 // @include      http://www.youtube.com/watch?*
 // @include      https://www.youtube.com/watch?*
 // @require      http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js
-// @version      12
+// @version      14
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
@@ -27,6 +27,9 @@
 
 // Russian
 // https://www.youtube.com/watch?v=JEF1Ro56wIU   Жизнь в Америке?
+
+// (not support all auto-generated language, Russian, Japanese, German, French, etc..
+// don't mind me, I just put the text here for future copy&paste
 
 // ===============================================
 
@@ -82,9 +85,9 @@ function init(){
 // 7. smile.
 function get_subtitle(){
     var TTS_URL = yt.getConfig("TTS_URL"); // <- if that one not wokring, try: yt.config.get("TTS_URL");
-    var data_url = new URL(decodeURIComponent(ytplayer.config.args.caption_tracks).split('u=')[1]);
-    var searchParams = new URLSearchParams(data_url.search);
-    var lang_code = searchParams.get('lang');
+    var raw_string = ytplayer.config.args.player_response;
+    var json = JSON.parse(raw_string);
+    var lang_code = json.captions.playerCaptionsTracklistRenderer.captionTracks[0].languageCode;
     console.log("Auto Subtitle Download: lang_code is " + lang_code);
 
     if (!TTS_URL){
@@ -95,6 +98,8 @@ function get_subtitle(){
     // following 2 line is to get a URL, URL is important, is where we get the subtitle from.
     var lang_code_xml = TTS_URL + "&kind=asr&lang="+lang_code+"&fmt=srv1";
     var en_xml = TTS_URL + "&kind=asr&lang=en&fmt=srv1";
+    console.log('haha');
+    console.log(lang_code_xml);
 
     var SRT_subtitle = "<content will be replace>";
     $.ajax({
