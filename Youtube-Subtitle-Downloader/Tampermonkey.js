@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v8
+// @name           Youtube Subtitle Downloader v9
 // @include        http://*youtube.com/watch*
 // @include        https://*youtube.com/watch*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2016 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        8
+// @version        9
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description download youtube COMPLETE subtitle
@@ -82,8 +82,10 @@ function download_subtitle (selector) {
 
     jQuery.get(url).done(function(r){
         var text = r.getElementsByTagName('text');
-        // 拿到所有的text节点
+        // 拿所有 text 节点
         var result = "";
+        var BOM = "\uFEFF";
+        result = BOM + result;
         // 保存结果的字符串
         for(var i=0; i<text.length; i++){
             var index = i+1;
