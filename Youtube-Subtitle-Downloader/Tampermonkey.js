@@ -1,84 +1,183 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v9
-// @include        http://*youtube.com/watch*
-// @include        https://*youtube.com/watch*
+// @name           Youtube Subtitle Downloader v10
+// @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2016 Cheng Zheng;
+// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2017 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        9
+// @version        10
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle
+// @description download youtube COMPLETE subtitle (Major Update: now support Youtube new Material Design!)
 // ==/UserScript==
 
 /*
-    Third Author :  Cheng Zheng
-    Email        :  guokrfans@gmail.com
-    Last update  :  2016/Sep/12
-    Github       :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+  Sometime it may not work(rarely), TRY Refresh. if is still got problem. email me.
 
-    Code comments are written in Chinese. If you need help, just let me know.
+  Author :  Cheng Zheng
+  Email  :  guokrfans@gmail.com
+  Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+
+  Some code comments are in Chinese.
 */
 
-// Page first time load
-(function () { init(); })();
+// CONFIG
+var NO_SUBTITLE = 'No captions.';
+var HAVE_SUBTITLE = 'Download captions.';
+var first_load = true;
 
-// Page jump
-window.addEventListener("spfdone", function(e) { init(); });
+// return true / false
+// Detect [new version UI(material design)] OR [old version UI]
+// I tested this, accurated.
+function new_material_design_version(){
+    var old_title_element = document.getElementById('watch7-headline');
+    if(old_title_element){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+// trigger when first load (hit refresh button)
+$(document).ready(function(){
+    // because document ready still not enough
+    // it's still too early, we have to wait certain element exist, then execute function.
+    if(new_material_design_version()){
+        var material_checkExist = setInterval(function() {
+            if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
+                init();
+                clearInterval(material_checkExist);
+            }
+        }, 330);
+    } else {
+        var checkExist = setInterval(function() {
+            if ($('#watch7-headline').length) {
+                init();
+                clearInterval(checkExist);
+            }
+        }, 330);
+    }
+
+});
+
+// trigger when loading new page (actually this would also trigger when first loading, that's not what we want, that's why we need to use firsr_load === false)
+// (new Material design version would trigger this "yt-navigate-finish" event. old version would not.)
+var body = document.getElementsByTagName("body")[0];
+body.addEventListener("yt-navigate-finish", function(event) {
+    if(first_load === false){
+        remove_subtitle_download_button();
+        init();
+    }
+});
+
+// trigger when loading new page
+// (old version would trigger this "spfdone" event. new Material design version not sure yet.)
+window.addEventListener("spfdone", function(e) {
+    if(current_page_is_video_page()){
+        remove_subtitle_download_button();
+        var checkExist = setInterval(function() {
+            if ($('#watch7-headline').length) {
+                init();
+                clearInterval(checkExist);
+            }
+        }, 330);
+    }
+
+});
+
+// return true / false
+function current_page_is_video_page(){
+    return get_video_id() !== null;
+}
+
+// return string like "RW1ChiWyiZQ",  from "https://www.youtube.com/watch?v=RW1ChiWyiZQ"
+// or null
+function get_video_id(){
+    return getURLParameter('v');
+}
+
+//https://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
+function remove_subtitle_download_button(){
+    $('#youtube-subtitle-downloader-by-1c7').remove();
+}
 
 function init(){
-    unsafeWindow.VIDEO_ID            = unsafeWindow.ytplayer.config.args.video_id;
-    unsafeWindow.caption_array       = [];
+    unsafeWindow.caption_array = [];
     inject_our_script();
+    first_load = false;
 }
 
 function inject_our_script(){
     var div      = document.createElement('div'),
         select   = document.createElement('select'),
         option   = document.createElement('option'),
-        controls = document.getElementById('watch7-headline');  // 装视频标题的div
+        controls = document.getElementById('watch7-headline');  // Youtube video title DIV
+    // 3 createElement
+    // 1 getElement
 
-    div.setAttribute( 'style', 'margin-bottom: 10px; display: inline-block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: #00B75A;margin-left: 4px; ');
+    div.setAttribute('style', `display: inline-block; 
+border: 1px solid rgb(0, 183, 90); 
+cursor: pointer; color: rgb(255, 255, 255); 
+border-top-left-radius: 3px; 
+border-top-right-radius: 3px; 
+border-bottom-right-radius: 3px; 
+border-bottom-left-radius: 3px; 
+background-color: #00B75A; 
+margin-top: 8px;
+padding: 2px;
+padding-right: 6px;
+position: relative;
+top: -3px;`);
+    div.id = 'youtube-subtitle-downloader-by-1c7';
 
     select.id       = 'captions_selector';
     select.disabled = true;
-    select.setAttribute( 'style', 'border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); background-color: #00B75A;');
+    select.setAttribute( 'style', 'display:block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); background-color: #00B75A;');
 
     option.textContent = 'Loading...';
     option.selected    = true;
 
     select.appendChild(option);
-    // 添加这个选项, 这个选项默认被选中, 文字是"Loading..."
+    // append default option: "Loading..."
 
     select.addEventListener('change', function() {
         download_subtitle(this);
     }, false);
-    // 事件侦听.
 
     div.appendChild(select);
-    // 往新建的div里面放入select
+    // put <select> into <div>
 
-    controls.appendChild(div);
-    // 往页面上添加这个div
+    // put the div into page: new material design
+    var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
+    if (title_element){
+        $(title_element[0]).after(div);
+    }
+    // put the div into page: old version
+    if(controls){
+        controls.appendChild(div);
+    }
 
     load_language_list(select);
-    // 用来载入有多少字幕的函数, 不是下载字幕的函数
 
+    // <a> element is for download
     var a = document.createElement('a');
     a.style.cssText = 'display:none;';
     a.setAttribute("id", "ForSubtitleDownload");
     var body = document.getElementsByTagName('body')[0];
-    body.appendChild(a);// 这个元素用于下载.
+    body.appendChild(a);
 }
 
-// 下字幕用的函数.
-function download_subtitle (selector) {
+function download_subtitle(selector) {
     var caption = caption_array[selector.selectedIndex - 1];
     if (!caption) return;
     var language_name_1c7 = caption.lang_name;
 
-    var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + VIDEO_ID;
+    var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + get_video_id();
 
     jQuery.get(url).done(function(r){
         var text = r.getElementsByTagName('text');
@@ -115,7 +214,7 @@ function download_subtitle (selector) {
         result = result.replace(/&#39;/g, "'");
         // 字幕里会有html实体字符..所以我们替换掉
 
-        var title =  '(' + language_name_1c7 + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
+        var title = get_file_name(language_name_1c7);
         downloadFile(title, result);
         // 下载
 
@@ -124,19 +223,31 @@ function download_subtitle (selector) {
     });
 
     selector.options[0].selected = true;
-    // 下载完把选项框选回第一个元素. 也就是 Download captions.
+    // 下载后把 <select> 选回第一个元素. 也就是 Download captions.
 }
 
-// 载入字幕有多少种语言的函数, 然后加到那个选项框里
+// Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
+function get_file_name(language_name){
+    if(new_material_design_version()){
+        var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
+        var video_name = title_element[0].childNodes[0].data;
+        return '(' + language_name + ')' + video_name + '.srt';
+    } else {
+        return '(' + language_name + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
+    }
+}
+
+// 载入有多少种语言, 然后加到 <select> 里
 function load_language_list (select) {
     GM_xmlhttpRequest({
         method: 'GET',
-        url:    'https://video.google.com/timedtext?hl=en&v=' + VIDEO_ID + '&type=list',
+        url:    'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list',
         onload: function( xhr ) {
             var caption, option, caption_info,
                 captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
             if (captions.length === 0) {
-                return select.options[0].textContent = 'No captions.';
+                select.options[0].textContent = NO_SUBTITLE;
+                return false;
             }
             for (var i = 0, il = captions.length; i < il; i++) {
                 caption      = captions[i];
@@ -147,10 +258,11 @@ function load_language_list (select) {
                     lang_name: caption.getAttribute('lang_translated')
                 };
                 caption_array.push(caption_info);
+                // 注意这里是加到 caption_array, 一个全局变量, 我们待会要依靠它来下载.
                 option.textContent = caption_info.lang_name;
                 select.appendChild(option);
             }
-            select.options[0].textContent = 'Download captions.';
+            select.options[0].textContent = HAVE_SUBTITLE;
             select.disabled               = false;
         }
     });
@@ -202,8 +314,8 @@ function process_time(s){
 }
 
 function downloadFile(fileName, content){
-    var TITLE = unsafeWindow.ytplayer.config.args.title; // 拿视频标题
-    var version = getChromeVersion(); // 拿 Chrome 版本
+    var TITLE = unsafeWindow.ytplayer.config.args.title; // Video title
+    var version = getChromeVersion();
 
     // dummy element for download
     if ($('#youtube-subtitle-downloader-dummy-element-for-download').length > 0) {
@@ -212,7 +324,7 @@ function downloadFile(fileName, content){
     }
     var dummy = $('#youtube-subtitle-downloader-dummy-element-for-download');
 
-    // 判断 Chrome 版本来做事，Chrome 52 和 53 的文件下载方式不一样, 总不能为了兼顾 53 的让 52 的用户用不了
+    // 判断 Chrome 版本选择下载方法，Chrome 52 和 53 的文件下载方式不一样
     if (version > 52){
         dummy.attr('download', fileName);
         dummy.attr('href','data:Content-type: text/plain,' + content);
