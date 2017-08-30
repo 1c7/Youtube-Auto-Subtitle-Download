@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v10
+// @name           Youtube Subtitle Downloader v11
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2017 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        10
+// @version        11
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle (Major Update: now support Youtube new Material Design!)
+// @description download youtube COMPLETE subtitle (v10 Major Update: now support Youtube new Material Design!)
 // ==/UserScript==
 
 /*
@@ -17,6 +17,7 @@
   Author :  Cheng Zheng
   Email  :  guokrfans@gmail.com
   Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+  Blog   :  1c7.me
 
   Some code comments are in Chinese.
 */
@@ -37,7 +38,6 @@ function new_material_design_version(){
         return true;
     }
 }
-
 
 // trigger when first load (hit refresh button)
 $(document).ready(function(){
@@ -117,10 +117,12 @@ function inject_our_script(){
         select   = document.createElement('select'),
         option   = document.createElement('option'),
         controls = document.getElementById('watch7-headline');  // Youtube video title DIV
-    // 3 createElement
-    // 1 getElement
-
-    div.setAttribute('style', `display: inline-block; 
+    
+    
+    
+    if (new_material_design_version()){
+        div.setAttribute('style', `display: table; 
+margin-top:4px;
 border: 1px solid rgb(0, 183, 90); 
 cursor: pointer; color: rgb(255, 255, 255); 
 border-top-left-radius: 3px; 
@@ -128,11 +130,24 @@ border-top-right-radius: 3px;
 border-bottom-right-radius: 3px; 
 border-bottom-left-radius: 3px; 
 background-color: #00B75A; 
-margin-top: 8px;
-padding: 2px;
-padding-right: 6px;
-position: relative;
-top: -3px;`);
+padding: 4px;
+padding-right: 8px;
+`);
+    } else {
+        div.setAttribute('style', `display: table; 
+margin-top:4px;
+border: 1px solid rgb(0, 183, 90); 
+cursor: pointer; color: rgb(255, 255, 255); 
+border-top-left-radius: 3px; 
+border-top-right-radius: 3px; 
+border-bottom-right-radius: 3px; 
+border-bottom-left-radius: 3px; 
+background-color: #00B75A; 
+padding: 3px;
+padding-right: 8px;
+`);
+    }
+
     div.id = 'youtube-subtitle-downloader-by-1c7';
 
     select.id       = 'captions_selector';
@@ -141,9 +156,7 @@ top: -3px;`);
 
     option.textContent = 'Loading...';
     option.selected    = true;
-
     select.appendChild(option);
-    // append default option: "Loading..."
 
     select.addEventListener('change', function() {
         download_subtitle(this);
@@ -247,6 +260,16 @@ function load_language_list (select) {
                 captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
             if (captions.length === 0) {
                 select.options[0].textContent = NO_SUBTITLE;
+
+                if (new_material_design_version()){
+                    $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6').css('padding','6px');
+                    $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6');
+
+                } else {
+                    $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6').css('padding','5px');
+                    $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6');
+                }
+
                 return false;
             }
             for (var i = 0, il = captions.length; i < il; i++) {
