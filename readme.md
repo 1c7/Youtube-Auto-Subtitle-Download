@@ -4,7 +4,7 @@ Here is 2 little script help you download Youtube subtitle directly on the video
 so you don't have to copy&paste Youtube URL into some website & watch ad & then get the file (at least 5 second)  
 
 ## How does it look like?
-![1](img_for_readme.png)
+![1](new.png)
 👆 2 little green button. 👆
 one for (auto-generated subtitle), one for (closed subtitle)
 
