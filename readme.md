@@ -23,15 +23,13 @@ You would see this (Click green "Install this script" button)
 then you would see this (click "Install" again to confirm):  
 ![3](install.png)
 
-### Step 3: there are no step 3  
-
 Thanks for using. I hope it save your time.  Have a nice day ;)    
 
 ### But I still feel confused, do you have video demonstrate? 
-yes: https://youtu.be/_e9pGKO-V24  
+Yes: https://youtu.be/_e9pGKO-V24  
 
 ### Project Background
-* Creator: Cheng Zheng (born in 1995, Chinese)
+* Creator: Cheng Zheng
 * When? around 2014
 * Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
 * is Createor still maintaing this? Yes!
@@ -39,9 +37,6 @@ yes: https://youtu.be/_e9pGKO-V24
 ### Wow! This is pretty helpful, Can I buy you a coffee?
 Sure! Thank you! 
 https://www.paypal.me/1c7
-
-### Support
-it work on "classic" Youtube, not the "new material design" Youtube, PR is welcome.
 
 ### Contributor (Thanks all of them!)
 [@cnbeining](https://github.com/cnbeining)    
