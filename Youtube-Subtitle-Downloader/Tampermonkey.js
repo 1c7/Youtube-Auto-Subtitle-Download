@@ -1,23 +1,22 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v11
+// @name           Youtube Subtitle Downloader v13
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2017 Cheng Zheng;
+// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        11
+// @version        13
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle (v10 Major Update: now support Youtube new Material Design!)
+// @description download youtube COMPLETE subtitle (v13 improve timeline)
 // ==/UserScript==
 
 /*
-  Sometime it may not work(rarely), TRY Refresh. if is still got problem. email me.
+  Sometime it may not work(rarely), TRY Refresh. if problem still exist. Email me at guokrfans@gmail.com
 
   Author :  Cheng Zheng
   Email  :  guokrfans@gmail.com
   Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
-  Blog   :  1c7.me
 
   Some code comments are in Chinese.
 */
@@ -117,9 +116,7 @@ function inject_our_script(){
         select   = document.createElement('select'),
         option   = document.createElement('option'),
         controls = document.getElementById('watch7-headline');  // Youtube video title DIV
-    
-    
-    
+
     if (new_material_design_version()){
         div.setAttribute('style', `display: table; 
 margin-top:4px;
@@ -191,8 +188,61 @@ function download_subtitle(selector) {
     var language_name_1c7 = caption.lang_name;
 
     var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + get_video_id();
-
+    // example: https://video.google.com/timedtext?hl=en&lang=en&name=&v=FWuwq8HTLQo
     jQuery.get(url).done(function(r){
+        // format should look like this: (2018-2-10)
+        // youtube change their format from time to time. I already change my code to fit their new format twice
+        /*
+    <transcript>
+<text start="54" dur="3">My name is Derpy Hooves</text>
+<text start="57" dur="3">I am a simple pegasus pony from Ponyville</text>
+<text start="65" dur="5">
+However, there is something about me that you must know
+</text>
+<text start="78" dur="5">
+I have strabismus, meaning that my eyes are not properly aligned with each others
+</text>
+<text start="113" dur="2">My problem was neurological</text>
+<text start="115" dur="3">
+The doctors couldn&#39;t do anything to ... correct the problem
+</text>
+<text start="122" dur="3">It&#39;s not only with my vision</text>
+<text start="125" dur="3">It&#39;s also affecting the front of my body</text>
+<text start="128" dur="2">Giving me my &quot;Derpy Hooves&quot;</text>
+<text start="130" dur="5">
+My clumsiness is so important it was represented by my cutie mark
+</text>
+<text start="135" dur="4">Seven bubbles representing luck and fragility</text>
+<text start="139" dur="2">They joked about the way I acted</text>
+<text start="141" dur="4">Saying that I was just stupid and silly</text>
+<text start="145" dur="2">This was not my fault</text>
+<text start="147" dur="3">
+This was the way I was and I couldn&#39;t do anything about it
+</text>
+<text start="158" dur="2">I wished to get my body fixed</text>
+<text start="160" dur="2">Later I realised this was not what I really wanted</text>
+<text start="162" dur="3">I wanted respect, and I had to earn it by mysel</text>
+<text start="196" dur="4">
+Despite being a great flyer raised by a former Wonderbolts member
+</text>
+<text start="200" dur="2">I couldn&#39;t join them because</text>
+<text start="202" dur="2">They didn&#39;t trust my impaired vision</text>
+<text start="213" dur="2">Instead, I used my silly eyes as an advantage</text>
+<text start="215" dur="3">And became one of the best mailmares in Ponyville</text>
+<text start="260" dur="3">
+I know I will have to live with this for the rest of my life
+</text>
+<text start="263" dur="2">But I don&#39;t really mind anymore</text>
+<text start="265" dur="4">
+My best memories are the voices of my friends and my familly, I don&#39;t need perfect vision to be happy
+</text>
+<text start="273" dur="3">I might be unable to walk correctly either</text>
+<text start="276" dur="2">But I still got my wings, and I will live with it</text>
+<text start="327" dur="4">
+And I won&#39;t allow you to blind those who are important to me
+</text>
+</transcript>
+    */
         var text = r.getElementsByTagName('text');
         // 拿所有 text 节点
         var result = "";
@@ -204,8 +254,8 @@ function download_subtitle(selector) {
             // 这个是字幕的索引, 从1开始的, 但是因为我们的循环是从0开始的, 所以加个1
             var content = text[i].textContent.replace(/\n/g, " ");
             // content 保存的是字幕内容 - 这里把换行换成了空格, 因为 Youtube 显示的多行字幕中间会有个\n, 如果不加这个replace. 两行的内容就会黏在一起.
-            var start = text[i].getAttribute('start');
-            var end = $(text[i+1]).attr('start');
+            var start = parseInt(text[i].getAttribute('start'));
+            var end = start + parseInt(text[i].getAttribute('dur'));
             if(!end){
                 end = start + 5;
             }
@@ -224,9 +274,6 @@ function download_subtitle(selector) {
             result = result + content + escape('\r\n\r\n');
             // 加字幕内容
         }
-        result = result.replace(/&#39;/g, "'");
-        // 字幕里会有html实体字符..所以我们替换掉
-
         var title = get_file_name(language_name_1c7);
         downloadFile(title, result);
         // 下载
@@ -238,6 +285,7 @@ function download_subtitle(selector) {
     selector.options[0].selected = true;
     // 下载后把 <select> 选回第一个元素. 也就是 Download captions.
 }
+
 
 // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
 function get_file_name(language_name){
@@ -350,10 +398,10 @@ function downloadFile(fileName, content){
     // 判断 Chrome 版本选择下载方法，Chrome 52 和 53 的文件下载方式不一样
     if (version > 52){
         dummy.attr('download', fileName);
-        dummy.attr('href','data:Content-type: text/plain,' + content);
+        dummy.attr('href','data:Content-type: text/plain,' + htmlDecode(content));
         dummy[0].click();
     } else {
-        downloadViaBlob(fileName, content);
+        downloadViaBlob(fileName, htmlDecode(content));
     }
 }
 
@@ -373,4 +421,13 @@ function downloadViaBlob(fileName, content){
 function getChromeVersion() {
     var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
     return raw ? parseInt(raw[2], 10) : false;
+}
+
+// https://css-tricks.com/snippets/javascript/unescape-html-in-js/
+// turn HTML entity back to text, example: &quot; should be "
+function htmlDecode(input){
+    var e = document.createElement('div');
+    e.class = 'dummy-element-for-tampermonkey-Youtube-Subtitle-Downloader-script-to-decode-html-entity';
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }
