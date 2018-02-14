@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v13
+// @name           Youtube Subtitle Downloader v14
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        13
+// @version        14
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle (v13 improve timeline)
+// @description download youtube COMPLETE subtitle (v14 fixed timeline)
 // ==/UserScript==
 
 /*
@@ -188,6 +188,8 @@ function download_subtitle(selector) {
     var language_name_1c7 = caption.lang_name;
 
     var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + get_video_id();
+    console.log("Youtube Subtitle Downloader: subtitlr URL is ");
+    console.log(url);
     // example: https://video.google.com/timedtext?hl=en&lang=en&name=&v=FWuwq8HTLQo
     jQuery.get(url).done(function(r){
         // format should look like this: (2018-2-10)
@@ -242,6 +244,29 @@ My best memories are the voices of my friends and my familly, I don&#39;t need p
 And I won&#39;t allow you to blind those who are important to me
 </text>
 </transcript>
+
+
+
+sometime it's different:
+https://video.google.com/timedtext?hl=en&lang=en&name=&v=a8uyilHatBA
+<transcript>
+<text start="0.07" dur="3.569">
+About a year ago, Elon Musk was sitting in traffic in Los Angeles, and thought about
+</text>
+<text start="3.639" dur="2.971">
+how cool it would be if he built a tunnel under the city.
+</text>
+<text start="6.61" dur="1.21">So he built a tunnel under the city.</text>
+<text start="7.82" dur="2.279">And he started selling hats for his tunnel.</text>
+<text start="10.099" dur="3.931">
+50,000 hats later, he got bored with hats, and switched the hats out for flamethrowers.
+</text>
+<text start="14.03" dur="3.999">
+He sold 20,000 of those, and then five days later he tied his car up to the most powerful
+</text>
+<text start="18.029" dur="3.431">rocket ever made, and shot it into fuckin space.</text>
+<text start="23.1" dur="2.44">And then the rocket fuckin landed itself.</text>
+</transcript>
     */
         var text = r.getElementsByTagName('text');
         // 拿所有 text 节点
@@ -254,8 +279,8 @@ And I won&#39;t allow you to blind those who are important to me
             // 这个是字幕的索引, 从1开始的, 但是因为我们的循环是从0开始的, 所以加个1
             var content = text[i].textContent.replace(/\n/g, " ");
             // content 保存的是字幕内容 - 这里把换行换成了空格, 因为 Youtube 显示的多行字幕中间会有个\n, 如果不加这个replace. 两行的内容就会黏在一起.
-            var start = parseInt(text[i].getAttribute('start'));
-            var end = start + parseInt(text[i].getAttribute('dur'));
+            var start = parseFloat(text[i].getAttribute('start'));
+            var end = start + parseFloat(text[i].getAttribute('dur'));
             if(!end){
                 end = start + 5;
             }
