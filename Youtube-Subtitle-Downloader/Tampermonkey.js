@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v14
+// @name           Youtube Subtitle Downloader v15
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        14
+// @version        15
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle (v14 fixed timeline)
+// @description download youtube COMPLETE subtitle (v15 fix "underfined" in file name)
 // ==/UserScript==
 
 /*
@@ -314,13 +314,7 @@ He sold 20,000 of those, and then five days later he tied his car up to the most
 
 // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
 function get_file_name(language_name){
-    if(new_material_design_version()){
-        var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
-        var video_name = title_element[0].childNodes[0].data;
-        return '(' + language_name + ')' + video_name + '.srt';
-    } else {
-        return '(' + language_name + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
-    }
+    return '(' + language_name + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
 }
 
 // 载入有多少种语言, 然后加到 <select> 里
