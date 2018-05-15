@@ -75,25 +75,23 @@ function start(){
     // 330 work for me.
     if (new_material_design_version()) {
         var material_checkExist = setInterval(function () {
-            if (retry_count <= RETRY_LIMIT){
-                if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
-                    init();
-                    clearInterval(material_checkExist);
-                }
-                retry_count = retry_count + 1;
-            }else{
+            if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
+                init();
+                clearInterval(material_checkExist);
+            }
+            retry_count = retry_count + 1;
+            if (retry_count <= RETRY_LIMIT) {
                 clearInterval(material_checkExist);
             }
         }, 330);
     } else {
         var checkExist = setInterval(function () {
+            if ($('#watch7-headline').length) {
+                init();
+                clearInterval(checkExist);
+            }
+            retry_count = retry_count + 1;
             if (retry_count <= RETRY_LIMIT) {
-                if ($('#watch7-headline').length) {
-                    init();
-                    clearInterval(checkExist);
-                }
-                retry_count = retry_count + 1;
-            }else{
                 clearInterval(checkExist);
             }
         }, 330);
@@ -434,26 +432,29 @@ function htmlDecode(input){
 // return URL or null;
 // later we can send a AJAX and get XML subtitle
 function get_auto_subtitle_xml_url() {
-    // get JSON
-    var json = '';
-    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-        json = youtube_playerResponse_1c7;
-    } else {
-        var raw_string = ytplayer.config.args.player_response;
-        json = JSON.parse(raw_string);
-    }
-
-    // get data from JSON
-    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
-    for (var index in captionTracks) {
-        var caption = captionTracks[index];
-        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
-            return captionTracks[index].baseUrl;
+    try {
+        // get JSON
+        var json = '';
+        if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+            json = youtube_playerResponse_1c7;
+        } else {
+            var raw_string = ytplayer.config.args.player_response;
+            json = JSON.parse(raw_string);
         }
-        // ASR – A caption track generated using automatic speech recognition.
-        // https://developers.google.com/youtube/v3/docs/captions
+
+        // get data from JSON
+        var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+        for (var index in captionTracks) {
+            var caption = captionTracks[index];
+            if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+                return captionTracks[index].baseUrl;
+            }
+            // ASR – A caption track generated using automatic speech recognition.
+            // https://developers.google.com/youtube/v3/docs/captions
+        }
+    } catch (error) {
+        return false;
     }
-    return false;
 }
 
 function get_auto_subtitle(callback) {
