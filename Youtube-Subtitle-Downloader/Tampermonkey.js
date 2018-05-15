@@ -80,7 +80,7 @@ function start(){
                 clearInterval(material_checkExist);
             }
             retry_count = retry_count + 1;
-            if (retry_count <= RETRY_LIMIT) {
+            if (retry_count > RETRY_LIMIT) {
                 clearInterval(material_checkExist);
             }
         }, 330);
@@ -91,7 +91,7 @@ function start(){
                 clearInterval(checkExist);
             }
             retry_count = retry_count + 1;
-            if (retry_count <= RETRY_LIMIT) {
+            if (retry_count > RETRY_LIMIT) {
                 clearInterval(checkExist);
             }
         }, 330);
