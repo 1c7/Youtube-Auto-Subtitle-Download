@@ -3,56 +3,29 @@
 ![1](img/1.jpg)          
 ![2](img/2.jpg)          
 
-## How to Install?
-### Step 1: Install [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
+## Step 1: Install [Chrome](https://www.google.com/chrome/browser/) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon)  
 
-### Step 2: Install this script
+## Step 2: Install this script
 [Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader)<br/>
+![3](img/3.jpg)   
 
-Have a nice day :)    
-
-### But I still feel confused, do you have video demonstrate? 
-Yes: https://youtu.be/_e9pGKO-V24  
-
-### Project Background
-* Creator: Cheng Zheng
-* When? around 2014
-* Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
-* Still Maintaing? Yes! (2014 to now(2018-May-15))
-
-### Other
-* Total work hours: probably over 40
-* 2018-5-15 Youtube Subtitle Downloader v15 to v16: support auto subtitle
-
-
-### Contributor (Thanks!)
-[@cnbeining](https://github.com/cnbeining)    
-[@772807886](https://github.com/772807886)   
-[@sterpe](https://github.com/sterpe)
-
-### Reference(Thank you! it help a lot!)
-https://github.com/sterpe/yt-timedtext2srt
-
-### How does it work? ( on code level )
-https://youtu.be/SSNrUTuryDg
-in this youtube video, I explain how subtitle downloader work.
+Have a nice day :smile:  
 
 ---
 
-### Youtube 字幕下载  (Chinese)
+## （中文说明）Youtube 字幕下载
 
-这里 2 个工具都是用来下载 Youtube 字幕的. （不是下载视频的）
-安装和使用请参考:
-http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566  
-感谢使用.
+这里的工具用来下载 Youtube 字幕 （不是下载视频的）
+安装和使用请参考 [这篇知乎回答](http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566) 答主是我
+ 
+感谢使用
 
 
-## 感谢! 很有用，省时间，可以给你打赏点钱么？
-😆  
+## 打赏
 <img src="img/weixin.png" alt="alt text" width="380">
 <img src="img/alipay.jpg" alt="alt text" width="360">
 
-这 2 个二维码是 2017 年 5 月加上的。  
+这 2 个二维码是 2017 年 5 月加的。  
 从 2014 年开始到 2017 年这个项目都没赚钱。  
 期间我时不时更新，修 bug，做客服在知乎和 Greasyfork 回答问题。动力当然是因为写的东西有人用，挺开心。  
 加二维码当然不指望能赚多少，只是一种动力来源，Motivation，每个月能看到 1，2 块钱代表还有人用。打赏不打赏随意，开心就好。  
@@ -61,11 +34,11 @@ http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
 
 # 感谢打赏！
-* 感谢“向涛涛”在支付宝上打赏2元！
+* 感谢“向涛涛”在支付宝打赏2元！
 
 * 感谢“昊“在支付宝打赏10元！
 
-* 感谢"向宏图"在支付宝上打赏2元！
+* 感谢"向宏图"在支付宝打赏2元！
 
 * 感谢"思成"在支付宝上打赏 2.88 元！
 
