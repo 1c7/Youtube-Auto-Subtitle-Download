@@ -34,11 +34,12 @@ Yes: https://youtu.be/_e9pGKO-V24
 * Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
 * is Createor still maintaing this? Yes!
 
-### Wow! This is pretty helpful, Can I buy you a coffee?
-Sure! Thank you! 
-https://www.paypal.me/1c7
+### Other
+* Total work hours put into this script: probably over 40
+* 2018-5-15  Youtube Subtitle Download v15 to v16: support auto subtitle now
 
-### Contributor (Thanks all of them!)
+
+### Contributor (Thanks!)
 [@cnbeining](https://github.com/cnbeining)    
 [@772807886](https://github.com/772807886)   
 [@sterpe](https://github.com/sterpe)
