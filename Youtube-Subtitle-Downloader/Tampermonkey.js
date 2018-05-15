@@ -1,69 +1,117 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v15
+// @name           Youtube Subtitle Downloader v16
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2013~2018 Cheng Zheng;
+// @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        15
+// @version        16
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description download youtube COMPLETE subtitle (v15 fix "underfined" in file name)
+// @description  v16 support both automatic and closed subtitle
 // ==/UserScript==
 
 /*
-  Sometime it may not work(rarely), TRY Refresh. if problem still exist. Email me at guokrfans@gmail.com
+  [What is this?]
+  This "Tampermonkey script" allow you download Youtube "Automatic subtitle" AND "closed subtitle"
+  
+  [Note]
+  If not working(rarely), Refresh!!
+  if problem still exist. Email me: guokrfans@gmail.com
 
+  [Who build this]
   Author :  Cheng Zheng
   Email  :  guokrfans@gmail.com
   Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+  If you want improve the script, Github Pull Request are welcome
 
-  Some code comments are in Chinese.
+  [Note]
+  Few things before you read the code: 
+  0. Some code comments are written in Chinese
+  1. Youtube have 2 UI: Material design and The old design 
+  2. Code need handle both Auto & Closed subtitle
+
+  (Explain: "Tampermonkey script" mean 
+  you have to install a Chrome extension call "Tampermonkey", and then install this script)
+
+  [Test Video]
+  https://www.youtube.com/watch?v=bkVsus8Ehxs
+  only have English closed subtitle, nothing else (no auto subtitle)
+
+  https://www.youtube.com/watch?v=-WEqFzyrbbs
+  no subtitle at all
+
+  https://www.youtube.com/watch?v=9AzNEG1GB-k
+  have a lot subtitle 
+
+  [Code Explain]
+  mainly three part
+    1. UI specific (add button on page etc)
+    2. detech if subtitle exists
+    3. transform subtitle format & download
 */
 
-// CONFIG
-var NO_SUBTITLE = 'No captions.';
-var HAVE_SUBTITLE = 'Download captions.';
-var first_load = true;
+// text for display
+var NO_SUBTITLE = 'No subtitle';
+var HAVE_SUBTITLE = 'Download subtitle';
 
-// return true / false
-// Detect [new version UI(material design)] OR [old version UI]
-// I tested this, accurated.
-function new_material_design_version(){
-    var old_title_element = document.getElementById('watch7-headline');
-    if(old_title_element){
-        return false;
-    } else {
-        return true;
-    }
-}
+// initialize
+var first_load = true; // indicate if first load this webpage or not
+var youtube_playerResponse_1c7 = null; // for auto subtitle
+unsafeWindow.caption_array = []; // store all subtitle
 
-// trigger when first load (hit refresh button)
+// trigger when first load
 $(document).ready(function(){
-    // because document ready still not enough
-    // it's still too early, we have to wait certain element exist, then execute function.
-    if(new_material_design_version()){
-        var material_checkExist = setInterval(function() {
-            if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
-                init();
+    start();
+});
+
+// Explain this function: we repeatly try if certain HTML element exist, 
+// if it does, we call init()
+// if it doesn't, stop trying after certain time
+function start(){
+    var retry_count = 0;
+    var RETRY_LIMIT = 20;
+    // use "setInterval" is because "$(document).ready()" still not enough, still too early
+    // 330 work for me.
+    if (new_material_design_version()) {
+        var material_checkExist = setInterval(function () {
+            if (retry_count <= RETRY_LIMIT){
+                if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
+                    init();
+                    clearInterval(material_checkExist);
+                }
+                retry_count = retry_count + 1;
+            }else{
                 clearInterval(material_checkExist);
             }
         }, 330);
     } else {
-        var checkExist = setInterval(function() {
-            if ($('#watch7-headline').length) {
-                init();
+        var checkExist = setInterval(function () {
+            if (retry_count <= RETRY_LIMIT) {
+                if ($('#watch7-headline').length) {
+                    init();
+                    clearInterval(checkExist);
+                }
+                retry_count = retry_count + 1;
+            }else{
                 clearInterval(checkExist);
             }
         }, 330);
     }
+}
 
-});
-
-// trigger when loading new page (actually this would also trigger when first loading, that's not what we want, that's why we need to use firsr_load === false)
+// trigger when loading new page 
+// (actually this would also trigger when first loading, that's not what we want, that's why we need to use firsr_load === false)
 // (new Material design version would trigger this "yt-navigate-finish" event. old version would not.)
 var body = document.getElementsByTagName("body")[0];
 body.addEventListener("yt-navigate-finish", function(event) {
+    if (current_page_is_video_page() === false) {
+        return;
+    }
+    youtube_playerResponse_1c7 = event.detail.response.playerResponse; // for auto subtitle
+    unsafeWindow.caption_array = []; // clean up (important, otherwise would have more and more item and cause error)
+
+    // if use click to another page, init again to get correct subtitle
     if(first_load === false){
         remove_subtitle_download_button();
         init();
@@ -71,7 +119,7 @@ body.addEventListener("yt-navigate-finish", function(event) {
 });
 
 // trigger when loading new page
-// (old version would trigger this "spfdone" event. new Material design version not sure yet.)
+// (old version would trigger "spfdone" event. new Material design version not sure yet.)
 window.addEventListener("spfdone", function(e) {
     if(current_page_is_video_page()){
         remove_subtitle_download_button();
@@ -82,8 +130,19 @@ window.addEventListener("spfdone", function(e) {
             }
         }, 330);
     }
-
 });
+
+// return true / false
+// Detect [new version UI(material design)] OR [old version UI]
+// I tested this, accurated.
+function new_material_design_version() {
+    var old_title_element = document.getElementById('watch7-headline');
+    if (old_title_element) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 // return true / false
 function current_page_is_video_page(){
@@ -106,7 +165,6 @@ function remove_subtitle_download_button(){
 }
 
 function init(){
-    unsafeWindow.caption_array = [];
     inject_our_script();
     first_load = false;
 }
@@ -117,50 +175,40 @@ function inject_our_script(){
         option   = document.createElement('option'),
         controls = document.getElementById('watch7-headline');  // Youtube video title DIV
 
-    if (new_material_design_version()){
-        div.setAttribute('style', `display: table; 
-margin-top:4px;
-border: 1px solid rgb(0, 183, 90); 
-cursor: pointer; color: rgb(255, 255, 255); 
-border-top-left-radius: 3px; 
-border-top-right-radius: 3px; 
-border-bottom-right-radius: 3px; 
-border-bottom-left-radius: 3px; 
-background-color: #00B75A; 
-padding: 4px;
-padding-right: 8px;
-`);
-    } else {
-        div.setAttribute('style', `display: table; 
-margin-top:4px;
-border: 1px solid rgb(0, 183, 90); 
-cursor: pointer; color: rgb(255, 255, 255); 
-border-top-left-radius: 3px; 
-border-top-right-radius: 3px; 
-border-bottom-right-radius: 3px; 
-border-bottom-left-radius: 3px; 
-background-color: #00B75A; 
-padding: 3px;
-padding-right: 8px;
-`);
-    }
+    div.setAttribute('style', `display: table; 
+        margin-top:4px;
+        border: 1px solid rgb(0, 183, 90); 
+        cursor: pointer; color: rgb(255, 255, 255); 
+        border-top-left-radius: 3px; 
+        border-top-right-radius: 3px; 
+        border-bottom-right-radius: 3px; 
+        border-bottom-left-radius: 3px; 
+        background-color: #00B75A;
+    `);
 
     div.id = 'youtube-subtitle-downloader-by-1c7';
+    div.title = 'Youtube Subtitle Download v16'; // display when cursor hover
 
-    select.id       = 'captions_selector';
+    select.id = 'captions_selector';
     select.disabled = true;
-    select.setAttribute( 'style', 'display:block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); background-color: #00B75A;');
+    select.setAttribute( 'style', `display:block; 
+        border: 1px solid rgb(0, 183, 90); 
+        cursor: pointer; 
+        color: rgb(255, 255, 255); 
+        background-color: #00B75A;
+        padding: 4px;
+    `);
 
     option.textContent = 'Loading...';
     option.selected    = true;
     select.appendChild(option);
 
+    // 下拉菜单里，选择一项后触发下载
     select.addEventListener('change', function() {
         download_subtitle(this);
     }, false);
 
-    div.appendChild(select);
-    // put <select> into <div>
+    div.appendChild(select); // put <select> into <div>
 
     // put the div into page: new material design
     var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
@@ -182,180 +230,139 @@ padding-right: 8px;
     body.appendChild(a);
 }
 
+// trigger when user select <option>
 function download_subtitle(selector) {
+    // if user select first <option>
+    // we just return, do nothing.
+    if (selector.selectedIndex == 0){
+        return;
+    }
+
     var caption = caption_array[selector.selectedIndex - 1];
-    if (!caption) return;
-    var language_name_1c7 = caption.lang_name;
+    // because first <option> is for display
+    // so index - 1 
 
-    var url = 'https://video.google.com/timedtext?hl=' + caption.lang_code + '&lang=' + caption.lang_code + '&name=' + caption.name + '&v=' + get_video_id();
-    console.log("Youtube Subtitle Downloader: subtitlr URL is ");
-    console.log(url);
-    // example: https://video.google.com/timedtext?hl=en&lang=en&name=&v=FWuwq8HTLQo
-    jQuery.get(url).done(function(r){
-        // format should look like this: (2018-2-10)
-        // youtube change their format from time to time. I already change my code to fit their new format twice
-        /*
-    <transcript>
-<text start="54" dur="3">My name is Derpy Hooves</text>
-<text start="57" dur="3">I am a simple pegasus pony from Ponyville</text>
-<text start="65" dur="5">
-However, there is something about me that you must know
-</text>
-<text start="78" dur="5">
-I have strabismus, meaning that my eyes are not properly aligned with each others
-</text>
-<text start="113" dur="2">My problem was neurological</text>
-<text start="115" dur="3">
-The doctors couldn&#39;t do anything to ... correct the problem
-</text>
-<text start="122" dur="3">It&#39;s not only with my vision</text>
-<text start="125" dur="3">It&#39;s also affecting the front of my body</text>
-<text start="128" dur="2">Giving me my &quot;Derpy Hooves&quot;</text>
-<text start="130" dur="5">
-My clumsiness is so important it was represented by my cutie mark
-</text>
-<text start="135" dur="4">Seven bubbles representing luck and fragility</text>
-<text start="139" dur="2">They joked about the way I acted</text>
-<text start="141" dur="4">Saying that I was just stupid and silly</text>
-<text start="145" dur="2">This was not my fault</text>
-<text start="147" dur="3">
-This was the way I was and I couldn&#39;t do anything about it
-</text>
-<text start="158" dur="2">I wished to get my body fixed</text>
-<text start="160" dur="2">Later I realised this was not what I really wanted</text>
-<text start="162" dur="3">I wanted respect, and I had to earn it by mysel</text>
-<text start="196" dur="4">
-Despite being a great flyer raised by a former Wonderbolts member
-</text>
-<text start="200" dur="2">I couldn&#39;t join them because</text>
-<text start="202" dur="2">They didn&#39;t trust my impaired vision</text>
-<text start="213" dur="2">Instead, I used my silly eyes as an advantage</text>
-<text start="215" dur="3">And became one of the best mailmares in Ponyville</text>
-<text start="260" dur="3">
-I know I will have to live with this for the rest of my life
-</text>
-<text start="263" dur="2">But I don&#39;t really mind anymore</text>
-<text start="265" dur="4">
-My best memories are the voices of my friends and my familly, I don&#39;t need perfect vision to be happy
-</text>
-<text start="273" dur="3">I might be unable to walk correctly either</text>
-<text start="276" dur="2">But I still got my wings, and I will live with it</text>
-<text start="327" dur="4">
-And I won&#39;t allow you to blind those who are important to me
-</text>
-</transcript>
-
-
-
-sometime it's different:
-https://video.google.com/timedtext?hl=en&lang=en&name=&v=a8uyilHatBA
-<transcript>
-<text start="0.07" dur="3.569">
-About a year ago, Elon Musk was sitting in traffic in Los Angeles, and thought about
-</text>
-<text start="3.639" dur="2.971">
-how cool it would be if he built a tunnel under the city.
-</text>
-<text start="6.61" dur="1.21">So he built a tunnel under the city.</text>
-<text start="7.82" dur="2.279">And he started selling hats for his tunnel.</text>
-<text start="10.099" dur="3.931">
-50,000 hats later, he got bored with hats, and switched the hats out for flamethrowers.
-</text>
-<text start="14.03" dur="3.999">
-He sold 20,000 of those, and then five days later he tied his car up to the most powerful
-</text>
-<text start="18.029" dur="3.431">rocket ever made, and shot it into fuckin space.</text>
-<text start="23.1" dur="2.44">And then the rocket fuckin landed itself.</text>
-</transcript>
-    */
-        var text = r.getElementsByTagName('text');
-        // 拿所有 text 节点
-        var result = "";
-        var BOM = "\uFEFF";
-        result = BOM + result;
-        // 保存结果的字符串
-        for(var i=0; i<text.length; i++){
-            var index = i+1;
-            // 这个是字幕的索引, 从1开始的, 但是因为我们的循环是从0开始的, 所以加个1
-            var content = text[i].textContent.replace(/\n/g, " ");
-            // content 保存的是字幕内容 - 这里把换行换成了空格, 因为 Youtube 显示的多行字幕中间会有个\n, 如果不加这个replace. 两行的内容就会黏在一起.
-            var start = parseFloat(text[i].getAttribute('start'));
-            var end = start + parseFloat(text[i].getAttribute('dur'));
-            if(!end){
-                end = start + 5;
+    // if user choose auto subtitle
+    if (caption.lang_code == 'AUTO'){
+        get_auto_subtitle(function(r){
+            if (r != false) {
+                var srt = parse_youtube_XML_to_SRT(r);
+                var title = get_file_name('auto');
+                downloadFile(title, srt);
             }
-            // ==== 开始处理数据, 把数据保存到result里. ====
-            result = result + index + escape('\r\n');
-            // 把序号加进去
-            var start_time = process_time( parseFloat(start) );
-            result = result + start_time;
-            // 拿到 开始时间 之后往result字符串里存一下
-            result = result + ' --> ';
-            // 标准srt时间轴: 00:00:01,850 --> 00:00:02,720
-            // 我们现在加个中间的箭头..
-            var end_time = process_time( parseFloat(end) );
-            result = result + end_time + escape('\r\n');
-            // 拿到 结束时间 之后往result字符串里存一下
-            result = result + content + escape('\r\n\r\n');
-            // 加字幕内容
-        }
-        var title = get_file_name(language_name_1c7);
-        downloadFile(title, result);
-        // 下载
-
-    }).fail(function() {
-        alert("Error: No response from server.");
-    });
-
+        });
+    } else { 
+        // closed subtitle
+        var lang_code = caption.lang_code;
+        var lang_name = caption.lang_name;
+        get_closed_subtitle(lang_code, function (r) {
+            if (r != false) {
+                var srt = parse_youtube_XML_to_SRT(r);
+                var title = get_file_name(lang_name);
+                downloadFile(title, srt);
+            }
+        });
+    }
+    // after download, select first <option>
     selector.options[0].selected = true;
-    // 下载后把 <select> 选回第一个元素. 也就是 Download captions.
 }
 
 
 // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
-function get_file_name(language_name){
-    return '(' + language_name + ')' + unsafeWindow.ytplayer.config.args.title + '.srt';
+function get_file_name(x){
+    return '(' + x + ')' + document.title + '.srt';
 }
 
-// 载入有多少种语言, 然后加到 <select> 里
-function load_language_list (select) {
+// detect if "auto subtitle" and "closed subtitle" exist
+// and add <option> into <select>
+function load_language_list(select) {
+    // auto
+    var auto_subtitle_exist = false;
+
+    // closed
+    var closed_subtitle_exist = false;
+    var captions = null;
+
+    // get auto subtitle
+    var auto_subtitle_url = get_auto_subtitle_xml_url();
+    if (auto_subtitle_url != false) {
+        auto_subtitle_exist = true;
+    }
+
+    // get closed subtitle
+    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list';
+    // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
     GM_xmlhttpRequest({
         method: 'GET',
-        url:    'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list',
+        url: list_url,
         onload: function( xhr ) {
-            var caption, option, caption_info,
-                captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
-            if (captions.length === 0) {
+            captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
+            if (captions.length != 0) {
+                closed_subtitle_exist = true;
+            }
+
+            // if no subtitle at all, just say no and stop
+            if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
                 select.options[0].textContent = NO_SUBTITLE;
-
-                if (new_material_design_version()){
-                    $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6').css('padding','6px');
-                    $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6');
-
-                } else {
-                    $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6').css('padding','5px');
-                    $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color','#95a5a6');
-                }
-
+                disable_download_button();
                 return false;
             }
-            for (var i = 0, il = captions.length; i < il; i++) {
-                caption      = captions[i];
-                option       = document.createElement('option');
+
+            // if at least one type of subtitle exist
+            select.options[0].textContent = HAVE_SUBTITLE;
+            select.disabled = false;
+
+            var caption = null; // for inside loop
+            var option = null;  // for <option>
+            var caption_info = null; // for our custom object
+
+            // if auto subtitle exist
+            if (auto_subtitle_exist) {
                 caption_info = {
-                    name:      caption.getAttribute('name'),
-                    lang_code: caption.getAttribute('lang_code'),
-                    lang_name: caption.getAttribute('lang_translated')
+                    lang_code: 'AUTO', // later we use this to know if it's auto subtitle
+                    lang_name: get_auto_subtitle_name() // for display only
                 };
                 caption_array.push(caption_info);
-                // 注意这里是加到 caption_array, 一个全局变量, 我们待会要依靠它来下载.
+
+                option = document.createElement('option');
                 option.textContent = caption_info.lang_name;
                 select.appendChild(option);
             }
-            select.options[0].textContent = HAVE_SUBTITLE;
-            select.disabled               = false;
+
+            // if closed_subtitle_exist
+            if (closed_subtitle_exist) {
+                for (var i = 0, il = captions.length; i < il; i++) {
+                    caption = captions[i];
+                    caption_info = {
+                        lang_code: caption.getAttribute('lang_code'), // for AJAX request
+                        lang_name: caption.getAttribute('lang_translated') // for display only
+                    };
+                    caption_array.push(caption_info);
+                    // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
+                    option = document.createElement('option');
+                    option.textContent = caption_info.lang_name;
+                    select.appendChild(option);
+                }
+            }
         }
     });
+}
+
+function disable_download_button(){
+    $('#youtube-subtitle-downloader-by-1c7')
+        .css('border', '#95a5a6')
+        .css('cursor', 'not-allowed')
+        .css('background-color', '#95a5a6');
+    $('#captions_selector')
+        .css('border', '#95a5a6')
+        .css('cursor', 'not-allowed')
+        .css('background-color', '#95a5a6');
+
+    if (new_material_design_version()) {
+        $('#youtube-subtitle-downloader-by-1c7').css('padding', '6px');
+    } else {
+        $('#youtube-subtitle-downloader-by-1c7').css('padding', '5px');
+    }
 }
 
 // 处理时间. 比如 start="671.33"  start="37.64"  start="12" start="23.029"
@@ -404,42 +411,15 @@ function process_time(s){
 }
 
 function downloadFile(fileName, content){
-    var TITLE = unsafeWindow.ytplayer.config.args.title; // Video title
-    var version = getChromeVersion();
-
     // dummy element for download
     if ($('#youtube-subtitle-downloader-dummy-element-for-download').length > 0) {
     }else{
         $("body").append('<a id="youtube-subtitle-downloader-dummy-element-for-download"></a>');
     }
     var dummy = $('#youtube-subtitle-downloader-dummy-element-for-download');
-
-    // 判断 Chrome 版本选择下载方法，Chrome 52 和 53 的文件下载方式不一样
-    if (version > 52){
-        dummy.attr('download', fileName);
-        dummy.attr('href','data:Content-type: text/plain,' + htmlDecode(content));
-        dummy[0].click();
-    } else {
-        downloadViaBlob(fileName, htmlDecode(content));
-    }
-}
-
-// 复制自： http://www.alloyteam.com/2014/01/use-js-file-download/
-// Chrome 53 之后这个函数失效。52有效。
-function downloadViaBlob(fileName, content){
-    var aLink = document.createElement('a');
-    var blob = new Blob([content]);
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", false, false);
-    aLink.download = fileName;
-    aLink.href = URL.createObjectURL(blob);
-    aLink.dispatchEvent(evt);
-}
-
-//http://stackoverflow.com/questions/4900436/how-to-detect-the-installed-chrome-version
-function getChromeVersion() {
-    var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-    return raw ? parseInt(raw[2], 10) : false;
+    dummy.attr('download', fileName);
+    dummy.attr('href','data:Content-type: text/plain,' + htmlDecode(content));
+    dummy[0].click();
 }
 
 // https://css-tricks.com/snippets/javascript/unescape-html-in-js/
@@ -449,4 +429,125 @@ function htmlDecode(input){
     e.class = 'dummy-element-for-tampermonkey-Youtube-Subtitle-Downloader-script-to-decode-html-entity';
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
+
+// return URL or null;
+// later we can send a AJAX and get XML subtitle
+function get_auto_subtitle_xml_url() {
+    // get JSON
+    var json = '';
+    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+        json = youtube_playerResponse_1c7;
+    } else {
+        var raw_string = ytplayer.config.args.player_response;
+        json = JSON.parse(raw_string);
+    }
+
+    // get data from JSON
+    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+            return captionTracks[index].baseUrl;
+        }
+        // ASR – A caption track generated using automatic speech recognition.
+        // https://developers.google.com/youtube/v3/docs/captions
+    }
+    return false;
+}
+
+function get_auto_subtitle(callback) {
+    var url = get_auto_subtitle_xml_url();
+    get_from_url(url, callback);
+}
+
+function get_closed_subtitle(lang_code, callback) {
+    var url = 'https://video.google.com/timedtext?hl=' + lang_code + '&lang=' + lang_code + '&v=' + get_video_id();
+    // example: https://video.google.com/timedtext?hl=en&lang=en&v=FWuwq8HTLQo
+    get_from_url(url, callback);
+}
+
+function get_from_url(url, callback) {
+    $.ajax({
+        url: url,
+        type: 'get',
+        success: function (r) {
+            callback(r);
+        },
+        fail: function (error) {
+            callback(false);
+        }
+    });
+}
+
+// Youtube return XML. we want SRT  
+// input: Youtube XML format
+// output: SRT format
+function parse_youtube_XML_to_SRT(youtube_xml_string) {
+    if (youtube_xml_string === '') {
+        return false;
+    }
+    var text = youtube_xml_string.getElementsByTagName('text');
+    var result = '';
+    var BOM = '\uFEFF';
+    result = BOM + result; // store final SRT result
+    var len = text.length;
+    for (var i = 0; i < len; i++) {
+        var index = i + 1;
+        var content = text[i].textContent.toString();
+        content = content.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
+        var start = text[i].getAttribute('start');
+        var end = '';
+
+        if (i + 1 >= len) {
+            end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
+        } else {
+            end = text[i + 1].getAttribute('start');
+        }
+
+        // we want SRT format:
+        /*
+            1
+            00:00:01,939 --> 00:00:04,350
+            everybody Craig Adams here I'm a
+
+            2
+            00:00:04,350 --> 00:00:06,720
+            filmmaker on YouTube who's digging
+        */
+        var new_line = "%0D%0A";
+        result = result + index + new_line;
+        // 1
+
+        var start_time = process_time(parseFloat(start));
+        var end_time = process_time(parseFloat(end));
+        result = result + start_time;
+        result = result + ' --> ';
+        result = result + end_time + new_line;
+        // 00:00:01,939 --> 00:00:04,350
+
+        result = result + content + new_line + new_line;
+        // everybody Craig Adams here I'm a
+    }
+    return result;
+}
+
+// return "English (auto-generated)" or a default name;
+function get_auto_subtitle_name(){
+    try {
+        var raw_string = ytplayer.config.args.player_response;
+        var json = JSON.parse(raw_string);
+
+        if (typeof json.captions !== "undefined") {
+            var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+            for (var index in captionTracks) {
+                var caption = captionTracks[index];
+                if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+                    return captionTracks[index].name.simpleText;
+                }
+            }
+        }
+    } catch (error) {
+        return 'Auto Subtitle';
+    }
 }
