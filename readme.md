@@ -32,11 +32,11 @@ Yes: https://youtu.be/_e9pGKO-V24
 * Creator: Cheng Zheng
 * When? around 2014
 * Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
-* is Createor still maintaing this? Yes!
+* Still Maintaing? Yes! (2014 to now(2018-May-15))
 
 ### Other
-* Total work hours put into this script: probably over 40
-* 2018-5-15  Youtube Subtitle Download v15 to v16: support auto subtitle now
+* Total work hours: probably over 40
+* 2018-5-15 Youtube Subtitle Downloader v15 to v16: support auto subtitle
 
 
 ### Contributor (Thanks!)
