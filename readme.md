@@ -1,6 +1,7 @@
 # Download Youtube Subtitle (auto-generated & closed)
 ## After install, it look like this:  
-![1](img/1.png)          
+![1](img/1.jpg)          
+![2](img/2.jpg)          
 
 ## How to Install?
 ### Step 1: Install [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
