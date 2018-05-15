@@ -1,3 +1,6 @@
+## 2018-5-15 Youtube Youtube Subtitle Downloader v15 to v16
+support auto subtitle    
+
 ## 2016-4-11 更新了 Youtube Subtitle Downloader v3
 修复了只显示 loading 无法下载字幕的问题：因为 Tampermonkey 升级导致权限收紧，加多一行代码把网络权限申请一下就好了。
 

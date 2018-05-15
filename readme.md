@@ -1,29 +1,14 @@
 # Download Youtube Subtitle (auto-generated & closed)
-Here is 2 little script help you download Youtube subtitle directly on the video play page (1 click - half second)   
-(file format .srt)     
-so you don't have to copy&paste Youtube URL into some website & watch ad & then get the file (at least 5 second)  
+## After install, it look like this:  
+![1](img/1.png)          
 
-## How does it look like?
-![1](new2.png)          
-👆 2 green button. 👆
-one for (auto-generated subtitle), one for (closed subtitle)
+## How to Install?
+### Step 1: Install [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
 
-## How Do I Install?
-### Step 1: you need [Chrome](https://www.google.com/chrome/browser/)(Browser) and [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=chrome-ntp-icon) (Chrome extension)
+### Step 2: Install this script
+[Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader)<br/>
 
-
-### Step 2: click 2 link down below and install both of them:
-
-[Youtube Subtitle Downloader](https://greasyfork.org/scripts/5368-youtube-subtitle-downloader-v2)<br/>
-[Youtube Auto Subtitle Downloader](https://greasyfork.org/scripts/5367-youtube-auto-subtitle-downloader)<br/>
-
-You would see this (Click green "Install this script" button)  
-![2](install-1.png)
-
-then you would see this (click "Install" again to confirm):  
-![3](install.png)
-
-Thanks for using. I hope it save your time.  Have a nice day ;)    
+Have a nice day :)    
 
 ### But I still feel confused, do you have video demonstrate? 
 Yes: https://youtu.be/_e9pGKO-V24  
@@ -63,8 +48,8 @@ http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566
 
 ## 感谢! 很有用，省时间，可以给你打赏点钱么？
 😆  
-<img src="https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/weixin.png" alt="alt text" width="380">
-<img src="https://raw.githubusercontent.com/1c7/Youtube-Auto-Subtitle-Download/master/alipay.jpg" alt="alt text" width="360">
+<img src="img/weixin.png" alt="alt text" width="380">
+<img src="img/alipay.jpg" alt="alt text" width="360">
 
 这 2 个二维码是 2017 年 5 月加上的。  
 从 2014 年开始到 2017 年这个项目都没赚钱。  
