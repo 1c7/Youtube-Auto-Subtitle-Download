@@ -11,7 +11,15 @@
 click green "Install" button
 
 ### Any problem?
-Email: guokrfans#gmail.com (# change to @)       
+Email: guokrfans#gmail.com (# change to @)     
+
+### Project Background
+* Creator: Cheng Zheng
+* When? created around 2014
+* Why? I need download a lot subtitle at that time, and I just hate copy & paste url into website and watch bunch of ads to get the subtitle file.
+* Still Maintaing? Yes! (2014 to now(2018-May-15))  
+
+<br/>
 
 ---
 
@@ -19,7 +27,7 @@ Email: guokrfans#gmail.com (# change to @)
 
 # Youtube 字幕下载工具
 这里的程序是用来下载 Youtube 字幕的        
-具体的安装和使用方法，请参考 [这篇详尽的知乎回答](http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566)      
+具体的安装和使用请参考 [这篇详尽的知乎回答](http://www.zhihu.com/question/19647719/answer/16843974?group_id=789328566)      
 答主是我
 
 ## 感谢使用！
