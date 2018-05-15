@@ -36,8 +36,8 @@ in this youtube video, I explain how subtitle downloader work.
 
 
 ## 打赏
-<img src="img/weixin.png" alt="alt text" width="380">
-<img src="img/alipay.jpg" alt="alt text" width="360">
+<img src="../img/weixin.png" alt="alt text" width="380">
+<img src="../img/alipay.jpg" alt="alt text" width="360">
 
 这 2 个二维码是 2017 年 5 月加的。  
 从 2014 年开始到 2017 年这个项目都没赚钱。  
