@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v17
+// @name           Youtube Subtitle Downloader v18
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        17
+// @version        18
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description  v17 support both automatic and closed subtitle
+// @description  v18 fix long youtube video(1:36:33) only get half subtitle problem
 // ==/UserScript==
 
 /*
@@ -44,11 +44,27 @@
   https://www.youtube.com/watch?v=9AzNEG1GB-k
   have a lot subtitle 
 
+  https://www.youtube.com/watch?v=tqGkOvrKGfY
+  1:36:33  super long subtitle
+
   [Code Explain]
   mainly three part
     1. UI specific (add button on page etc)
     2. detech if subtitle exists
     3. transform subtitle format & download
+
+   [Changelog]
+    v1~v15: I forgot, and I am too lazy to check git log
+
+    v16: add support for auto subtitle
+    
+    v17: fix few minor issue in v16, to make sure all user get update, bump up 1 version
+    
+    v18: fix https://greasyfork.org/zh-CN/forum/discussion/38299/x?locale=zh-CN  video too long issue
+    (for example 1:36:33) and cause subtitle error
+    reason is the 'downloadFile' function 
+    using a <a> element 'href' attribute to download .srt file.
+    and this 'href' can't handle string that's too long
 */
 
 // text for display
@@ -246,7 +262,8 @@ function download_subtitle(selector) {
             if (r != false) {
                 var srt = parse_youtube_XML_to_SRT(r);
                 var title = get_file_name('auto');
-                downloadFile(title, srt);
+                // downloadFile(title, srt);
+                downloadString(srt, "text/plain", title);
             }
         });
     } else { 
@@ -257,7 +274,8 @@ function download_subtitle(selector) {
             if (r != false) {
                 var srt = parse_youtube_XML_to_SRT(r);
                 var title = get_file_name(lang_name);
-                downloadFile(title, srt);
+                // downloadFile(title, srt);
+                downloadString(srt, "text/plain", title);
             }
         });
     }
@@ -408,16 +426,21 @@ function process_time(s){
     return Hour + ':' + Minute + ':' + Second + ',' + MilliSecond;
 }
 
-function downloadFile(fileName, content){
-    // dummy element for download
-    if ($('#youtube-subtitle-downloader-dummy-element-for-download').length > 0) {
-    }else{
-        $("body").append('<a id="youtube-subtitle-downloader-dummy-element-for-download"></a>');
-    }
-    var dummy = $('#youtube-subtitle-downloader-dummy-element-for-download');
-    dummy.attr('download', fileName);
-    dummy.attr('href','data:Content-type: text/plain,' + htmlDecode(content));
-    dummy[0].click();
+// copy from: https://gist.github.com/danallison/3ec9d5314788b337b682
+// Thanks! https://github.com/danallison
+// work in Chrome 66
+// test passed: 2018-5-19
+function downloadString(text, fileType, fileName) {
+    var blob = new Blob([text], { type: fileType });
+    var a = document.createElement('a');
+    a.download = fileName;
+    a.href = URL.createObjectURL(blob);
+    a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
 }
 
 // https://css-tricks.com/snippets/javascript/unescape-html-in-js/
@@ -465,6 +488,7 @@ function get_auto_subtitle(callback) {
 function get_closed_subtitle(lang_code, callback) {
     var url = 'https://video.google.com/timedtext?hl=' + lang_code + '&lang=' + lang_code + '&v=' + get_video_id();
     // example: https://video.google.com/timedtext?hl=en&lang=en&v=FWuwq8HTLQo
+    console.log('地址是：' + url);
     get_from_url(url, callback);
 }
 
@@ -516,7 +540,8 @@ function parse_youtube_XML_to_SRT(youtube_xml_string) {
             00:00:04,350 --> 00:00:06,720
             filmmaker on YouTube who's digging
         */
-        var new_line = "%0D%0A";
+        var new_line = "\n";
+        // var new_line = "%0D%0A";
         result = result + index + new_line;
         // 1
 
