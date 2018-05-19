@@ -262,7 +262,6 @@ function download_subtitle(selector) {
             if (r != false) {
                 var srt = parse_youtube_XML_to_SRT(r);
                 var title = get_file_name('auto');
-                // downloadFile(title, srt);
                 downloadString(srt, "text/plain", title);
             }
         });
@@ -274,7 +273,6 @@ function download_subtitle(selector) {
             if (r != false) {
                 var srt = parse_youtube_XML_to_SRT(r);
                 var title = get_file_name(lang_name);
-                // downloadFile(title, srt);
                 downloadString(srt, "text/plain", title);
             }
         });
@@ -488,7 +486,6 @@ function get_auto_subtitle(callback) {
 function get_closed_subtitle(lang_code, callback) {
     var url = 'https://video.google.com/timedtext?hl=' + lang_code + '&lang=' + lang_code + '&v=' + get_video_id();
     // example: https://video.google.com/timedtext?hl=en&lang=en&v=FWuwq8HTLQo
-    console.log('地址是：' + url);
     get_from_url(url, callback);
 }
 
@@ -541,10 +538,9 @@ function parse_youtube_XML_to_SRT(youtube_xml_string) {
             filmmaker on YouTube who's digging
         */
         var new_line = "\n";
-        // var new_line = "%0D%0A";
         result = result + index + new_line;
         // 1
-
+        
         var start_time = process_time(parseFloat(start));
         var end_time = process_time(parseFloat(end));
         result = result + start_time;
