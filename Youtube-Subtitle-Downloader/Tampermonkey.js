@@ -1,20 +1,20 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v18
+// @name           Youtube Subtitle Downloader v19
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        18
+// @version        19
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description  v18 fix long youtube video(1:36:33) only get half subtitle problem
+// @description  v19 fix HTML html entity problem, for example: apostrophe as &#39;
 // ==/UserScript==
 
 /*
   [What is this?]
   This "Tampermonkey script" allow you download Youtube "Automatic subtitle" AND "closed subtitle"
-  
+
   [Note]
   If not working(rarely), Refresh!!
   if problem still exist. Email me: guokrfans@gmail.com
@@ -26,12 +26,12 @@
   If you want improve the script, Github Pull Request are welcome
 
   [Note]
-  Few things before you read the code: 
+  Few things before you read the code:
   0. Some code comments are written in Chinese
-  1. Youtube have 2 UI: Material design and The old design 
+  1. Youtube have 2 UI: Material design and The old design
   2. Code need handle both Auto & Closed subtitle
 
-  (Explain: "Tampermonkey script" mean 
+  (Explain: "Tampermonkey script" mean
   you have to install a Chrome extension call "Tampermonkey", and then install this script)
 
   [Test Video]
@@ -65,6 +65,8 @@
     reason is the 'downloadFile' function 
     using a <a> element 'href' attribute to download .srt file.
     and this 'href' can't handle string that's too long
+
+    v19: fix HTML html entity problem, for example: apostrophe as &#39;
 */
 
 // text for display
@@ -540,13 +542,16 @@ function parse_youtube_XML_to_SRT(youtube_xml_string) {
         var new_line = "\n";
         result = result + index + new_line;
         // 1
-        
+
         var start_time = process_time(parseFloat(start));
         var end_time = process_time(parseFloat(end));
         result = result + start_time;
         result = result + ' --> ';
         result = result + end_time + new_line;
         // 00:00:01,939 --> 00:00:04,350
+
+        content = htmlDecode(content);
+        // turn HTML entity back to text. example: &#39; back to apostrophe (')
 
         result = result + content + new_line + new_line;
         // everybody Craig Adams here I'm a
