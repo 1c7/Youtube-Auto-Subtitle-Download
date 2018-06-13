@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v19
+// @name           Youtube Subtitle Downloader v20
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2018 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        19
+// @version        20
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description  v19 fix HTML html entity problem, for example: apostrophe as &#39;
+// @description   (2018-June-13) v20 fix download error cause by Youtube change their API
 // ==/UserScript==
 
 /*
@@ -57,9 +57,9 @@
     v1~v15: I forgot, and I am too lazy to check git log
 
     v16: add support for auto subtitle
-    
+
     v17: fix few minor issue in v16, to make sure all user get update, bump up 1 version
-    
+
     v18: fix https://greasyfork.org/zh-CN/forum/discussion/38299/x?locale=zh-CN  video too long issue
     (for example 1:36:33) and cause subtitle error
     reason is the 'downloadFile' function 
@@ -67,6 +67,9 @@
     and this 'href' can't handle string that's too long
 
     v19: fix HTML html entity problem, for example: apostrophe as &#39;
+
+    v20: 2018-June-13 seem like Youtube change their URL format, now URL must have something like '&name=en'
+     v20 test with: https://www.youtube.com/watch?v=tqGkOvrKGfY  https://www.youtube.com/watch?time_continue=5&v=36tggrpRoTI
 */
 
 // text for display
@@ -192,15 +195,15 @@ function inject_our_script(){
         controls = document.getElementById('watch7-headline');  // Youtube video title DIV
 
     div.setAttribute('style', `display: table; 
-        margin-top:4px;
-        border: 1px solid rgb(0, 183, 90); 
-        cursor: pointer; color: rgb(255, 255, 255); 
-        border-top-left-radius: 3px; 
-        border-top-right-radius: 3px; 
-        border-bottom-right-radius: 3px; 
-        border-bottom-left-radius: 3px; 
-        background-color: #00B75A;
-    `);
+margin-top:4px;
+border: 1px solid rgb(0, 183, 90); 
+cursor: pointer; color: rgb(255, 255, 255); 
+border-top-left-radius: 3px; 
+border-top-right-radius: 3px; 
+border-bottom-right-radius: 3px; 
+border-bottom-left-radius: 3px; 
+background-color: #00B75A;
+`);
 
     div.id = 'youtube-subtitle-downloader-by-1c7';
     div.title = 'Youtube Subtitle Download v16'; // display when cursor hover
@@ -208,12 +211,12 @@ function inject_our_script(){
     select.id = 'captions_selector';
     select.disabled = true;
     select.setAttribute( 'style', `display:block; 
-        border: 1px solid rgb(0, 183, 90); 
-        cursor: pointer; 
-        color: rgb(255, 255, 255); 
-        background-color: #00B75A;
-        padding: 4px;
-    `);
+border: 1px solid rgb(0, 183, 90); 
+cursor: pointer; 
+color: rgb(255, 255, 255); 
+background-color: #00B75A;
+padding: 4px;
+`);
 
     option.textContent = 'Loading...';
     option.selected    = true;
@@ -271,13 +274,17 @@ function download_subtitle(selector) {
         // closed subtitle
         var lang_code = caption.lang_code;
         var lang_name = caption.lang_name;
-        get_closed_subtitle(lang_code, function (r) {
+        var result = get_closed_subtitle(lang_code, function (r) {
             if (r != false) {
                 var srt = parse_youtube_XML_to_SRT(r);
                 var title = get_file_name(lang_name);
                 downloadString(srt, "text/plain", title);
             }
         });
+        if (result == false){
+           alert('Error: can\' get subtitle');
+
+        }
     }
     // after download, select first <option>
     selector.options[0].selected = true;
@@ -486,9 +493,28 @@ function get_auto_subtitle(callback) {
 }
 
 function get_closed_subtitle(lang_code, callback) {
-    var url = 'https://video.google.com/timedtext?hl=' + lang_code + '&lang=' + lang_code + '&v=' + get_video_id();
-    // example: https://video.google.com/timedtext?hl=en&lang=en&v=FWuwq8HTLQo
-    get_from_url(url, callback);
+    try {
+        var json = '';
+        if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+            json = youtube_playerResponse_1c7;
+        } else {
+            var raw_string = ytplayer.config.args.player_response;
+            json = JSON.parse(raw_string);
+        }
+
+        // get data from JSON
+        var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+        for (var index in captionTracks) {
+            var caption = captionTracks[index];
+            if (caption.languageCode === lang_code) {
+                var url = captionTracks[index].baseUrl;
+                get_from_url(url, callback);
+            }
+        }
+    } catch (error) {
+        return false;
+    }
+
 }
 
 function get_from_url(url, callback) {
