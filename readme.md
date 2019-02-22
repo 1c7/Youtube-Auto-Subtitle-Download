@@ -15,9 +15,9 @@ Email: guokrfans#gmail.com (# change to @)
 
 ### Project Background
 * Creator: Cheng Zheng
-* When? created around 2014
-* Why? I need download a lot subtitle, I hate copy&paste url into website and watch ad to get subtitle.
-* Still Maintaing? Yes! (2014 to now))  
+* When? Around 2014
+* Why? I need to download a lot subtitle, I hate copy&paste URL into website and watch AD to get subtitle.
+* Still Maintaing? Yes! 2014 to now(2019)    
 
 <br/>
 
