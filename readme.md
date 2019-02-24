@@ -11,7 +11,7 @@
 click green "Install" button
 
 ### Any question?
-Email: guokrfans#gmail.com (# change to @)     
+Email: guokrfans#gmail.com (replace # with @)     
 
 ### Project Background
 * Creator: Cheng Zheng
@@ -28,7 +28,9 @@ I am not interested to keep maintaining this project anymore.
 I been doing this from 2014-2019     
 
 if someone interested to keep this little script alive.   
-please let me know,    
+please let me know, email me at `guokrfans#gmail.com` (replace # with @)  
+or open a Github issue, or maybe just send me a Pull Request fix issue.   
+
 you need to fork this repo. and I am gonna write your repo URL in README.md.    
 so people know they should click to visit your repo.     
 
