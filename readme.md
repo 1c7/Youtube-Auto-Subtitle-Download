@@ -29,7 +29,7 @@ I been doing this from 2014-2019
 
 if someone interested to keep this little script alive.   
 please let me know, email me at `guokrfans#gmail.com` (replace # with @)  
-or open a Github issue, or maybe just send me a Pull Request fix issue.   
+or open a Github issue, or maybe just send me a Pull Request to fix bug(if you don't want to take over this but still want to fix it)      
 
 you need to fork this repo. and I am gonna write your repo URL in README.md.    
 so people know they should click to visit your repo.     
