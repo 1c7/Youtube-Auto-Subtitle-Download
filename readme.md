@@ -10,14 +10,35 @@
 ![3](img/3.jpg)   
 click green "Install" button
 
-### Any problem?
+### Any question?
 Email: guokrfans#gmail.com (# change to @)     
 
 ### Project Background
 * Creator: Cheng Zheng
 * When? Around 2014
 * Why? I need to download a lot subtitle, I hate copy&paste URL into website and watch AD to get subtitle.
-* Still Maintaing? Yes! 2014 to now(2019)    
+* Still Maintaing? No (I maintain this from `2014` to `2019 Feb`, now it's time to move on)    
+**Don't worry, as of 2019-2-24, this still work.**   
+but in future(I don't know when)   
+it gonna stop working because Youtube change their code.   
+cause this script fail to download subtitle.   
+
+### Looking for new maintainer!
+I am not interested to keep maintaining this project anymore.    
+I been doing this from 2014-2019     
+
+if someone interested to keep this little script alive.   
+please let me know,    
+you need to fork this repo. and I am gonna write your repo URL in README.md.    
+so people know they should click to visit your repo.     
+
+this script still work as of 2019-2-24, when someday it's not working anymore.   
+then you can take over and maintain this project.   
+
+### Why I abandon this project?
+time and money.    
+I can't keep investing **time** into this project because It's not bringing me any **revenue**.   
+I have more important things to do in life.  
 
 <br/>
 
