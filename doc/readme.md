@@ -1,4 +1,4 @@
-## 文档
+# 文档
 
 ## 项目历史-简单说明
 原本是2个脚本，一个脚本下载"自动字幕"，一个脚本下载"完整字幕"   
@@ -14,11 +14,11 @@ var raw_string = ytplayer.config.args.player_response;
 json = JSON.parse(raw_string);
 ```
 
-## 翻译的时候，发出的请求是什么？
+## 完整字幕
+拿这个视频 URL 举例
 https://www.youtube.com/watch?v=n1zpnN-6pZQ&t=11s
 
-
-### 原始英文：
+### 英文：
 https://www.youtube.com/api/timedtext?v=n1zpnN-6pZQ&asr_langs=de%2Cen%2Ces%2Cfr%2Cit%2Cja%2Cko%2Cnl%2Cpt%2Cru&caps=asr&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1602073051&sparams=ip%2Cipbits%2Cexpire%2Cv%2Casr_langs%2Ccaps%2Cxorp%2Cxoaf&signature=3BA095651949DD59FA8095E70EA0F1015BA184D0.7BCEEA5A4DAC185D72735C54DE2BF1AC20091343&key=yt8&lang=en&fmt=json3&xorb=2&xobt=3&xovt=3
 
 ### 中文： tlang=zh-Hans
@@ -84,14 +84,3 @@ vtt 的 timestamp 有些奇怪，有内容重复的句子
 	* 以中文的句子时间轴为准
 	* 英文只有词的时间轴，把词填入中文句子
 
-
-
-
-https://www.youtube.com/api/timedtext?fmt=vtt&v=tnsB6YCHVXA&lang=en&name=English
-
-
-
-## ttml
-https://www.youtube.com/api/timedtext?v=n1zpnN-6pZQ&asr_langs=de%2Cen%2Ces%2Cfr%2Cit%2Cja%2Cko%2Cnl%2Cpt%2Cru&caps=asr&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1602073051&sparams=ip%2Cipbits%2Cexpire%2Cv%2Casr_langs%2Ccaps%2Cxorp%2Cxoaf&signature=3BA095651949DD59FA8095E70EA0F1015BA184D0.7BCEEA5A4DAC185D72735C54DE2BF1AC20091343&key=yt8&kind=asr&lang=en&fmt=ttml&xorb=2&xobt=3&xovt=3
-
-## 自动字幕真的没办法找到，和翻译后 match 的时间戳，
