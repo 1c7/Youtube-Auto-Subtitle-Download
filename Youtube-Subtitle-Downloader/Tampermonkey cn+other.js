@@ -328,9 +328,11 @@ function load_language_list(select) {
 
       // 自动字幕
       if (auto_subtitle_exist) {
+        var auto_sub_name = get_auto_subtitle_name()
+        var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
         caption_info = {
           lang_code: 'AUTO', // later we use this to know if it's auto subtitle
-          lang_name: get_auto_subtitle_name() // for display only
+          lang_name: lang_name // for display only
         };
         caption_array.push(caption_info);
 
