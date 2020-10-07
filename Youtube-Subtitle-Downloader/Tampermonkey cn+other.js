@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v1 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v2 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        v1
+// @version        2
 // @grant GM_xmlhttpRequest
-// @description   Youtube 有两种类型的字幕，"自动字幕"和"完整字幕"。目前支持"完整字幕"的双语，比如"中文 \n 英语"（\n 是换行符的意思）。暂不支持"自动字幕"的双语，如有需求可以联系作者 QQ 1003211008
+// @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
@@ -21,13 +21,6 @@
 
   解决什么问题：
     下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思
-
-  给什么人用：
-    需要下载字幕的人
-
-  功能说明:
-    '完整字幕'可以下载双语的
-    '自动字幕'暂时不行 (因为代码更复杂一些，暂时还没写)
   
   术语说明：
     auto 自动字幕
@@ -215,7 +208,148 @@ padding: 4px;
   body.appendChild(a);
 }
 
-// trigger when user select <option>
+
+// 输入: url
+// 输出: SRT Array
+async function auto_sub_in_chinese_fmt_json3_to_srt(url) {
+  var json = await get(url);
+  var srt_array = []
+  // 先处理中文，转成 SRT 中间格式, 一个句子一个句子的形式，开始时间，结束时间，文字，都是对的
+  var events = json.events;
+  for (let index = 0; index < events.length; index++) {
+    const event = events[index];
+    // console.log(event);
+    var tStartMs = event.tStartMs
+    var dDurationMs = event.dDurationMs
+    var segs = event.segs
+    // console.log(tStartMs)
+    // console.log(dDurationMs)
+    // console.log(segs)
+    var text = segs[0].utf8;
+    // console.log(text)
+
+    var item = {
+      startTime: ms_to_srt(tStartMs),
+      endTime: ms_to_srt(tStartMs + dDurationMs),
+      text: text,
+
+      tStartMs: tStartMs,
+      dDurationMs: dDurationMs,
+    }
+    srt_array.push(item);
+  }
+  return srt_array
+}
+
+// 下载自动字幕的中英双语
+async function download_auto_subtitle(file_name) {
+  // 1. English Auto Sub in json3 format
+  var auto_sub_url = get_auto_subtitle_xml_url();
+  var format_json3_url = auto_sub_url + '&fmt=json3'
+  var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
+
+  // 2. 自动字幕的翻译中文
+  var cn_url = format_json3_url + '&tlang=zh-Hans'
+  var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
+
+  // 3. 处理英文，插入到句子里, 也就是插入到 cn_srt 的每个元素里（新加一个属性叫 words)
+  var events = en_auto_sub.events;
+  for (let i = 0; i < events.length; i++) { // loop events
+    let event = events[i];
+    if (event.aAppend == 1) { // 这样的元素内部只有一个换行符，对我们没有意义，跳过
+      continue
+    }
+    var segs = event.segs
+    if (segs == undefined) { // 这样的元素也没意义，跳过
+      continue
+    }
+    var tStartMs = event.tStartMs
+    var dDurationMs = event.dDurationMs
+
+    for (let j = 0; j < segs.length; j++) { // loop segs
+      const seg = segs[j];
+      var word = seg.utf8 // 词的内容
+
+      var word_offset = seg.tOffsetMs === undefined ? 0 : seg.tOffsetMs;
+      var word_start_time = tStartMs + word_offset // 词的开始时间
+
+      for (let z = 0; z < cn_srt.length; z++) { // loop each word and put into cn_srt
+        const srt_line = cn_srt[z];
+        var line_start_time_ms = srt_line.tStartMs
+        var line_end_time_ms = srt_line.tStartMs + dDurationMs
+
+        // 如果词的开始时间，刚好处于这个句子的 [开始时间, 结束时间] 区间之内
+        if (word_start_time >= line_start_time_ms && word_start_time <= line_end_time_ms) {
+          // push 到 words 数组里
+          if (cn_srt[z].words === undefined) {
+            cn_srt[z].words = [word]
+          } else {
+            var final_word = ` ${word.trim()}` // 去掉单词本身的空格（不管有没有）然后给单词前面加一个空格
+            cn_srt[z].words.push(final_word)
+          }
+        }
+      }
+    }
+  }
+
+  // console.log(cn_srt)
+  // 到了这一步，cn_srt 的每一个 item 应该是：
+  // var item_example = {
+  //   "startTime": "00:00:06,640",
+  //   "endTime": "00:00:09,760",
+  //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
+  //   "tStartMs": 6640,
+  //   "dDurationMs": 3120,
+  //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
+  // }
+
+  // 最后保存下来
+  var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
+  downloadString(srt_string, "text/plain", file_name);
+}
+
+function auto_sub_dual_language_to_srt(srt_array) {
+  // var srt_array_item_example = {
+  //   "startTime": "00:00:06,640",
+  //   "endTime": "00:00:09,760",
+  //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
+  //   "tStartMs": 6640,
+  //   "dDurationMs": 3120,
+  //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
+  // }
+
+  var result_array = []
+  for (let i = 0; i < srt_array.length; i++) {
+    const line = srt_array[i];
+    var text = line.text + NEW_LINE + line.words.join(''); // 中文 \n 英文
+    var item = {
+      startTime: line.startTime,
+      endTime: line.endTime,
+      text: text
+    }
+    result_array.push(item)
+  }
+
+  var srt_string = object_array_to_SRT_string(result_array)
+  return srt_string
+}
+
+// 把毫秒转成 srt 时间
+// 代码来源网络
+function ms_to_srt($milliseconds) {
+  var $seconds = Math.floor($milliseconds / 1000);
+  var $minutes = Math.floor($seconds / 60);
+  var $hours = Math.floor($minutes / 60);
+  var $milliseconds = $milliseconds % 1000;
+  var $seconds = $seconds % 60;
+  var $minutes = $minutes % 60;
+  return ($hours < 10 ? '0' : '') + $hours + ':' +
+    ($minutes < 10 ? '0' : '') + $minutes + ':' +
+    ($seconds < 10 ? '0' : '') + $seconds + ',' +
+    ($milliseconds < 100 ? '0' : '') + ($milliseconds < 10 ? '0' : '') + $milliseconds;
+}
+
+// Trigger when user select <option>
 async function download_subtitle(selector) {
   // if user select first <option>
   // we just return, do nothing.
@@ -223,28 +357,28 @@ async function download_subtitle(selector) {
     return;
   }
 
-  var caption = caption_array[selector.selectedIndex - 1];
-  // because first <option> is for display
-  // so index - 1 
+  // 核心概念
+  // 对于完整字幕而言，英文和中文的时间轴是一致的，只需要一行行的 match 即可
 
-  // if user choose auto subtitle
-  if (caption.lang_code == 'AUTO') {
-    get_auto_subtitle(function (r) {
-      if (r != false) {
-        var srt = parse_youtube_XML_to_SRT(r);
-        var title = get_file_name('auto');
-        downloadString(srt, "text/plain", title);
-      }
-    });
-    // after download, select first <option>
-    selector.options[0].selected = true;
-    return
-  }
+  // 但是对于自动字幕就不是这样了，"自动字幕的英文"只能拿到一个个单词的开始时间和结束时间
+  // "自动字幕的中文"只能拿到一个个句子
+  // 现在的做法是，先拿到中文，处理成 SRT 格式，
+  // 然后去拿英文，然后把英文的每个词，拿去和中文的每个句子的开始时间和结束时间进行对比
+  // 如果"英文单词的开始时间"在"中文句子的开始-结束时间"区间内，那么认为这个英文单词属于这一句中文
 
-  // closed subtitle
+  var caption = caption_array[selector.selectedIndex - 1]; // because first <option> is for display, so index-1 
   var lang_code = caption.lang_code;
   var lang_name = caption.lang_name;
 
+  // if user choose auto subtitle // 如果用户选的是自动字幕
+  if (caption.lang_code == 'AUTO') {
+    var file_name = get_file_name(lang_name);
+    download_auto_subtitle(file_name);
+    selector.options[0].selected = true; // after download, select first <option>
+    return
+  }
+
+  // 如果用户选的是完整字幕
   // 原文
   // sub mean "subtitle"
   var sub_original_url = await get_closed_subtitle_url(lang_code)
@@ -334,7 +468,8 @@ function load_language_list(select) {
       // 自动字幕
       if (auto_subtitle_exist) {
         var auto_sub_name = get_auto_subtitle_name()
-        var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
+        // var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
+        var lang_name = `中文 + ${auto_sub_name}`
         caption_info = {
           lang_code: 'AUTO', // later we use this to know if it's auto subtitle
           lang_name: lang_name // for display only
@@ -353,9 +488,10 @@ function load_language_list(select) {
           // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
           var lang_code = caption.getAttribute('lang_code')
           var lang_translated = caption.getAttribute('lang_translated')
+          var lang_name = `中文 + ${lang_translated}`
           caption_info = {
             lang_code: lang_code, // for AJAX request
-            lang_name: "中文 + " + lang_translated, // display to user
+            lang_name: lang_name, // display to user
           };
           caption_array.push(caption_info);
           // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载

@@ -1,0 +1,1093 @@
+{
+  "wireMagic": "pb3",
+  "pens": [ {
+  
+  } ],
+  "wsWinStyles": [ {
+  
+  } ],
+  "wpWinPositions": [ {
+  
+  } ],
+  "events": [ {
+    "tStartMs": 160,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "嗨，我是泰勒，欢迎您在第3集学习速成课程语言学"
+    } ]
+  }, {
+    "tStartMs": 4000,
+    "dDurationMs": 2560,
+    "segs": [ {
+      "utf8": "了解了如何测试句子的哪些部分"
+    } ]
+  }, {
+    "tStartMs": 6560,
+    "dDurationMs": 4079,
+    "segs": [ {
+      "utf8": "句子中单词的组成部分或紧密相关的子组"
+    } ]
+  }, {
+    "tStartMs": 10639,
+    "dDurationMs": 3201,
+    "segs": [ {
+      "utf8": "泰勒看到兔子，我们知道兔子就是这样的一只"
+    } ]
+  }, {
+    "tStartMs": 13840,
+    "dDurationMs": 3359,
+    "segs": [ {
+      "utf8": "因为我们可以用一个词或代词代替它"
+    } ]
+  }, {
+    "tStartMs": 17199,
+    "dDurationMs": 4881,
+    "segs": [ {
+      "utf8": "像gavagai或它们，并发现兔子是另一种稍大的成分"
+    } ]
+  }, {
+    "tStartMs": 22080,
+    "dDurationMs": 2959,
+    "segs": [ {
+      "utf8": "因为我们可以将整个内容移动到句子的开头"
+    } ]
+  }, {
+    "tStartMs": 25039,
+    "dDurationMs": 4080,
+    "segs": [ {
+      "utf8": "裂开，看到泰勒做的兔子"
+    } ]
+  }, {
+    "tStartMs": 29119,
+    "dDurationMs": 4241,
+    "segs": [ {
+      "utf8": "现在我们想更进一步，让我们找出一种跟踪"
+    } ]
+  }, {
+    "tStartMs": 33360,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "这些分组并提取一些规则，这些规则可以帮助我们找到"
+    } ]
+  }, {
+    "tStartMs": 37040,
+    "dDurationMs": 8800,
+    "segs": [ {
+      "utf8": "很多不同的句子"
+    } ]
+  }, {
+    "tStartMs": 49280,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "跟踪句子不同部分的简单方法是绘制"
+    } ]
+  }, {
+    "tStartMs": 52640,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "单词之间的联系，例如，我们可以在周围画圈"
+    } ]
+  }, {
+    "tStartMs": 56480,
+    "dDurationMs": 3919,
+    "segs": [ {
+      "utf8": "每个组成部分，但随着我们的句子变得越来越多，圈子变得非常迅速"
+    } ]
+  }, {
+    "tStartMs": 60399,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "更长的时间，或者我们可以在每个"
+    } ]
+  }, {
+    "tStartMs": 62879,
+    "dDurationMs": 3841,
+    "segs": [ {
+      "utf8": "成分括号很好而且很紧凑，但是很难"
+    } ]
+  }, {
+    "tStartMs": 66720,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "扫描并一目了然，因此语言学家通常代表"
+    } ]
+  }, {
+    "tStartMs": 70720,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "使用树形结构图的单词之间的结构关系"
+    } ]
+  }, {
+    "tStartMs": 74720,
+    "dDurationMs": 4160,
+    "segs": [ {
+      "utf8": "有点像带有节点和分支的家谱树图"
+    } ]
+  }, {
+    "tStartMs": 78880,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "在可理解和合理使用之间取得平衡"
+    } ]
+  }, {
+    "tStartMs": 82400,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "节点之间的空间表示要素之间的链接"
+    } ]
+  }, {
+    "tStartMs": 85680,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "因此标记它们很有用，这有助于我们比较各个树形图"
+    } ]
+  }, {
+    "tStartMs": 89360,
+    "dDurationMs": 2799,
+    "segs": [ {
+      "utf8": "各种句子并跟踪中的不同短语"
+    } ]
+  }, {
+    "tStartMs": 92159,
+    "dDurationMs": 3841,
+    "segs": [ {
+      "utf8": "句子也是一个短语，是中等大小的成分，小于"
+    } ]
+  }, {
+    "tStartMs": 96000,
+    "dDurationMs": 3119,
+    "segs": [ {
+      "utf8": "一个完整的句子，但通常不止一个单词"
+    } ]
+  }, {
+    "tStartMs": 99119,
+    "dDurationMs": 3201,
+    "segs": [ {
+      "utf8": "在本视频中，我们将介绍一些基础的常用短语"
+    } ]
+  }, {
+    "tStartMs": 102320,
+    "dDurationMs": 2960,
+    "segs": [ {
+      "utf8": "英语语法，例如短语之间的差异"
+    } ]
+  }, {
+    "tStartMs": 105280,
+    "dDurationMs": 5199,
+    "segs": [ {
+      "utf8": "看到兔子，只是兔子看到兔子里面有一个动词"
+    } ]
+  }, {
+    "tStartMs": 110479,
+    "dDurationMs": 3521,
+    "segs": [ {
+      "utf8": "因此我们可以使用替换将c的Rabbit称为动词短语"
+    } ]
+  }, {
+    "tStartMs": 114000,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "在上一个视频中讨论的测试，我们可以交换位置"
+    } ]
+  }, {
+    "tStartMs": 117680,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "泰勒和兔子在这句话中都应该"
+    } ]
+  }, {
+    "tStartMs": 120960,
+    "dDurationMs": 3119,
+    "segs": [ {
+      "utf8": "因为这两个短语都有一个名词，所以使用相同的短语"
+    } ]
+  }, {
+    "tStartMs": 124079,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "在它们中，我们将其称为名词短语，而“ the”一词是"
+    } ]
+  }, {
+    "tStartMs": 127759,
+    "dDurationMs": 2801,
+    "segs": [ {
+      "utf8": "语言学家称谓词为一类词的一部分"
+    } ]
+  }, {
+    "tStartMs": 130560,
+    "dDurationMs": 5920,
+    "segs": [ {
+      "utf8": "其中也包括这样的词，我和每个决定者都可以帮助我们确定"
+    } ]
+  }, {
+    "tStartMs": 136480,
+    "dDurationMs": 2800,
+    "segs": [ {
+      "utf8": "我们是特定名词的哪个特定实例"
+    } ]
+  }, {
+    "tStartMs": 139280,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "谈论一种语法理论实际上认为"
+    } ]
+  }, {
+    "tStartMs": 142640,
+    "dDurationMs": 3040,
+    "segs": [ {
+      "utf8": "确定短语和名词短语"
+    } ]
+  }, {
+    "tStartMs": 145680,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "无论哪种方式，这些小字都能起到很大的作用，所以让我们用“"
+    } ]
+  }, {
+    "tStartMs": 149360,
+    "dDurationMs": 3920,
+    "segs": [ {
+      "utf8": "短语和单词类，以跟踪所有这些信息以及整个"
+    } ]
+  }, {
+    "tStartMs": 153280,
+    "dDurationMs": 2720,
+    "segs": [ {
+      "utf8": "我们已经知道的是句子写作"
+    } ]
+  }, {
+    "tStartMs": 156000,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "每次名词短语和动词短语都会变得乏味，所以"
+    } ]
+  }, {
+    "tStartMs": 159840,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "语言学家通常将其缩写为np"
+    } ]
+  }, {
+    "tStartMs": 162480,
+    "dDurationMs": 6160,
+    "segs": [ {
+      "utf8": "和vp一样，名词v表示动词，名词s表示句子加债务"
+    } ]
+  }, {
+    "tStartMs": 168640,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "对于确定器树形图，让我们看看我们讨论过的谓词关系"
+    } ]
+  }, {
+    "tStartMs": 172080,
+    "dDurationMs": 4159,
+    "segs": [ {
+      "utf8": "大约在最后一集中动词和宾语短语都是"
+    } ]
+  }, {
+    "tStartMs": 176239,
+    "dDurationMs": 2881,
+    "segs": [ {
+      "utf8": "甚至在vp内用语言表达他们的想法"
+    } ]
+  }, {
+    "tStartMs": 179120,
+    "dDurationMs": 3199,
+    "segs": [ {
+      "utf8": "动词和宾语的顺序不同"
+    } ]
+  }, {
+    "tStartMs": 182319,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "关系让我们以日语为例"
+    } ]
+  }, {
+    "tStartMs": 184959,
+    "dDurationMs": 3441,
+    "segs": [ {
+      "utf8": "日语动词出现在句子的结尾，动词仍在"
+    } ]
+  }, {
+    "tStartMs": 188400,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "动词短语与宾语相同，因此我们可以"
+    } ]
+  }, {
+    "tStartMs": 191840,
+    "dDurationMs": 3679,
+    "segs": [ {
+      "utf8": "通过给vp节点一个"
+    } ]
+  }, {
+    "tStartMs": 195519,
+    "dDurationMs": 2800,
+    "segs": [ {
+      "utf8": "一点点回头回到英语，现在这是另一个"
+    } ]
+  }, {
+    "tStartMs": 198319,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "加瓦加语把我的蛋糕吃了这个新句子"
+    } ]
+  }, {
+    "tStartMs": 201519,
+    "dDurationMs": 3041,
+    "segs": [ {
+      "utf8": "与第一个单词完全不同，但是它具有"
+    } ]
+  }, {
+    "tStartMs": 204560,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "完全相同的结构，因此其树形结构图看起来像"
+    } ]
+  }, {
+    "tStartMs": 208000,
+    "dDurationMs": 4480,
+    "segs": [ {
+      "utf8": "同样，我们可以从结构的一些基本位中做出很多句子"
+    } ]
+  }, {
+    "tStartMs": 212480,
+    "dDurationMs": 3119,
+    "segs": [ {
+      "utf8": "这使我们想到了一个有趣的难题，让我们尝试找出所有"
+    } ]
+  }, {
+    "tStartMs": 215599,
+    "dDurationMs": 2881,
+    "segs": [ {
+      "utf8": "英语中句子的可能结构"
+    } ]
+  }, {
+    "tStartMs": 218480,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "换句话说，让我们尝试使英语语法成为一种语法"
+    } ]
+  }, {
+    "tStartMs": 222000,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "语言中句子如何一起使用的描述"
+    } ]
+  }, {
+    "tStartMs": 225120,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "我们可以用语法开始教机器学习英语"
+    } ]
+  }, {
+    "tStartMs": 228640,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "或者将英语的规则与另一种语言的语法进行比较"
+    } ]
+  }, {
+    "tStartMs": 231920,
+    "dDurationMs": 3039,
+    "segs": [ {
+      "utf8": "不一定是您说的时候脑子里到底发生了什么"
+    } ]
+  }, {
+    "tStartMs": 234959,
+    "dDurationMs": 2241,
+    "segs": [ {
+      "utf8": "这句话仍然是一个开放的问题"
+    } ]
+  }, {
+    "tStartMs": 237200,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "语言学家正在研究，而我们将专注于"
+    } ]
+  }, {
+    "tStartMs": 240560,
+    "dDurationMs": 2959,
+    "segs": [ {
+      "utf8": "这里的英语每种语言都有一种语法"
+    } ]
+  }, {
+    "tStartMs": 243519,
+    "dDurationMs": 3521,
+    "segs": [ {
+      "utf8": "实际上是一个很大的挑战，让我们从几句话开始"
+    } ]
+  }, {
+    "tStartMs": 247040,
+    "dDurationMs": 3279,
+    "segs": [ {
+      "utf8": "弄清楚如何描述泰勒看到兔子的结构"
+    } ]
+  }, {
+    "tStartMs": 250319,
+    "dDurationMs": 4480,
+    "segs": [ {
+      "utf8": "兔子先吃了蛋糕，然后吃了gavigan，我们注意到我们可以将它们分开"
+    } ]
+  }, {
+    "tStartMs": 254799,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "句子分为两部分，我们可以混合并匹配前半部分和后半部分"
+    } ]
+  }, {
+    "tStartMs": 258479,
+    "dDurationMs": 3761,
+    "segs": [ {
+      "utf8": "一半我们有泰勒兔和加洛家伙"
+    } ]
+  }, {
+    "tStartMs": 262240,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "在一侧看到兔子的八个蛋糕和"
+    } ]
+  }, {
+    "tStartMs": 265440,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "跳到另一个这个结构可以预测泰勒"
+    } ]
+  }, {
+    "tStartMs": 268080,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "跳了起来，泰勒吃了蛋糕，加维甘看到了兔子"
+    } ]
+  }, {
+    "tStartMs": 271360,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "即使它们不在我们的原始列表中也应该是可以的句子"
+    } ]
+  }, {
+    "tStartMs": 274880,
+    "dDurationMs": 4080,
+    "segs": [ {
+      "utf8": "根据我作为英语使用者的语言直觉，这是一个很好的预测"
+    } ]
+  }, {
+    "tStartMs": 278960,
+    "dDurationMs": 3040,
+    "segs": [ {
+      "utf8": "作为语法的一部分，我们已经确定句子包含"
+    } ]
+  }, {
+    "tStartMs": 282000,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "两部分，但是如果我们像这样将这些句子分开"
+    } ]
+  }, {
+    "tStartMs": 285120,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "相反，这预示着该句子是gavagai ate"
+    } ]
+  }, {
+    "tStartMs": 288400,
+    "dDurationMs": 5120,
+    "segs": [ {
+      "utf8": "兔子吃了蛋糕，我的蛋糕应该可以了，我们知道"
+    } ]
+  }, {
+    "tStartMs": 293520,
+    "dDurationMs": 3760,
+    "segs": [ {
+      "utf8": "说英语的人不是他们，我们希望某些分组会像这样失败"
+    } ]
+  }, {
+    "tStartMs": 297280,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "到目前为止，我们在英语语法中都尝试过的任何语言"
+    } ]
+  }, {
+    "tStartMs": 300800,
+    "dDurationMs": 4320,
+    "segs": [ {
+      "utf8": "这两个句子包含两个部分，但这两个部分又有什么关系呢"
+    } ]
+  }, {
+    "tStartMs": 305120,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "让我们回到工作清单并突出显示名词"
+    } ]
+  }, {
+    "tStartMs": 308400,
+    "dDurationMs": 4079,
+    "segs": [ {
+      "utf8": "动词和限定词使用不同的颜色，以便泰勒看到兔子"
+    } ]
+  }, {
+    "tStartMs": 312479,
+    "dDurationMs": 2801,
+    "segs": [ {
+      "utf8": "我们将泰勒和兔子的名字设为红色"
+    } ]
+  }, {
+    "tStartMs": 315280,
+    "dDurationMs": 4160,
+    "segs": [ {
+      "utf8": "c表示动词为蓝色，而动词为绿色，基于此我们可以写成"
+    } ]
+  }, {
+    "tStartMs": 319440,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "首先，我们可以说一些关于英语语法的规则"
+    } ]
+  }, {
+    "tStartMs": 322720,
+    "dDurationMs": 4880,
+    "segs": [ {
+      "utf8": "英语由两部分组成：名词短语加上动词短语a名词"
+    } ]
+  }, {
+    "tStartMs": 327600,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "短语由确定词加名词组成"
+    } ]
+  }, {
+    "tStartMs": 330240,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "动词短语由动词加名词短语组成"
+    } ]
+  }, {
+    "tStartMs": 333520,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "但是即使这些规则是一个好的开始，他们仍然需要一些调整"
+    } ]
+  }, {
+    "tStartMs": 337360,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "并非我们所有的名词短语中都有一个限定词"
+    } ]
+  }, {
+    "tStartMs": 340560,
+    "dDurationMs": 3760,
+    "segs": [ {
+      "utf8": "有时候是兔子，而其他时候只是"
+    } ]
+  }, {
+    "tStartMs": 344320,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "蛋糕和我们的一些动词短语中也没有名词短语"
+    } ]
+  }, {
+    "tStartMs": 348160,
+    "dDurationMs": 3920,
+    "segs": [ {
+      "utf8": "有时是抓住兔子或吃了蛋糕，但其他时候"
+    } ]
+  }, {
+    "tStartMs": 352080,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "太热了，所以我们需要指出这些规则的某些部分"
+    } ]
+  }, {
+    "tStartMs": 356080,
+    "dDurationMs": 2959,
+    "segs": [ {
+      "utf8": "可选的，我们可以使用它的括号来做"
+    } ]
+  }, {
+    "tStartMs": 359039,
+    "dDurationMs": 2720,
+    "segs": [ {
+      "utf8": "效果很好，这是绝对唯一的"
+    } ]
+  }, {
+    "tStartMs": 361759,
+    "dDurationMs": 3841,
+    "segs": [ {
+      "utf8": "名词短语中必需的是名词，而名词中唯一需要的是"
+    } ]
+  }, {
+    "tStartMs": 365600,
+    "dDurationMs": 2719,
+    "segs": [ {
+      "utf8": "动词短语是一个动词，我们称其为必需的片断"
+    } ]
+  }, {
+    "tStartMs": 368319,
+    "dDurationMs": 4401,
+    "segs": [ {
+      "utf8": "短语以标题和次要版本命名的部分"
+    } ]
+  }, {
+    "tStartMs": 372720,
+    "dDurationMs": 3039,
+    "segs": [ {
+      "utf8": "补语还有很多我们可以添加到句子中的东西"
+    } ]
+  }, {
+    "tStartMs": 375759,
+    "dDurationMs": 3201,
+    "segs": [ {
+      "utf8": "这使语法变得更加复杂"
+    } ]
+  }, {
+    "tStartMs": 378960,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "例如把这些带围巾的兔子"
+    } ]
+  }, {
+    "tStartMs": 382560,
+    "dDurationMs": 4880,
+    "segs": [ {
+      "utf8": "在月球上跳来跳去，吃了蛋糕，您添加了两个新短语"
+    } ]
+  }, {
+    "tStartMs": 387440,
+    "dDurationMs": 4800,
+    "segs": [ {
+      "utf8": "这些短语带有围巾和月亮，其中包含确定词和名词"
+    } ]
+  }, {
+    "tStartMs": 392240,
+    "dDurationMs": 3679,
+    "segs": [ {
+      "utf8": "但它们也包含一个介词，表示"
+    } ]
+  }, {
+    "tStartMs": 395919,
+    "dDurationMs": 3521,
+    "segs": [ {
+      "utf8": "句子其余部分的名词短语，所以现在我们可以为"
+    } ]
+  }, {
+    "tStartMs": 399440,
+    "dDurationMs": 3599,
+    "segs": [ {
+      "utf8": "介词短语，其中包含介词作为头和一个名词"
+    } ]
+  }, {
+    "tStartMs": 403039,
+    "dDurationMs": 3761,
+    "segs": [ {
+      "utf8": "作为补充，我们还需要完善名词短语和"
+    } ]
+  }, {
+    "tStartMs": 406800,
+    "dDurationMs": 3040,
+    "segs": [ {
+      "utf8": "动词短语，允许使用可选介词短语"
+    } ]
+  }, {
+    "tStartMs": 409840,
+    "dDurationMs": 4880,
+    "segs": [ {
+      "utf8": "到目前为止，我们的语法仅包含四个规则，但它已经非常强大"
+    } ]
+  }, {
+    "tStartMs": 414720,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "找出让我们如何进入思想泡泡的样子"
+    } ]
+  }, {
+    "tStartMs": 418080,
+    "dDurationMs": 3839,
+    "segs": [ {
+      "utf8": "我和gav在一个思想泡泡内，让我们进入另一个思想泡泡"
+    } ]
+  }, {
+    "tStartMs": 421919,
+    "dDurationMs": 3041,
+    "segs": [ {
+      "utf8": "很酷，我们在思想泡泡里面"
+    } ]
+  }, {
+    "tStartMs": 424960,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "让我们更深入，现在我们进入一个思想泡泡"
+    } ]
+  }, {
+    "tStartMs": 428960,
+    "dDurationMs": 2639,
+    "segs": [ {
+      "utf8": "在思想泡泡中，我们可以继续前进"
+    } ]
+  }, {
+    "tStartMs": 431599,
+    "dDurationMs": 3121,
+    "segs": [ {
+      "utf8": "我们可能会感到无聊或屏幕空间不足，或者被"
+    } ]
+  }, {
+    "tStartMs": 434720,
+    "dDurationMs": 3039,
+    "segs": [ {
+      "utf8": "youtube的时间限制，但理论上我们可以保持"
+    } ]
+  }, {
+    "tStartMs": 437759,
+    "dDurationMs": 2641,
+    "segs": [ {
+      "utf8": "在思想泡泡中嵌入思想泡泡"
+    } ]
+  }, {
+    "tStartMs": 440400,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "永远吧，让我们弹出其中的一些思想泡泡，并获得更多"
+    } ]
+  }, {
+    "tStartMs": 443840,
+    "dDurationMs": 3919,
+    "segs": [ {
+      "utf8": "呼吸室好吧离开以为泡沫离开"
+    } ]
+  }, {
+    "tStartMs": 447759,
+    "dDurationMs": 3041,
+    "segs": [ {
+      "utf8": "以为泡沫好了，现在我们回到正常的单身状态"
+    } ]
+  }, {
+    "tStartMs": 450800,
+    "dDurationMs": 2799,
+    "segs": [ {
+      "utf8": "气泡以为气泡具有递归的性质"
+    } ]
+  }, {
+    "tStartMs": 453599,
+    "dDurationMs": 3040,
+    "segs": [ {
+      "utf8": "我们可以将思想泡泡永久地嵌入思想泡泡中"
+    } ]
+  }, {
+    "tStartMs": 456639,
+    "dDurationMs": 4321,
+    "segs": [ {
+      "utf8": "语言也是递归的，让我们在思想泡泡中使用这个短语"
+    } ]
+  }, {
+    "tStartMs": 460960,
+    "dDurationMs": 3919,
+    "segs": [ {
+      "utf8": "内部是介词，所以这是介词短语"
+    } ]
+  }, {
+    "tStartMs": 464879,
+    "dDurationMs": 4320,
+    "segs": [ {
+      "utf8": "一个思想泡泡是一个名词短语，但是在这个名词短语中是一个思想"
+    } ]
+  }, {
+    "tStartMs": 469199,
+    "dDurationMs": 2881,
+    "segs": [ {
+      "utf8": "泡泡，我们可以添加另一个介词短语"
+    } ]
+  }, {
+    "tStartMs": 472080,
+    "dDurationMs": 4239,
+    "segs": [ {
+      "utf8": "假设它也在思想泡泡内，我们可以继续进行下去"
+    } ]
+  }, {
+    "tStartMs": 476319,
+    "dDurationMs": 3121,
+    "segs": [ {
+      "utf8": "我们在描述递归思想泡泡时已经做过"
+    } ]
+  }, {
+    "tStartMs": 479440,
+    "dDurationMs": 2479,
+    "segs": [ {
+      "utf8": "第一名，我们不必总是嵌入确切的位置"
+    } ]
+  }, {
+    "tStartMs": 481919,
+    "dDurationMs": 3521,
+    "segs": [ {
+      "utf8": "同样的词递归只是意味着我们可以在其他内部构建结构"
+    } ]
+  }, {
+    "tStartMs": 485440,
+    "dDurationMs": 3439,
+    "segs": [ {
+      "utf8": "结构，例如太阳中月亮上的兔子"
+    } ]
+  }, {
+    "tStartMs": 488879,
+    "dDurationMs": 4481,
+    "segs": [ {
+      "utf8": "星期五热宇宙中银河系在宇宙中"
+    } ]
+  }, {
+    "tStartMs": 493360,
+    "dDurationMs": 3519,
+    "segs": [ {
+      "utf8": "去感谢思想泡泡和思想泡泡"
+    } ]
+  }, {
+    "tStartMs": 496879,
+    "dDurationMs": 2481,
+    "segs": [ {
+      "utf8": "并以为我们简化了四个一组"
+    } ]
+  }, {
+    "tStartMs": 499360,
+    "dDurationMs": 3920,
+    "segs": [ {
+      "utf8": "语法规则对于递归来说足够强大，但也有一些事情"
+    } ]
+  }, {
+    "tStartMs": 503280,
+    "dDurationMs": 3919,
+    "segs": [ {
+      "utf8": "缺少大或紫色副词之类的形容词"
+    } ]
+  }, {
+    "tStartMs": 507199,
+    "dDurationMs": 3840,
+    "segs": [ {
+      "utf8": "就像这个人很快就代词一样"
+    } ]
+  }, {
+    "tStartMs": 511039,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "实际上不包含无限递归"
+    } ]
+  }, {
+    "tStartMs": 513519,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "空间，但现在我们像语言学家一样思考，我们可以利用我们的知识"
+    } ]
+  }, {
+    "tStartMs": 516959,
+    "dDurationMs": 3200,
+    "segs": [ {
+      "utf8": "语言以继续建立更完整的规则集"
+    } ]
+  }, {
+    "tStartMs": 520159,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "这仅仅是开始，但是即使只有四个规则，我们也可以看到"
+    } ]
+  }, {
+    "tStartMs": 523519,
+    "dDurationMs": 3681,
+    "segs": [ {
+      "utf8": "有时完全不同的词具有相同的语言结构"
+    } ]
+  }, {
+    "tStartMs": 527200,
+    "dDurationMs": 2400,
+    "segs": [ {
+      "utf8": "相同的单词使用不同的语言"
+    } ]
+  }, {
+    "tStartMs": 529600,
+    "dDurationMs": 3359,
+    "segs": [ {
+      "utf8": "结构，我们可以通过查看语言来了解异同"
+    } ]
+  }, {
+    "tStartMs": 532959,
+    "dDurationMs": 4241,
+    "segs": [ {
+      "utf8": "从语法的角度来看这两个句子的时间"
+    } ]
+  }, {
+    "tStartMs": 537200,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "像箭一样飞翔意味着时间的概念很快"
+    } ]
+  }, {
+    "tStartMs": 540560,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "就像箭一样，速食果蝇就像香蕉一样，意味着"
+    } ]
+  }, {
+    "tStartMs": 544240,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "这些小昆虫喜欢吃水果，这两个句子都有苍蝇，"
+    } ]
+  }, {
+    "tStartMs": 548240,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "喜欢他们，但是这些话有不同"
+    } ]
+  }, {
+    "tStartMs": 550560,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "与句子其余部分的结构关系"
+    } ]
+  }, {
+    "tStartMs": 553200,
+    "dDurationMs": 4319,
+    "segs": [ {
+      "utf8": "在这第一棵树中，苍蝇是动词，就像介词"
+    } ]
+  }, {
+    "tStartMs": 557519,
+    "dDurationMs": 4641,
+    "segs": [ {
+      "utf8": "在第二棵树中，苍蝇是名词短语的一部分，就像动词一样，我们可以"
+    } ]
+  }, {
+    "tStartMs": 562160,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "通过绘制图表表示差异"
+    } ]
+  }, {
+    "tStartMs": 564480,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "不要强调三角形语言学家在树上使用三角形来"
+    } ]
+  }, {
+    "tStartMs": 568080,
+    "dDurationMs": 3439,
+    "segs": [ {
+      "utf8": "节省空间并代表不是我们关注重点的要素"
+    } ]
+  }, {
+    "tStartMs": 571519,
+    "dDurationMs": 2961,
+    "segs": [ {
+      "utf8": "在谈论，但我们可以看到这些共享词"
+    } ]
+  }, {
+    "tStartMs": 574480,
+    "dDurationMs": 3359,
+    "segs": [ {
+      "utf8": "占据每棵树的不同部分或听有关神话的歌"
+    } ]
+  }, {
+    "tStartMs": 577839,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "独眼一角的紫色飞人"
+    } ]
+  }, {
+    "tStartMs": 580959,
+    "dDurationMs": 3841,
+    "segs": [ {
+      "utf8": "这可能意味着一首关于一个可以吃掉任何人的生物的歌"
+    } ]
+  }, {
+    "tStartMs": 584800,
+    "dDurationMs": 3440,
+    "segs": [ {
+      "utf8": "一只角蝇飞过，眼睛是紫色的，或者它可以"
+    } ]
+  }, {
+    "tStartMs": 588240,
+    "dDurationMs": 4080,
+    "segs": [ {
+      "utf8": "关于一个吃了一只眼睛的单角飞紫色人的生物"
+    } ]
+  }, {
+    "tStartMs": 592320,
+    "dDurationMs": 4240,
+    "segs": [ {
+      "utf8": "或介于两者之间的东西，可能是一个单眼的单角生物"
+    } ]
+  }, {
+    "tStartMs": 596560,
+    "dDurationMs": 2959,
+    "segs": [ {
+      "utf8": "紫色的人这些野兽中的一些更多"
+    } ]
+  }, {
+    "tStartMs": 599519,
+    "dDurationMs": 3601,
+    "segs": [ {
+      "utf8": "在整个情节中比其他人更危险，我们一直在使用规则和树"
+    } ]
+  }, {
+    "tStartMs": 603120,
+    "dDurationMs": 2399,
+    "segs": [ {
+      "utf8": "图是一种非常简单的表示方式"
+    } ]
+  }, {
+    "tStartMs": 605519,
+    "dDurationMs": 3201,
+    "segs": [ {
+      "utf8": "句子的结构，但还有许多其他方式"
+    } ]
+  }, {
+    "tStartMs": 608720,
+    "dDurationMs": 3760,
+    "segs": [ {
+      "utf8": "代表相同句子的语法有很多理论"
+    } ]
+  }, {
+    "tStartMs": 612480,
+    "dDurationMs": 2880,
+    "segs": [ {
+      "utf8": "有不同的表示语法结构的方式"
+    } ]
+  }, {
+    "tStartMs": 615360,
+    "dDurationMs": 2960,
+    "segs": [ {
+      "utf8": "每个都有其优点和局限性，还有一些"
+    } ]
+  }, {
+    "tStartMs": 618320,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "句法师还没有弄清楚的语法结构"
+    } ]
+  }, {
+    "tStartMs": 621440,
+    "dDurationMs": 3920,
+    "segs": [ {
+      "utf8": "到目前为止，如何表示我们已经看到了具有荒谬含义的句子，但是"
+    } ]
+  }, {
+    "tStartMs": 625360,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "下次关于速成课程语言学的合理语法"
+    } ]
+  }, {
+    "tStartMs": 628480,
+    "dDurationMs": 3359,
+    "segs": [ {
+      "utf8": "我们将深入了解自身，感谢您收看这一集"
+    } ]
+  }, {
+    "tStartMs": 631839,
+    "dDurationMs": 3361,
+    "segs": [ {
+      "utf8": "速成课程语言学，如果您想帮助保持速成课程免费"
+    } ]
+  }, {
+    "tStartMs": 635200,
+    "dDurationMs": 8560,
+    "segs": [ {
+      "utf8": "永远的每个人，您都可以加入我们的社区"
+    } ]
+  } ]
+}
