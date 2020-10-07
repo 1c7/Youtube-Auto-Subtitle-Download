@@ -5,20 +5,29 @@
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @version        v1
 // @grant GM_xmlhttpRequest
-// @description   双语，比如"中文 \n 英语"，\n 是换行符的意思
+// @description   Youtube 有两种类型的字幕，"自动字幕"和"完整字幕"。目前支持"完整字幕"的双语，比如"中文 \n 英语"（\n 是换行符的意思）。暂不支持"自动字幕"的双语，如有需求可以联系作者 QQ 1003211008
 // @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
+  作者联系方式:
+    QQ 1003211008
+    邮件 guokrfans@gmail.com
+    Github@1c7
+
+  使用场景:
+    此文件仅针对于 Tampermonkey (Chrome 上的一款插件)
+    需要安装在 Tampermonkey 里
+
   解决什么问题：
     下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思
 
+  给什么人用：
+    需要下载字幕的人
+
   功能说明:
     '完整字幕'可以下载双语的
-    '自动字幕'暂时不行 (因为实现起来代码复杂一些，暂时还没写)
-
-  为什么写这个: 
-    有朋友在 QQ 上联系我说希望有双语字幕，所以做一个出来
+    '自动字幕'暂时不行 (因为代码更复杂一些，暂时还没写)
   
   术语说明：
     auto 自动字幕
@@ -26,11 +35,6 @@
 
   时间: 
     初次写于 2020-10-7，大量代码来自同一作者之前写的另一个脚本
-
-  作者联系方式:
-    QQ 1003211008
-    邮件 guokrfans@gmail.com
-    Github@1c7
 */
 
 // text for display
