@@ -6,6 +6,7 @@
 // @version        v1
 // @grant GM_xmlhttpRequest
 // @description   双语，比如"中文 \n 英语"，\n 是换行符的意思
+// @namespace https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
