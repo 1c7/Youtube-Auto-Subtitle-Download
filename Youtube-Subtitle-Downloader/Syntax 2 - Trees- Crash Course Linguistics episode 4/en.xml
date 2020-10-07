@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<transcript>
+	<text start="0.14" dur="2.88">Hi, I&amp;#39;m Taylor and welcome to Crash Course Linguistics!</text>
+	<text start="3.02" dur="6.62">In episode 3, we learned about how to test which parts of a sentence are constituents, or closely-related subgroups of words.</text>
+	<text start="9.65" dur="4.71">So in the sentence, “Taylor sees the rabbit,” we know &amp;quot;the rabbit&amp;quot; is one such constituent</text>
+	<text start="14.36" dur="4.38">because we can substitute for it a single word or pronoun, like &amp;quot;Gavagai&amp;quot; or &amp;quot;them&amp;quot;.</text>
+	<text start="18.74" dur="7.62">And &amp;quot;sees the rabbit&amp;#39; is another, slightly larger constituent, because we can move the whole thing up to the beginning of the sentence in a cleft construction:</text>
+	<text start="26.36" dur="2.7">&amp;quot;it&amp;#39;s seeing the rabbit that Taylor does&amp;quot;.</text>
+	<text start="29.06" dur="2.078">Now, we want to take it a step deeper.</text>
+	<text start="31.14" dur="7.44">Let’s figure out a way to keep track of these groupings, and extract some rules that could help us find patterns between lots of different sentences.</text>
+	<text start="38.58" dur="10.76">[THEME MUSIC]</text>
+	<text start="49.34" dur="5.14">A simple way to keep track of different parts of sentences is by drawing connections between words.</text>
+	<text start="54.48" dur="2.86">For example, we could draw circles around each constituent.</text>
+	<text start="57.34" dur="3.49">But circles get really big, really quickly as our sentences get longer.</text>
+	<text start="60.83" dur="2.77">Or, we could draw brackets around each of the constituents.</text>
+	<text start="63.6" dur="4.72">Brackets are nice and compact, but they can be hard to easily scan and understand at a glance.</text>
+	<text start="68.32" dur="8.86">So, instead, linguists often represent the structural relationships between words using a tree structure diagram, sort of like a family tree with nodes and branches.</text>
+	<text start="77.18" dur="5.58">Tree diagrams strike a nice balance between being understandable and taking up a reasonable amount of space.</text>
+	<text start="82.76" dur="4.34">The nodes represent links between constituents, so it&amp;#39;s useful to label them.</text>
+	<text start="87.1" dur="5.8">That helps us compare the tree diagrams across various sentences and track the different phrases in the sentence, too.</text>
+	<text start="92.9" dur="2.55">A phrase is a constituent that&amp;#39;s sorta mid sized.</text>
+	<text start="95.45" dur="3.58">It&amp;#39;s less than a full sentence but often more than a single word.</text>
+	<text start="99.03" dur="3.81">In this video we’re going to meet some of the common phrases that are the basis of English grammar.</text>
+	<text start="102.84" dur="7.38">For example, the difference between the phrases &amp;quot;sees the rabbit&amp;quot; and just &amp;quot;the rabbit&amp;quot; is that &amp;quot;sees the rabbit&amp;quot; has a verb in it.</text>
+	<text start="110.22" dur="2.6">So we can call &amp;quot;sees the rabbit&amp;quot; a verb phrase.</text>
+	<text start="112.82" dur="7.14">Using the substitution test we talked about in the previous video, we can swap the positions of &amp;quot;Taylor&amp;quot; and &amp;quot;the rabbit&amp;quot; in this sentence.</text>
+	<text start="119.96" dur="2.32">So they should both be the same kind of phrase.</text>
+	<text start="122.28" dur="3.85">Since both of these phrases have a noun in them, we&amp;#39;ll call them noun phrases.</text>
+	<text start="126.13" dur="9.15">The word &amp;quot;the&amp;quot;, by the way, is part of a class of words that linguists call determiners, which also includes words like &amp;quot;a,&amp;quot; &amp;quot;this,&amp;quot; &amp;quot;my,&amp;quot; &amp;quot;one,&amp;quot; and &amp;quot;every.&amp;quot;</text>
+	<text start="135.28" dur="4.1">Determiners help us figure out which specific instance of a specific noun we&amp;#39;re talking about.</text>
+	<text start="139.38" dur="5.84">There&amp;#39;s one theory of syntax that actually argues there are determiner phrases as well as noun phrases.</text>
+	<text start="145.22" dur="2.51">Either way, these small words do a big job.</text>
+	<text start="147.73" dur="4.93">So, let’s label our tree with the phrases and the word classes to keep track of all of this information.</text>
+	<text start="152.72" dur="2.94">And the whole thing, as we already know, is a sentence.</text>
+	<text start="155.66" dur="7.54">Writing out &amp;quot;noun phrase&amp;quot; and &amp;quot;verb phrase&amp;quot; every time gets kind of tedious, so linguists generally abbreviate these as NP and VP.</text>
+	<text start="163.2" dur="6.28">And the same goes with N for noun, V for verb and S for sentence, plus Det for determiner.</text>
+	<text start="169.48" dur="4.46">Tree diagrams let us see the predicate relationship we talked about in the last episode.</text>
+	<text start="173.94" dur="3.62">The verb and the object noun phrase are both together within the VP.</text>
+	<text start="177.64" dur="5.38">Even in languages that put their words in a different order, the verb and the object still have this closer relationship.</text>
+	<text start="183.02" dur="1.84">Let&amp;#39;s take Japanese for example.</text>
+	<text start="184.86" dur="2.48">In Japanese, the verb comes at the end of the sentence.</text>
+	<text start="187.34" dur="8.84">The verb is still in the same phrase, the verb phrase, as the object, so we can represent this in a tree structure diagram by just giving the VP node a little twist.</text>
+	<text start="196.18" dur="4.44">Going back to English now, here&amp;#39;s another sentence: Gavagai ate my cake.</text>
+	<text start="200.62" dur="7.209">This new sentence has completely different words from the first one, but it has the exact same structure, so its tree structure diagram looks the same.</text>
+	<text start="207.829" dur="4.22">We can make a lot of sentences from just a few basic bits of structure.</text>
+	<text start="212.049" dur="2.371">And this leads us to an interesting puzzle.</text>
+	<text start="214.42" dur="3.599">Let&amp;#39;s try to figure out all of the possible structures for sentences in English.</text>
+	<text start="218.02" dur="3.24">In other words, let&amp;#39;s try to make a grammar of English.</text>
+	<text start="221.26" dur="3.8">A grammar is a description of how sentences go together in a language.</text>
+	<text start="225.06" dur="6.28">We could use a grammar to start to teach machines to understand English, or to compare the rules of English to those of another language.</text>
+	<text start="231.34" dur="4.34">A grammar isn&amp;#39;t necessarily what&amp;#39;s actually going on in your head when you&amp;#39;re saying a sentence.</text>
+	<text start="235.68" dur="3">That&amp;#39;s still an open question that linguists are researching.</text>
+	<text start="238.68" dur="3.96">And while we’ll be focusing on a grammar of English here, every language has one.</text>
+	<text start="242.64" dur="2.72">Making a grammar is actually a pretty big
+	challenge.</text>
+	<text start="245.36" dur="3.46">Let&amp;#39;s start out with a few sentences and figure out how to describe their structures.</text>
+	<text start="248.82" dur="1.42">Taylor sees the rabbit.</text>
+	<text start="250.24" dur="1.38">The rabbit ate cake.</text>
+	<text start="251.62" dur="1.44">And, Gavagai hopped.</text>
+	<text start="253.06" dur="5.7">First we notice that we can split each sentence into two pieces, and we can mix and match the front half and the back half.</text>
+	<text start="258.82" dur="7.66">We have “Taylor,” “the rabbit,” and “Gavagai” on one side and “sees the rabbit,” “ate cake,” and “hopped” on the other.</text>
+	<text start="266.48" dur="8.42">This structure predicts that &amp;quot;Taylor hopped&amp;quot; and &amp;quot;Taylor ate cake&amp;quot; and &amp;quot;Gavagai sees the rabbit&amp;quot; should be okay sentences, even though they&amp;#39;re not on our original list.</text>
+	<text start="274.9" dur="5.34">Based on my linguistic intuitions as an English speaker, that&amp;#39;s a good prediction and is part of our grammar!</text>
+	<text start="280.24" dur="2.5">We&amp;#39;ve established that sentences contain two parts.</text>
+	<text start="282.74" dur="2.94">But what if we split those sentences up like this instead?</text>
+	<text start="285.68" dur="9.14">This predicts that the sentences &amp;quot;Gavagai ate rabbit ate cake&amp;quot; and &amp;quot;the my cake&amp;quot; should be possible, and we know as English speakers that they&amp;#39;re not!</text>
+	<text start="294.82" dur="3.86">We&amp;#39;d expect some groupings to fail like this in any language we tried.</text>
+	<text start="298.68" dur="6.54">So in our grammar of English so far, these sentences contain two parts, but it also matters what those two parts are.</text>
+	<text start="305.22" dur="5.74">Let&amp;#39;s go back to our list that works, and highlight the nouns, verbs, and determiners in different colors.</text>
+	<text start="310.96" dur="7.4">So for “Taylor sees the rabbit,” we’ll make “taylor” and “rabbit” red for noun, “sees” blue for verb, and “the” green for determiner.</text>
+	<text start="318.36" dur="2.78">Based on this, we could write a couple rules for English grammar.</text>
+	<text start="321.14" dur="6.1">First, we can say that a sentence in English is made up of two parts: a noun phrase plus a verb phrase.</text>
+	<text start="327.26" dur="2.84">A noun phrase is made up of a determiner plus a noun.</text>
+	<text start="330.1" dur="3.34">And a verb phrase is made up of a verb plus a noun phrase.</text>
+	<text start="333.44" dur="3.94">But even though those rules are a good start, they still need a few tweaks.</text>
+	<text start="337.38" dur="3.16">Not all of our noun phrases have a determiner in them.</text>
+	<text start="340.54" dur="4.14">Sometimes it&amp;#39;s &amp;quot;the rabbit&amp;quot; but other times it&amp;#39;s just &amp;quot;cake&amp;quot;.</text>
+	<text start="344.68" dur="3.54">And some of our verb phrases don’t have a noun phrase in them, either.</text>
+	<text start="348.22" dur="4.68">Sometimes it&amp;#39;s &amp;quot;sees the rabbit&amp;quot; or &amp;quot;ate cake&amp;quot; but other times it&amp;#39;s just &amp;quot;hopped&amp;quot;.</text>
+	<text start="352.9" dur="5.8">So we need to indicate that certain parts of these rules are optional, which we can do using parentheses.</text>
+	<text start="358.7" dur="1.6">It has a nice effect.</text>
+	<text start="360.3" dur="6.58">The only thing that&amp;#39;s absolutely required in a noun phrase is a noun, and the only thing that&amp;#39;s required in a verb phrase is a verb.</text>
+	<text start="366.88" dur="6.54">We call this required piece, the part that the phrase is named after, the head, and the less important additions the complement.</text>
+	<text start="373.42" dur="5.56">There are plenty more things we can add to a sentence, which starts to make a grammar even more complicated.</text>
+	<text start="378.98" dur="1.74">For instance, take these ones:</text>
+	<text start="380.72" dur="2.02">The rabbit with a scarf hopped.</text>
+	<text start="382.74" dur="3.02">And Gavagai ate cake on the moon.</text>
+	<text start="385.76" dur="3.459">We&amp;#39;ve added two new phrases: “with a scarf” and “on the moon.”</text>
+	<text start="389.22" dur="8.8">These phrases contain a determiner and a noun, but they also contain a preposition, a word that shows the relationship of a noun phrase to the rest of the sentence.</text>
+	<text start="398.02" dur="6.3">So now we can make a rule for a prepositional phrase, which contains a preposition as the head and a noun phrase as the complement.</text>
+	<text start="404.32" dur="5.46">We also need to refine our rules for noun phrases and verb phrases to allow for optional prepositional phrases.</text>
+	<text start="409.78" dur="2.74">So far, our grammar contains just four rules.</text>
+	<text start="412.52" dur="2.2">But it&amp;#39;s already really powerful.</text>
+	<text start="414.72" dur="2.58">To find out how, let&amp;#39;s go into the Thought Bubble.</text>
+	<text start="417.34" dur="1">Hey look!</text>
+	<text start="418.34" dur="1.78">Gav and I are inside a thought bubble.</text>
+	<text start="420.12" dur="1.7">Let&amp;#39;s go into another thought bubble.</text>
+	<text start="421.82" dur="3.14">Cool, we&amp;#39;re inside a thought bubble inside a thought bubble!</text>
+	<text start="424.96" dur="1.14">Let&amp;#39;s go deeper!</text>
+	<text start="426.1" dur="4.26">Now, we&amp;#39;re inside a thought bubble inside a thought bubble inside a thought bubble.</text>
+	<text start="430.42" dur="1">We could just keep going!</text>
+	<text start="431.42" dur="9.62">We might get bored or run out of space on the screen or get cut off by YouTube&amp;#39;s time limits, but in theory, we could just keep embedding thought bubbles inside thought bubbles...forever.</text>
+	<text start="441.04" dur="3.36">Uh, let&amp;#39;s pop a few of these thought bubbles to get some more breathing room.</text>
+	<text start="444.4" dur="1.98">Okay, leave thought bubble.</text>
+	<text start="446.38" dur="1.3">And….leave thought bubble.</text>
+	<text start="447.68" dur="3.52">Ok, we&amp;#39;re back in a normal single bubble!</text>
+	<text start="451.2" dur="2.46">Thought bubbles have the property of recursion.</text>
+	<text start="453.66" dur="3.04">We can embed thought bubbles inside thought bubbles forever.</text>
+	<text start="456.7" dur="4">Language is also recursive. Let&amp;#39;s take the phrase &amp;quot;inside a thought bubble&amp;quot;.</text>
+	<text start="460.7" dur="4.06">&amp;quot;Inside&amp;quot; is a preposition, so this is a prepositional phrase.</text>
+	<text start="464.76" dur="2.28">And &amp;quot;a thought bubble&amp;quot; is a noun phrase.</text>
+	<text start="467.04" dur="4.92">But inside this noun phrase &amp;quot;a thought bubble&amp;quot; we can add another prepositional phrase.</text>
+	<text start="471.96" dur="2.4">Let&amp;#39;s say it&amp;#39;s also &amp;quot;inside a thought bubble&amp;quot;.</text>
+	<text start="474.36" dur="1.26">And we can keep going.</text>
+	<text start="475.7" dur="4.5">In fact, we already did, when we were describing the recursive thought bubbles in the first place.</text>
+	<text start="480.2" dur="2.5">We don&amp;#39;t always have to embed the exact same words.</text>
+	<text start="482.7" dur="3.28">Recursion just means that we can build structures inside other structures.</text>
+	<text start="485.98" dur="6.88">For instance, the Rabbit on the moon in the solar system in the milky way in the universe on Friday hopped.</text>
+	<text start="492.94" dur="0.96">There Gav goes!</text>
+	<text start="494.02" dur="0.98">Thanks, Thought Bubble!</text>
+	<text start="495" dur="2.72">(And thought bubble, and thought bubble!)</text>
+	<text start="497.72" dur="6.26">Our simplified little set of four grammar rules is powerful enough for recursion, but there are also some things missing:</text>
+	<text start="503.98" dur="6.02">adjectives like &amp;quot;big&amp;quot; or &amp;quot;purple&amp;quot;, adverbs like &amp;quot;quickly&amp;quot;, pronouns like &amp;quot;you&amp;quot; or &amp;quot;me&amp;quot;.</text>
+	<text start="510" dur="4.14">Sadly, this video does not actually contain infinite recursive space,</text>
+	<text start="514.14" dur="6.04">but now that we’re thinking like linguists, we can use our knowledge of language to continue to build up a more complete set of rules.</text>
+	<text start="520.32" dur="1.1">This is just the start!</text>
+	<text start="521.42" dur="5.64">But even with just four rules, we can see that sometimes completely different words have the same linguistic structure.</text>
+	<text start="527.06" dur="2.96">Other times, the same words have different linguistic structures.</text>
+	<text start="530.02" dur="5.2">We can see these similarities and differences by looking at language from the perspective of syntax.</text>
+	<text start="535.3" dur="1.48">Let&amp;#39;s take these two sentences.</text>
+	<text start="536.78" dur="5.4">“Time flies like an arrow” means that the concept of time is fast, like an arrow is fast.</text>
+	<text start="542.18" dur="4.12">“Fruit flies like a banana” means that these small insects are fond of fruit.</text>
+	<text start="546.3" dur="6.98">Both of these sentences have &amp;quot;flies&amp;quot; and &amp;quot;like&amp;quot; in them, but these words have different structural relationships with the rest of the sentence.</text>
+	<text start="553.28" dur="4.1">In this first tree, &amp;quot;flies&amp;quot; is the verb, and &amp;quot;like&amp;quot; is a preposition.</text>
+	<text start="557.38" dur="4.34">In this second tree, &amp;quot;flies&amp;quot; is part of the noun phrase and &amp;quot;like&amp;quot; is the verb.</text>
+	<text start="561.72" dur="2.8">We can represent that difference by drawing diagrams.</text>
+	<text start="564.52" dur="1.62">Don’t stress about the triangles.</text>
+	<text start="566.14" dur="6.48">Linguists use triangles within a tree to save space and represent constituents that are not the focus of what we&amp;#39;re talking about.</text>
+	<text start="572.62" dur="3.7">But we can see how these shared words occupy different parts of each tree.</text>
+	<text start="576.32" dur="4.5">Or take the song about the mythical &amp;quot;One-eyed one-horn flying purple people eater&amp;quot;.</text>
+	<text start="580.82" dur="6.56">This could mean a song about a creature that eats any kind of people and has one eye, one horn, flies, and is purple.</text>
+	<text start="587.38" dur="5.08">Or it could be about a creature that eats one-eyed, one-horned, flying purple people.</text>
+	<text start="592.46" dur="1.36">Or something in between.</text>
+	<text start="593.82" dur="4.2">Maybe a one-eyed, one-horn creature that eats flying purple people?</text>
+	<text start="598.02" dur="2.6">Some of these beasts are a lot more dangerous than others.</text>
+	<text start="600.62" dur="6.62">Throughout this episode, we&amp;#39;ve been using rules and tree diagrams as a fairly simple way of representing the structure of sentences.</text>
+	<text start="607.24" dur="3.54">But there are lots of other ways of representing the same sentences.</text>
+	<text start="610.78" dur="6.94">There are many theories of syntax which have different ways of representing grammatical structures, each with their advantages and limitations.</text>
+	<text start="617.72" dur="4.9">And there are some grammatical structures that syntacticians haven&amp;#39;t even figured out how to represent yet!</text>
+	<text start="622.62" dur="4.2">So far, we&amp;#39;ve seen sentences with absurd meanings but reasonable grammar.</text>
+	<text start="626.82" dur="3.74">Next time on Crash Course Linguistics, we&amp;#39;ll go deeper into meaning itself.</text>
+	<text start="630.56" dur="2.9">Thanks for watching this episode of Crash Course Linguistics.</text>
+	<text start="633.46" dur="5.6">If you want to help keep all Crash Course free for everybody, forever, you can join our community on Patreon.</text>
+</transcript>

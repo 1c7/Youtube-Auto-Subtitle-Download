@@ -1,80 +1,41 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v20
+// @name           Youtube 双语字幕下载 v1 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2018 Cheng Zheng;
-// @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        20
+// @version        v1
 // @grant GM_xmlhttpRequest
-// @namespace https://greasyfork.org/users/5711
-// @description   (2018-June-13) v20 fix download error cause by Youtube change their API
+// @description   双语，比如"中文 \n 英语"，\n 是换行符的意思
 // ==/UserScript==
 
 /*
-  [What is this?]
-  This "Tampermonkey script" allow you download Youtube "Automatic subtitle" AND "closed subtitle"
+  解决什么问题：
+    下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思
 
-  [Note]
-  If not working(rarely), Refresh!!
-  if problem still exist. Email me: guokrfans@gmail.com
+  功能说明:
+    '完整字幕'可以下载双语的
+    '自动字幕'暂时不行 (因为实现起来代码复杂一些，暂时还没写)
 
-  [Who build this]
-  Author :  Cheng Zheng
-  Email  :  guokrfans@gmail.com
-  Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
-  If you want improve the script, Github Pull Request are welcome
+  为什么写这个: 
+    有朋友在 QQ 上联系我说希望有双语字幕，所以做一个出来
+  
+  术语说明：
+    auto 自动字幕
+    closed 完整字幕 (或者叫人工字幕也可以)
 
-  [Note]
-  Few things before you read the code:
-  0. Some code comments are written in Chinese
-  1. Youtube have 2 UI: Material design and The old design
-  2. Code need handle both Auto & Closed subtitle
+  时间: 
+    初次写于 2020-10-7，大量代码来自同一作者之前写的另一个脚本
 
-  (Explain: "Tampermonkey script" mean
-  you have to install a Chrome extension call "Tampermonkey", and then install this script)
-
-  [Test Video]
-  https://www.youtube.com/watch?v=bkVsus8Ehxs
-  only have English closed subtitle, nothing else (no auto subtitle)
-
-  https://www.youtube.com/watch?v=-WEqFzyrbbs
-  no subtitle at all
-
-  https://www.youtube.com/watch?v=9AzNEG1GB-k
-  have a lot subtitle 
-
-  https://www.youtube.com/watch?v=tqGkOvrKGfY
-  1:36:33  super long subtitle
-
-  [Code Explain]
-  mainly three part
-    1. UI specific (add button on page etc)
-    2. detech if subtitle exists
-    3. transform subtitle format & download
-
-   [Changelog]
-    v1~v15: I forgot, and I am too lazy to check git log
-
-    v16: add support for auto subtitle
-
-    v17: fix few minor issue in v16, to make sure all user get update, bump up 1 version
-
-    v18: fix https://greasyfork.org/zh-CN/forum/discussion/38299/x?locale=zh-CN  video too long issue
-    (for example 1:36:33) and cause subtitle error
-    reason is the 'downloadFile' function 
-    using a <a> element 'href' attribute to download .srt file.
-    and this 'href' can't handle string that's too long
-
-    v19: fix HTML html entity problem, for example: apostrophe as &#39;
-
-    v20: 2018-June-13 seem like Youtube change their URL format, now URL must have something like '&name=en'
-     v20 test with: https://www.youtube.com/watch?v=tqGkOvrKGfY  https://www.youtube.com/watch?time_continue=5&v=36tggrpRoTI
+  作者联系方式:
+    QQ 1003211008
+    邮件 guokrfans@gmail.com
+    Github@1c7
 */
 
 // text for display
-var NO_SUBTITLE = 'No subtitle';
-var HAVE_SUBTITLE = 'Download subtitle';
+var NO_SUBTITLE = '没有字幕';
+var HAVE_SUBTITLE = '下载双语字幕 (中文 + 外语)';
+const NEW_LINE = '\n'
 
 // initialize
 var first_load = true; // indicate if first load this webpage or not
@@ -250,7 +211,7 @@ padding: 4px;
 }
 
 // trigger when user select <option>
-function download_subtitle(selector) {
+async function download_subtitle(selector) {
   // if user select first <option>
   // we just return, do nothing.
   if (selector.selectedIndex == 0) {
@@ -270,22 +231,46 @@ function download_subtitle(selector) {
         downloadString(srt, "text/plain", title);
       }
     });
-  } else {
-    // closed subtitle
-    var lang_code = caption.lang_code;
-    var lang_name = caption.lang_name;
-    var result = get_closed_subtitle(lang_code, function (r) {
-      if (r != false) {
-        var srt = parse_youtube_XML_to_SRT(r);
-        var title = get_file_name(lang_name);
-        downloadString(srt, "text/plain", title);
-      }
-    });
-    if (result == false) {
-      alert('Error: can\' get subtitle');
-
-    }
+    // after download, select first <option>
+    selector.options[0].selected = true;
+    return
   }
+
+  // closed subtitle
+  var lang_code = caption.lang_code;
+  var lang_name = caption.lang_name;
+
+  // 原文
+  // sub mean "subtitle"
+  var sub_original_url = await get_closed_subtitle_url(lang_code)
+  var sub_original_xml = await get(sub_original_url);
+
+  // 中文
+  var sub_translated_url = sub_original_url + "&tlang=" + "zh-Hans"
+  var sub_translated_xml = await get(sub_translated_url);
+
+  // 根据时间轴融合这俩
+  var sub_original_srt = parse_youtube_XML_to_object_list(sub_original_xml)
+  var sub_translated_srt = parse_youtube_XML_to_object_list(sub_translated_xml)
+  // 'sub_original_srt' and 'sub_translated_srt' have the same length
+
+  var dual_language_srt = []
+  for (let index = 0; index < sub_original_srt.length; index++) {
+    const original = sub_original_srt[index];
+    const translated = sub_translated_srt[index];
+    var text = translated.text + NEW_LINE + original.text; // 中文 \n 英文
+    var item = {
+      startTime: original.startTime,
+      endTime: original.endTime,
+      text: text
+    }
+    dual_language_srt.push(item)
+  }
+
+  var srt_string = object_array_to_SRT_string(dual_language_srt)
+  var title = get_file_name(lang_name);
+  downloadString(srt_string, "text/plain", title);
+
   // after download, select first <option>
   selector.options[0].selected = true;
 }
@@ -313,8 +298,10 @@ function load_language_list(select) {
   }
 
   // get closed subtitle
-  var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list';
-  // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
+  var list_url = 'https://video.google.com/timedtext?v=' + get_video_id() + '&type=list&hl=zh-CN';
+  // https://video.google.com/timedtext?v=if36bqHypqk&type=list&hl=en // 英文
+  // https://video.google.com/timedtext?v=n1zpnN-6pZQ&type=list&hl=zh-CN // 中文
+
   GM_xmlhttpRequest({
     method: 'GET',
     url: list_url,
@@ -339,7 +326,7 @@ function load_language_list(select) {
       var option = null; // for <option>
       var caption_info = null; // for our custom object
 
-      // if auto subtitle exist
+      // 自动字幕
       if (auto_subtitle_exist) {
         caption_info = {
           lang_code: 'AUTO', // later we use this to know if it's auto subtitle
@@ -356,9 +343,12 @@ function load_language_list(select) {
       if (closed_subtitle_exist) {
         for (var i = 0, il = captions.length; i < il; i++) {
           caption = captions[i];
+          // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
+          var lang_code = caption.getAttribute('lang_code')
+          var lang_translated = caption.getAttribute('lang_translated')
           caption_info = {
-            lang_code: caption.getAttribute('lang_code'), // for AJAX request
-            lang_name: caption.getAttribute('lang_translated') // for display only
+            lang_code: lang_code, // for AJAX request
+            lang_name: "中文 + " + lang_translated, // display to user
           };
           caption_array.push(caption_info);
           // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
@@ -433,10 +423,10 @@ function process_time(s) {
   return Hour + ':' + Minute + ':' + Second + ',' + MilliSecond;
 }
 
-// copy from: https://gist.github.com/danallison/3ec9d5314788b337b682
+// Copy from: https://gist.github.com/danallison/3ec9d5314788b337b682
 // Thanks! https://github.com/danallison
-// work in Chrome 66
-// test passed: 2018-5-19
+// Work in Chrome 66
+// Test passed: 2018-5-19
 function downloadString(text, fileType, fileName) {
   var blob = new Blob([text], {
     type: fileType
@@ -496,7 +486,7 @@ function get_auto_subtitle(callback) {
   get_from_url(url, callback);
 }
 
-function get_closed_subtitle(lang_code, callback) {
+async function get_closed_subtitle_url(lang_code) {
   try {
     var json = '';
     if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
@@ -510,44 +500,130 @@ function get_closed_subtitle(lang_code, callback) {
     var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
     for (var index in captionTracks) {
       var caption = captionTracks[index];
-      if (caption.languageCode === lang_code) {
-        // 这里进来了2次，所以造成了下载2个字幕，
-        // 因为 lang_code 是 "en" 的时候可能会 match 2条纪录，一条是自动字幕，一条是完整字幕
-        // 自动字幕那条是 kind=asr
+      if (caption.languageCode === lang_code && caption.kind != 'asr') {
         var url = captionTracks[index].baseUrl;
-        get_from_url(url, callback);
+        return url
       }
     }
   } catch (error) {
+    console.log(error);
     return false;
   }
-
 }
 
+// Usage: var result = await get(url)
+function get(url) {
+  return $.ajax({
+    url: url,
+    type: 'get',
+    success: function (r) {
+      return r
+    },
+    fail: function (error) {
+      return error
+    }
+  });
+}
+
+// GET request a URL
 function get_from_url(url, callback) {
   $.ajax({
     url: url,
     type: 'get',
     success: function (r) {
-      callback(r);
+      callback(r); // pass result to callback
     },
     fail: function (error) {
-      callback(false);
+      callback(false); // or pass false to callback
     }
   });
+}
+
+// input: XML
+// output: Array of object
+// each object look like: 
+/*
+  {
+    startTime: "",
+    endTime: "",
+    text: ""
+  }
+*/
+// it's intermediate representation for SRT
+function parse_youtube_XML_to_object_list(youtube_xml_string) {
+  if (youtube_xml_string === '' || youtube_xml_string === undefined || youtube_xml_string === null) {
+    return false;
+  }
+  var result_array = []
+  var text_nodes = youtube_xml_string.getElementsByTagName('text');
+  var len = text_nodes.length;
+  for (var i = 0; i < len; i++) {
+    var text = text_nodes[i].textContent.toString();
+    text = text.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
+    text = htmlDecode(text);
+
+    var start = text_nodes[i].getAttribute('start');
+    var end = '';
+
+    if (i + 1 >= len) {
+      end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+    } else {
+      end = text_nodes[i + 1].getAttribute('start');
+    }
+
+    var start_time = process_time(parseFloat(start));
+    var end_time = process_time(parseFloat(end));
+
+    var item = {
+      startTime: start_time,
+      endTime: end_time,
+      text: text
+    }
+    result_array.push(item)
+  }
+
+  return result_array
+}
+
+
+function object_array_to_SRT_string(object_array) {
+  var result = '';
+  var BOM = '\uFEFF';
+  result = BOM + result; // store final SRT result
+
+  for (var i = 0; i < object_array.length; i++) {
+    var item = object_array[i]
+    var index = i + 1;
+    var start_time = item.startTime
+    var end_time = item.endTime
+    var text = item.text
+
+    var new_line = "\n";
+    result = result + index + new_line;
+
+    result = result + start_time;
+    result = result + ' --> ';
+    result = result + end_time + new_line;
+
+    result = result + text + new_line + new_line;
+  }
+
+  return result;
 }
 
 // Youtube return XML. we want SRT  
 // input: Youtube XML format
 // output: SRT format
 function parse_youtube_XML_to_SRT(youtube_xml_string) {
-  if (youtube_xml_string === '') {
+  if (youtube_xml_string === '' || youtube_xml_string === undefined || youtube_xml_string === null) {
     return false;
   }
-  var text = youtube_xml_string.getElementsByTagName('text');
+
   var result = '';
   var BOM = '\uFEFF';
   result = BOM + result; // store final SRT result
+
+  var text = youtube_xml_string.getElementsByTagName('text');
   var len = text.length;
   for (var i = 0; i < len; i++) {
     var index = i + 1;
@@ -587,7 +663,6 @@ function parse_youtube_XML_to_SRT(youtube_xml_string) {
     // turn HTML entity back to text. example: &#39; back to apostrophe (')
 
     result = result + content + new_line + new_line;
-    // everybody Craig Adams here I'm a
   }
   return result;
 }
