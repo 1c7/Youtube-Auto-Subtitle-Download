@@ -193,12 +193,12 @@ padding: 4px;
 
   div.appendChild(select); // put <select> into <div>
 
-  // put the div into page: new material design
+  // Put the div into page: new material design
   var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
   if (title_element) {
     $(title_element[0]).after(div);
   }
-  // put the div into page: old version
+  // Put the div into page: old version
   if (controls) {
     controls.appendChild(div);
   }
@@ -214,24 +214,19 @@ padding: 4px;
 }
 
 
-// 输入: url
-// 输出: SRT Array
+// 输入: url (String)
+// 输出: SRT (Array)
 async function auto_sub_in_chinese_fmt_json3_to_srt(url) {
-  var json = await get(url);
   var srt_array = []
-  // 先处理中文，转成 SRT 中间格式, 一个句子一个句子的形式，开始时间，结束时间，文字，都是对的
+
+  var json = await get(url);
   var events = json.events;
   for (let index = 0; index < events.length; index++) {
     const event = events[index];
-    // console.log(event);
     var tStartMs = event.tStartMs
     var dDurationMs = event.dDurationMs
     var segs = event.segs
-    // console.log(tStartMs)
-    // console.log(dDurationMs)
-    // console.log(segs)
     var text = segs[0].utf8;
-    // console.log(text)
 
     var item = {
       startTime: ms_to_srt(tStartMs),
@@ -247,6 +242,8 @@ async function auto_sub_in_chinese_fmt_json3_to_srt(url) {
 }
 
 // 下载自动字幕的中英双语
+// 输入: file_name: 保存的文件名
+// 输出: 无 (会触发浏览器下载一个文件)
 async function download_auto_subtitle(file_name) {
   // 1. English Auto Sub in json3 format
   var auto_sub_url = get_auto_subtitle_xml_url();
@@ -425,8 +422,8 @@ function get_file_name(x) {
   return '(' + x + ')' + document.title + '.srt';
 }
 
-// detect if "auto subtitle" and "closed subtitle" exist
-// and add <option> into <select>
+// Detect if "auto subtitle" and "closed subtitle" exist
+// And add <option> into <select>
 function load_language_list(select) {
   // auto
   var auto_subtitle_exist = false;
@@ -629,11 +626,8 @@ function get_auto_subtitle_xml_url() {
   }
 }
 
-function get_auto_subtitle(callback) {
-  var url = get_auto_subtitle_xml_url();
-  get_from_url(url, callback);
-}
-
+// Input: lang_code like 'en'
+// Output: URL (String)
 async function get_closed_subtitle_url(lang_code) {
   try {
     var json = '';
@@ -687,8 +681,8 @@ function get_from_url(url, callback) {
   });
 }
 
-// input: XML
-// output: Array of object
+// Input: XML (provide by Youtube)
+// Output: Array of object
 // each object look like: 
 /*
   {
@@ -734,6 +728,10 @@ function parse_youtube_XML_to_object_list(youtube_xml_string) {
 }
 
 
+/*
+  Input: [ {startTime: "", endTime: "", text: ""}, {...}, {...} ]
+  Output: SRT
+*/
 function object_array_to_SRT_string(object_array) {
   var result = '';
   var BOM = '\uFEFF';
