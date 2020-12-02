@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v3
+// @name           Youtube 翻译中文字幕下载 v4
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        3
+// @version        4
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -15,22 +15,17 @@
   作者 : 郑诚
   新浪微博: 糖醋陈皮 https://weibo.com/u/2004104451/home?wvr=5
   邮箱 :  guokrfans@gmail.com
+  Github: https://github.com/1c7/Youtube-Auto-Subtitle-Download
 
-  测试视频：（代码在如下视频中试过，没有发现问题）
+  测试视频: 
   https://www.youtube.com/watch?v=nGlQkaoIfBI   1门语言
   https://www.youtube.com/watch?v=O5nskjZ_GoI   13门语言
-
-  这个脚本有90%和我之前写的下载"完全字幕"的脚本一样：https://greasyfork.org/zh-CN/scripts/5368-youtube-subtitle-downloader-v14
-  这个只是把获取字幕地址的部分做了修改，拿到了翻译后的中文字幕地址。
-
-  v2 在 2020年12月2号似乎失效了
-    主要是 var json = ytplayer.config.args.raw_player_response; 改成这样才是对的
-  v3 支持了自动字幕（之前不支持）
+  https://www.youtube.com/watch?v=VfEz3DIbkvo
 */
 
 // CONFIG
-var NO_SUBTITLE = '没有检测到字幕';
-var HAVE_SUBTITLE = '下载中文字幕(单语言)';
+var NO_SUBTITLE = '无字幕';
+var HAVE_SUBTITLE = '下载翻译的中文字幕';
 var first_load = true;
 
 // return true / false
@@ -244,27 +239,10 @@ async function download_subtitle(selector) {
   var sub_translated_url = sub_original_url + "&tlang=" + "zh-Hans"
   var sub_translated_xml = await get(sub_translated_url);
 
-  // 根据时间轴融合这俩
-  // var sub_original_srt = parse_youtube_XML_to_object_list(sub_original_xml)
   var sub_translated_srt = parse_youtube_XML_to_object_list(sub_translated_xml)
-  // 'sub_original_srt' and 'sub_translated_srt' have the same length
-
-  // var dual_language_srt = []
-  // for (let index = 0; index < sub_original_srt.length; index++) {
-  //   const original = sub_original_srt[index];
-  //   const translated = sub_translated_srt[index];
-  //   var text = translated.text + NEW_LINE + original.text; // 中文 \n 英文
-  //   var item = {
-  //     startTime: original.startTime,
-  //     endTime: original.endTime,
-  //     text: text
-  //   }
-  //   dual_language_srt.push(item)
-  // }
 
   var srt_string = object_array_to_SRT_string(sub_translated_srt)
   var title = get_file_name(lang_name);
-  console.log(title);
   downloadString(srt_string, "text/plain", title);
 
   // after download, select first <option>
@@ -274,7 +252,6 @@ async function download_subtitle(selector) {
 // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
 function get_file_name(x) {
   return `(${x}) ${document.title}.srt`;
-  // return '(' + x + ')' + document.title + '.srt';
 }
 
 // 载入有多少种语言, 然后加到 <select> 里
@@ -290,10 +267,10 @@ function load_language_list(select) {
   var auto_subtitle_url = get_auto_subtitle_xml_url();
   if (auto_subtitle_url != false) {
     auto_subtitle_exist = true;
-    console.log('自动字幕的确存在');
+    // console.log('自动字幕的确存在');
   } else {
-    console.log('自动字幕不存在');
-    console.log(auto_subtitle_url);
+    // console.log('自动字幕不存在');
+    // console.log(auto_subtitle_url);
   }
 
   // get closed subtitle
@@ -334,7 +311,7 @@ function load_language_list(select) {
       if (auto_subtitle_exist) {
         var auto_sub_name = get_auto_subtitle_name()
         // var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
-        var lang_name = `${auto_sub_name} -> 中文`
+        var lang_name = `${auto_sub_name} 翻译成 中文`
         caption_info = {
           lang_code: 'AUTO', // later we use this to know if it's auto subtitle
           lang_name: lang_name // for display only
@@ -353,7 +330,7 @@ function load_language_list(select) {
           // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
           var lang_code = caption.getAttribute('lang_code')
           var lang_translated = caption.getAttribute('lang_translated')
-          var lang_name = `${lang_translated} -> 中文`
+          var lang_name = `${lang_translated} 翻译成 中文`
           caption_info = {
             lang_code: lang_code, // for AJAX request
             lang_name: lang_name, // display to user
@@ -534,7 +511,7 @@ async function download_auto_subtitle(file_name) {
 
   // 最后保存下来
   var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
-  console.log(srt_string);
+  // console.log(srt_string);
   downloadString(srt_string, "text/plain", file_name);
 }
 

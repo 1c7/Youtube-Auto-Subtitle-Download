@@ -14,3 +14,7 @@ https://github.com/1c7/Youtube-translate-chinese-subtitle-download
 * 2020-12-2 升级为 v3
 	* 修复了下载失败问题
 	* v3 支持了"自动字幕"翻译的中文下载(之前是不支持的)
+* 2020-12-2 升级为 v4
+	* v4 仅为小调整
+	* 菜单项的文案进行了修改
+	* 去掉了代码里一些 console.log 以及进行了整理
