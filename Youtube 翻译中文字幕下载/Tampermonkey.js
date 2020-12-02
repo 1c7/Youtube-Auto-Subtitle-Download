@@ -22,11 +22,15 @@
 
   这个脚本有90%和我之前写的下载"完全字幕"的脚本一样：https://greasyfork.org/zh-CN/scripts/5368-youtube-subtitle-downloader-v14
   这个只是把获取字幕地址的部分做了修改，拿到了翻译后的中文字幕地址。
+
+  v2 在 2020年12月2号似乎失效了
+    主要是 var json = ytplayer.config.args.raw_player_response; 改成这样才是对的
+  v3 支持了自动字幕（之前不支持）
 */
 
 // CONFIG
-var NO_SUBTITLE = 'No captions.';
-var HAVE_SUBTITLE = '下载中文字幕';
+var NO_SUBTITLE = '没有检测到字幕';
+var HAVE_SUBTITLE = '下载中文字幕(单语言)';
 var first_load = true;
 
 // return true / false
@@ -189,8 +193,7 @@ padding-right: 8px;
 // Input: 语言代码（代表要从哪个语言转成中文）
 // Ouput: 字幕的 URL，或者 false（找不到的话）
 function get_chinese_subtitle_url(from_language_code) {
-  var raw_string = ytplayer.config.args.player_response;
-  var json = JSON.parse(raw_string);
+  var json = ytplayer.config.args.raw_player_response;
   var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
   // 有多少种语言，captionTracks 就有多少个数组。
 
@@ -209,177 +212,159 @@ function get_chinese_subtitle_url(from_language_code) {
   return chinese_subtitle_url;
 }
 
-function download_subtitle(selector) {
-  var caption = caption_array[selector.selectedIndex - 1];
+// Trigger when user select <option>
+async function download_subtitle(selector) {
+  // if user select first <option>
+  // we just return, do nothing.
+  if (selector.selectedIndex == 0) {
+    return;
+  }
+
+  var caption = caption_array[selector.selectedIndex - 1]; // because first <option> is for display, so index-1 
   if (!caption) return;
-  var language_name_1c7 = caption.lang_name;
-  var from_language_code = caption.lang_code;
-  var url = get_chinese_subtitle_url(from_language_code);
-  jQuery.get(url).done(function (r) {
-    // format should look like this: (2018-2-10)
-    // youtube change their format from time to time. I already change my code to fit their new format twice
-    /*
-    <transcript>
-<text start="54" dur="3">My name is Derpy Hooves</text>
-<text start="57" dur="3">I am a simple pegasus pony from Ponyville</text>
-<text start="65" dur="5">
-However, there is something about me that you must know
-</text>
-<text start="78" dur="5">
-I have strabismus, meaning that my eyes are not properly aligned with each others
-</text>
-<text start="113" dur="2">My problem was neurological</text>
-<text start="115" dur="3">
-The doctors couldn&#39;t do anything to ... correct the problem
-</text>
-<text start="122" dur="3">It&#39;s not only with my vision</text>
-<text start="125" dur="3">It&#39;s also affecting the front of my body</text>
-<text start="128" dur="2">Giving me my &quot;Derpy Hooves&quot;</text>
-<text start="130" dur="5">
-My clumsiness is so important it was represented by my cutie mark
-</text>
-<text start="135" dur="4">Seven bubbles representing luck and fragility</text>
-<text start="139" dur="2">They joked about the way I acted</text>
-<text start="141" dur="4">Saying that I was just stupid and silly</text>
-<text start="145" dur="2">This was not my fault</text>
-<text start="147" dur="3">
-This was the way I was and I couldn&#39;t do anything about it
-</text>
-<text start="158" dur="2">I wished to get my body fixed</text>
-<text start="160" dur="2">Later I realised this was not what I really wanted</text>
-<text start="162" dur="3">I wanted respect, and I had to earn it by mysel</text>
-<text start="196" dur="4">
-Despite being a great flyer raised by a former Wonderbolts member
-</text>
-<text start="200" dur="2">I couldn&#39;t join them because</text>
-<text start="202" dur="2">They didn&#39;t trust my impaired vision</text>
-<text start="213" dur="2">Instead, I used my silly eyes as an advantage</text>
-<text start="215" dur="3">And became one of the best mailmares in Ponyville</text>
-<text start="260" dur="3">
-I know I will have to live with this for the rest of my life
-</text>
-<text start="263" dur="2">But I don&#39;t really mind anymore</text>
-<text start="265" dur="4">
-My best memories are the voices of my friends and my familly, I don&#39;t need perfect vision to be happy
-</text>
-<text start="273" dur="3">I might be unable to walk correctly either</text>
-<text start="276" dur="2">But I still got my wings, and I will live with it</text>
-<text start="327" dur="4">
-And I won&#39;t allow you to blind those who are important to me
-</text>
-</transcript>
 
+  var lang_code = caption.lang_code;
+  var lang_name = caption.lang_name;
 
+  // if user choose auto subtitle // 如果用户选的是自动字幕
+  if (caption.lang_code == 'AUTO') {
+    var file_name = get_file_name(lang_name);
+    download_auto_subtitle(file_name);
+    selector.options[0].selected = true; // after download, select first <option>
+    return
+  }
 
-sometime it's different:
-https://video.google.com/timedtext?hl=en&lang=en&name=&v=a8uyilHatBA
-<transcript>
-<text start="0.07" dur="3.569">
-About a year ago, Elon Musk was sitting in traffic in Los Angeles, and thought about
-</text>
-<text start="3.639" dur="2.971">
-how cool it would be if he built a tunnel under the city.
-</text>
-<text start="6.61" dur="1.21">So he built a tunnel under the city.</text>
-<text start="7.82" dur="2.279">And he started selling hats for his tunnel.</text>
-<text start="10.099" dur="3.931">
-50,000 hats later, he got bored with hats, and switched the hats out for flamethrowers.
-</text>
-<text start="14.03" dur="3.999">
-He sold 20,000 of those, and then five days later he tied his car up to the most powerful
-</text>
-<text start="18.029" dur="3.431">rocket ever made, and shot it into fuckin space.</text>
-<text start="23.1" dur="2.44">And then the rocket fuckin landed itself.</text>
-</transcript>
-    */
-    console.log('输出结果');
-    console.log(r);
-    var text = r.getElementsByTagName('text');
-    // 拿所有 text 节点
-    var result = "";
-    var BOM = "\uFEFF";
-    result = BOM + result;
-    // 保存结果的字符串
-    for (var i = 0; i < text.length; i++) {
-      var index = i + 1;
-      // 这个是字幕的索引, 从1开始的, 但是因为我们的循环是从0开始的, 所以加个1
-      var content = text[i].textContent.replace(/\n/g, " ");
-      // content 保存的是字幕内容 - 这里把换行换成了空格, 因为 Youtube 显示的多行字幕中间会有个\n, 如果不加这个replace. 两行的内容就会黏在一起.
-      var start = parseFloat(text[i].getAttribute('start'));
-      var end = start + parseFloat(text[i].getAttribute('dur'));
-      if (!end) {
-        end = start + 5;
-      }
-      // ==== 开始处理数据, 把数据保存到result里. ====
-      result = result + index + escape('\r\n');
-      // 把序号加进去
-      var start_time = process_time(parseFloat(start));
-      result = result + start_time;
-      // 拿到 开始时间 之后往result字符串里存一下
-      result = result + ' --> ';
-      // 标准srt时间轴: 00:00:01,850 --> 00:00:02,720
-      // 我们现在加个中间的箭头..
-      var end_time = process_time(parseFloat(end));
-      result = result + end_time + escape('\r\n');
-      // 拿到 结束时间 之后往result字符串里存一下
-      result = result + content + escape('\r\n\r\n');
-      // 加字幕内容
-    }
-    var title = get_file_name(language_name_1c7);
-    downloadFile(title, result);
-    // 下载
+  // 如果用户选的是完整字幕
+  // 原文
+  // sub mean "subtitle"
+  var sub_original_url = await get_closed_subtitle_url(lang_code)
+  // var sub_original_xml = await get(sub_original_url);
 
-  }).fail(function () {
-    alert("Error: No response from server.");
-  });
+  // 中文
+  var sub_translated_url = sub_original_url + "&tlang=" + "zh-Hans"
+  var sub_translated_xml = await get(sub_translated_url);
 
+  // 根据时间轴融合这俩
+  // var sub_original_srt = parse_youtube_XML_to_object_list(sub_original_xml)
+  var sub_translated_srt = parse_youtube_XML_to_object_list(sub_translated_xml)
+  // 'sub_original_srt' and 'sub_translated_srt' have the same length
+
+  // var dual_language_srt = []
+  // for (let index = 0; index < sub_original_srt.length; index++) {
+  //   const original = sub_original_srt[index];
+  //   const translated = sub_translated_srt[index];
+  //   var text = translated.text + NEW_LINE + original.text; // 中文 \n 英文
+  //   var item = {
+  //     startTime: original.startTime,
+  //     endTime: original.endTime,
+  //     text: text
+  //   }
+  //   dual_language_srt.push(item)
+  // }
+
+  var srt_string = object_array_to_SRT_string(sub_translated_srt)
+  var title = get_file_name(lang_name);
+  console.log(title);
+  downloadString(srt_string, "text/plain", title);
+
+  // after download, select first <option>
   selector.options[0].selected = true;
-  // 下载后把 <select> 选回第一个元素.
 }
 
-
 // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
-function get_file_name(language_name) {
-  return '(' + language_name + ' 转中文)' + unsafeWindow.ytplayer.config.args.title + '.srt';
+function get_file_name(x) {
+  return `(${x}) ${document.title}.srt`;
+  // return '(' + x + ')' + document.title + '.srt';
 }
 
 // 载入有多少种语言, 然后加到 <select> 里
 function load_language_list(select) {
+  // auto
+  var auto_subtitle_exist = false;
+
+  // closed
+  var closed_subtitle_exist = false;
+  var captions = null;
+
+  // get auto subtitle
+  var auto_subtitle_url = get_auto_subtitle_xml_url();
+  if (auto_subtitle_url != false) {
+    auto_subtitle_exist = true;
+    console.log('自动字幕的确存在');
+  } else {
+    console.log('自动字幕不存在');
+    console.log(auto_subtitle_url);
+  }
+
+  // get closed subtitle
+  var list_url = 'https://video.google.com/timedtext?v=' + get_video_id() + '&type=list&hl=zh-CN';
+  // https://video.google.com/timedtext?v=if36bqHypqk&type=list&hl=en // 英文
+  // https://video.google.com/timedtext?v=n1zpnN-6pZQ&type=list&hl=zh-CN // 中文
+
   GM_xmlhttpRequest({
     method: 'GET',
-    url: 'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list',
+    url: list_url,
     onload: function (xhr) {
-      var caption, option, caption_info,
-        captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
-      if (captions.length === 0) {
+
+      captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
+      if (captions.length != 0) {
+        closed_subtitle_exist = true;
+      }
+
+      // if no subtitle at all, just say no and stop
+      if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
         select.options[0].textContent = NO_SUBTITLE;
-
-        if (new_material_design_version()) {
-          $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color', '#95a5a6').css('padding', '6px');
-          $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color', '#95a5a6');
-
-        } else {
-          $('#youtube-subtitle-downloader-by-1c7').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color', '#95a5a6').css('padding', '5px');
-          $('#captions_selector').css('border', '#95a5a6').css('cursor', 'not-allowed').css('background-color', '#95a5a6');
-        }
-
+        disable_download_button();
         return false;
       }
-      for (var i = 0, il = captions.length; i < il; i++) {
-        caption = captions[i];
-        option = document.createElement('option');
-        caption_info = {
-          name: caption.getAttribute('name'),
-          lang_code: caption.getAttribute('lang_code'),
-          lang_name: caption.getAttribute('lang_translated')
-        };
-        caption_array.push(caption_info);
-        // 注意这里是加到 caption_array, 一个全局变量, 我们待会要依靠它来下载.
-        option.textContent = caption_info.lang_name + " -> 翻译成中字";
-        select.appendChild(option);
-      }
+
+      // if at least one type of subtitle exist
       select.options[0].textContent = HAVE_SUBTITLE;
       select.disabled = false;
+
+      // if at least one type of subtitle exist
+      select.options[0].textContent = HAVE_SUBTITLE;
+      select.disabled = false;
+
+      var caption = null; // for inside loop
+      var option = null; // for <option>
+      var caption_info = null; // for our custom object
+
+      // 自动字幕
+      if (auto_subtitle_exist) {
+        var auto_sub_name = get_auto_subtitle_name()
+        // var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
+        var lang_name = `${auto_sub_name} -> 中文`
+        caption_info = {
+          lang_code: 'AUTO', // later we use this to know if it's auto subtitle
+          lang_name: lang_name // for display only
+        };
+        caption_array.push(caption_info);
+
+        option = document.createElement('option');
+        option.textContent = caption_info.lang_name;
+        select.appendChild(option);
+      }
+
+      // if closed_subtitle_exist
+      if (closed_subtitle_exist) {
+        for (var i = 0, il = captions.length; i < il; i++) {
+          caption = captions[i];
+          // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
+          var lang_code = caption.getAttribute('lang_code')
+          var lang_translated = caption.getAttribute('lang_translated')
+          var lang_name = `${lang_translated} -> 中文`
+          caption_info = {
+            lang_code: lang_code, // for AJAX request
+            lang_name: lang_name, // display to user
+          };
+          caption_array.push(caption_info);
+          // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
+          option = document.createElement('option');
+          option.textContent = caption_info.lang_name;
+          select.appendChild(option);
+        }
+      }
     }
   });
 }
@@ -430,7 +415,6 @@ function process_time(s) {
 }
 
 function downloadFile(fileName, content) {
-  var TITLE = unsafeWindow.ytplayer.config.args.title; // Video title
   var version = getChromeVersion();
 
   // dummy element for download
@@ -474,4 +458,306 @@ function htmlDecode(input) {
   e.class = 'dummy-element-for-tampermonkey-Youtube-Subtitle-Downloader-script-to-decode-html-entity';
   e.innerHTML = input;
   return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
+
+// return URL or null;
+// later we can send a AJAX and get XML subtitle
+function get_auto_subtitle_xml_url() {
+  try {
+    // get JSON
+    var json = '';
+    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+      json = youtube_playerResponse_1c7;
+    } else {
+      var json = ytplayer.config.args.raw_player_response;
+    }
+
+    // get data from JSON
+    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    for (var index in captionTracks) {
+      var caption = captionTracks[index];
+      if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+        return captionTracks[index].baseUrl;
+      }
+      // ASR – A caption track generated using automatic speech recognition.
+      // https://developers.google.com/youtube/v3/docs/captions
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+function disable_download_button() {
+  $('#youtube-subtitle-downloader-by-1c7')
+    .css('border', '#95a5a6')
+    .css('cursor', 'not-allowed')
+    .css('background-color', '#95a5a6');
+  $('#captions_selector')
+    .css('border', '#95a5a6')
+    .css('cursor', 'not-allowed')
+    .css('background-color', '#95a5a6');
+
+  if (new_material_design_version()) {
+    $('#youtube-subtitle-downloader-by-1c7').css('padding', '6px');
+  } else {
+    $('#youtube-subtitle-downloader-by-1c7').css('padding', '5px');
+  }
+}
+
+// 下载自动字幕的中英双语
+// 输入: file_name: 保存的文件名
+// 输出: 无 (会触发浏览器下载一个文件)
+async function download_auto_subtitle(file_name) {
+  // console.log(`进入了 download_auto_subtitle, 参数 file_name 是 ${file_name}`)
+  // 1. English Auto Sub in json3 format
+  var auto_sub_url = get_auto_subtitle_xml_url();
+  var format_json3_url = auto_sub_url + '&fmt=json3'
+  // var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
+  // console.log(en_auto_sub);
+
+  // 2. 自动字幕的翻译中文
+  var cn_url = format_json3_url + '&tlang=zh-Hans'
+  // console.log(cn_url);
+  var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
+  // console.log(cn_srt);
+
+  // console.log(cn_srt)
+  // 到了这一步，cn_srt 的每一个 item 应该是：
+  // var item_example = {
+  //   "startTime": "00:00:06,640",
+  //   "endTime": "00:00:09,760",
+  //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
+  //   "tStartMs": 6640,
+  //   "dDurationMs": 3120,
+  //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
+  // }
+
+  // 最后保存下来
+  var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
+  console.log(srt_string);
+  downloadString(srt_string, "text/plain", file_name);
+}
+
+function auto_sub_dual_language_to_srt(srt_array) {
+  // var srt_array_item_example = {
+  //   "startTime": "00:00:06,640",
+  //   "endTime": "00:00:09,760",
+  //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
+  //   "tStartMs": 6640,
+  //   "dDurationMs": 3120,
+  //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
+  // }
+
+  var result_array = []
+  for (let i = 0; i < srt_array.length; i++) {
+    const line = srt_array[i];
+    var text = line.text; // 中文
+    // var text = line.text + NEW_LINE + line.words.join(''); // 中文 \n 英文
+    var item = {
+      startTime: line.startTime,
+      endTime: line.endTime,
+      text: text
+    }
+    result_array.push(item)
+  }
+
+  var srt_string = object_array_to_SRT_string(result_array)
+  return srt_string
+}
+
+// return "English (auto-generated)" or a default name;
+function get_auto_subtitle_name() {
+  try {
+    var json = ytplayer.config.args.raw_player_response;
+    if (typeof json.captions !== "undefined") {
+      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+          return captionTracks[index].name.simpleText;
+        }
+      }
+    }
+  } catch (error) {
+    return 'Auto Subtitle';
+  }
+}
+
+// Usage: var result = await get(url)
+function get(url) {
+  return $.ajax({
+    url: url,
+    type: 'get',
+    success: function (r) {
+      return r
+    },
+    fail: function (error) {
+      return error
+    }
+  });
+}
+
+
+// 输入: url (String)
+// 输出: SRT (Array)
+async function auto_sub_in_chinese_fmt_json3_to_srt(url) {
+  var srt_array = []
+
+  var json = await get(url);
+  var events = json.events;
+  for (let index = 0; index < events.length; index++) {
+    const event = events[index];
+    var tStartMs = event.tStartMs
+    var dDurationMs = event.dDurationMs
+    var segs = event.segs
+    var text = segs[0].utf8;
+
+    var item = {
+      startTime: ms_to_srt(tStartMs),
+      endTime: ms_to_srt(tStartMs + dDurationMs),
+      text: text,
+
+      tStartMs: tStartMs,
+      dDurationMs: dDurationMs,
+    }
+    srt_array.push(item);
+  }
+  return srt_array
+}
+
+// 把毫秒转成 srt 时间
+// 代码来源网络
+function ms_to_srt($milliseconds) {
+  var $seconds = Math.floor($milliseconds / 1000);
+  var $minutes = Math.floor($seconds / 60);
+  var $hours = Math.floor($minutes / 60);
+  var $milliseconds = $milliseconds % 1000;
+  var $seconds = $seconds % 60;
+  var $minutes = $minutes % 60;
+  return ($hours < 10 ? '0' : '') + $hours + ':' +
+    ($minutes < 10 ? '0' : '') + $minutes + ':' +
+    ($seconds < 10 ? '0' : '') + $seconds + ',' +
+    ($milliseconds < 100 ? '0' : '') + ($milliseconds < 10 ? '0' : '') + $milliseconds;
+}
+
+/*
+  Input: [ {startTime: "", endTime: "", text: ""}, {...}, {...} ]
+  Output: SRT
+*/
+function object_array_to_SRT_string(object_array) {
+  var result = '';
+  var BOM = '\uFEFF';
+  result = BOM + result; // store final SRT result
+
+  for (var i = 0; i < object_array.length; i++) {
+    var item = object_array[i]
+    var index = i + 1;
+    var start_time = item.startTime
+    var end_time = item.endTime
+    var text = item.text
+
+    var new_line = "\n";
+    result = result + index + new_line;
+
+    result = result + start_time;
+    result = result + ' --> ';
+    result = result + end_time + new_line;
+
+    result = result + text + new_line + new_line;
+  }
+
+  return result;
+}
+
+// Copy from: https://gist.github.com/danallison/3ec9d5314788b337b682
+// Thanks! https://github.com/danallison
+// Work in Chrome 66
+// Test passed: 2018-5-19
+function downloadString(text, fileType, fileName) {
+  var blob = new Blob([text], {
+    type: fileType
+  });
+  var a = document.createElement('a');
+  a.download = fileName;
+  a.href = URL.createObjectURL(blob);
+  a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () {
+    URL.revokeObjectURL(a.href);
+  }, 1500);
+}
+
+// Input: lang_code like 'en'
+// Output: URL (String)
+async function get_closed_subtitle_url(lang_code) {
+  try {
+    var json = '';
+    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+      json = youtube_playerResponse_1c7;
+    } else {
+      var json = ytplayer.config.args.raw_player_response;
+    }
+
+    // get data from JSON
+    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    for (var index in captionTracks) {
+      var caption = captionTracks[index];
+      if (caption.languageCode === lang_code && caption.kind != 'asr') {
+        var url = captionTracks[index].baseUrl;
+        return url
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+// Input: XML (provide by Youtube)
+// Output: Array of object
+// each object look like: 
+/*
+  {
+    startTime: "",
+    endTime: "",
+    text: ""
+  }
+*/
+// it's intermediate representation for SRT
+function parse_youtube_XML_to_object_list(youtube_xml_string) {
+  if (youtube_xml_string === '' || youtube_xml_string === undefined || youtube_xml_string === null) {
+    return false;
+  }
+  var result_array = []
+  var text_nodes = youtube_xml_string.getElementsByTagName('text');
+  var len = text_nodes.length;
+  for (var i = 0; i < len; i++) {
+    var text = text_nodes[i].textContent.toString();
+    text = text.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
+    text = htmlDecode(text);
+
+    var start = text_nodes[i].getAttribute('start');
+    var end = '';
+
+    if (i + 1 >= len) {
+      end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+    } else {
+      end = text_nodes[i + 1].getAttribute('start');
+    }
+
+    var start_time = process_time(parseFloat(start));
+    var end_time = process_time(parseFloat(end));
+
+    var item = {
+      startTime: start_time,
+      endTime: end_time,
+      text: text
+    }
+    result_array.push(item)
+  }
+
+  return result_array
 }
