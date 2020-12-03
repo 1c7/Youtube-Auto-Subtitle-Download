@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v6
+// @name           Youtube 翻译中文字幕下载 v8
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        6
+// @version        8
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -24,9 +24,14 @@
 */
 
 (function () {
-  // CONFIG
-  var NO_SUBTITLE = '无字幕';
-  var HAVE_SUBTITLE = '下载翻译的中文字幕';
+  // 配置项
+  const NO_SUBTITLE = '无字幕';
+  const HAVE_SUBTITLE = '下载翻译的中文字幕';
+  const TEXT_LOADING = '载入中...';
+  const BUTTON_ID = 'youtube-translate-to-chinese-subtitle-downloader-by-1c7'
+  // 配置项
+
+  var HASH_BUTTON_ID = `#${BUTTON_ID}`
   var first_load = true;
 
   // return true / false
@@ -105,7 +110,7 @@
   }
 
   function remove_subtitle_download_button() {
-    $('#youtube-subtitle-downloader-by-1c7').remove();
+    $(HASH_BUTTON_ID).remove();
   }
 
   function init() {
@@ -148,13 +153,13 @@ padding-right: 8px;
 `);
     }
 
-    div.id = 'youtube-subtitle-downloader-by-1c7';
+    div.id = BUTTON_ID;
 
     select.id = 'captions_selector';
     select.disabled = true;
     select.setAttribute('style', 'display:block; border: 1px solid rgb(0, 183, 90); cursor: pointer; color: rgb(255, 255, 255); background-color: #00B75A;');
 
-    option.textContent = '载入中...';
+    option.textContent = TEXT_LOADING;
     option.selected = true;
     select.appendChild(option);
 
@@ -234,7 +239,6 @@ padding-right: 8px;
     // 原文
     // sub mean "subtitle"
     var sub_original_url = await get_closed_subtitle_url(lang_code)
-    // var sub_original_xml = await get(sub_original_url);
 
     // 中文
     var sub_translated_url = sub_original_url + "&tlang=" + "zh-Hans"
@@ -311,7 +315,6 @@ padding-right: 8px;
         // 自动字幕
         if (auto_subtitle_exist) {
           var auto_sub_name = get_auto_subtitle_name()
-          // var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
           var lang_name = `${auto_sub_name} 翻译成 中文`
           caption_info = {
             lang_code: 'AUTO', // later we use this to know if it's auto subtitle
@@ -452,13 +455,14 @@ padding-right: 8px;
         // ASR – A caption track generated using automatic speech recognition.
         // https://developers.google.com/youtube/v3/docs/captions
       }
+      return false;
     } catch (error) {
       return false;
     }
   }
 
   function disable_download_button() {
-    $('#youtube-subtitle-downloader-by-1c7')
+    $(HASH_BUTTON_ID)
       .css('border', '#95a5a6')
       .css('cursor', 'not-allowed')
       .css('background-color', '#95a5a6');
@@ -468,9 +472,9 @@ padding-right: 8px;
       .css('background-color', '#95a5a6');
 
     if (new_material_design_version()) {
-      $('#youtube-subtitle-downloader-by-1c7').css('padding', '6px');
+      $(HASH_BUTTON_ID).css('padding', '6px');
     } else {
-      $('#youtube-subtitle-downloader-by-1c7').css('padding', '5px');
+      $(HASH_BUTTON_ID).css('padding', '5px');
     }
   }
 
@@ -537,6 +541,7 @@ padding-right: 8px;
 
   // return "English (auto-generated)" or a default name;
   function get_auto_subtitle_name() {
+    const name = "自动字幕"
     try {
       var json = get_json();
       if (typeof json.captions !== "undefined") {
@@ -548,8 +553,10 @@ padding-right: 8px;
           }
         }
       }
+      return name;
     } catch (error) {
-      return 'Auto Subtitle';
+      console.log(error);
+      return name;
     }
   }
 

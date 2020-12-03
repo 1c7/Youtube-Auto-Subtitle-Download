@@ -27,7 +27,9 @@ https://github.com/1c7/Youtube-translate-chinese-subtitle-download
 - 2020-12-3 升级为 v6
   - `ytplayer.config.args.player_response;` 的部分做了抽象
   - 把代码用 `(function(){})()` 包起来了
-
+- 2020-12-3 升级为 v8
+  - 抽象
+	- fix 逻辑, try catch 里面有可能 for loop 完了应该 return 一个默认值
 ## TODO
 
 ```javascript
