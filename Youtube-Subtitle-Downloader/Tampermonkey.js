@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v24
+// @name           Youtube Subtitle Downloader v25
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        24
+// @version        25
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -298,7 +298,7 @@
     }
 
     // get closed subtitle
-    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_video_id() + '&type=list';
+    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
     // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
     GM_xmlhttpRequest({
       method: 'GET',
