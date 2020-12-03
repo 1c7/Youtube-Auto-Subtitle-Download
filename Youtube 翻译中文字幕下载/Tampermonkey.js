@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v4
+// @name           Youtube 翻译中文字幕下载 v6
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        4
+// @version        6
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -188,7 +188,7 @@ padding-right: 8px;
 // Input: 语言代码（代表要从哪个语言转成中文）
 // Ouput: 字幕的 URL，或者 false（找不到的话）
 function get_chinese_subtitle_url(from_language_code) {
-  var json = ytplayer.config.args.raw_player_response;
+  var json = get_json();
   var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
   // 有多少种语言，captionTracks 就有多少个数组。
 
@@ -441,15 +441,7 @@ function htmlDecode(input) {
 // later we can send a AJAX and get XML subtitle
 function get_auto_subtitle_xml_url() {
   try {
-    // get JSON
-    var json = '';
-    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-      json = youtube_playerResponse_1c7;
-    } else {
-      var json = ytplayer.config.args.raw_player_response;
-    }
-
-    // get data from JSON
+    var json = get_json();
     var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
     for (var index in captionTracks) {
       var caption = captionTracks[index];
@@ -545,7 +537,7 @@ function auto_sub_dual_language_to_srt(srt_array) {
 // return "English (auto-generated)" or a default name;
 function get_auto_subtitle_name() {
   try {
-    var json = ytplayer.config.args.raw_player_response;
+    var json = get_json();
     if (typeof json.captions !== "undefined") {
       var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
       for (var index in captionTracks) {
@@ -671,14 +663,7 @@ function downloadString(text, fileType, fileName) {
 // Output: URL (String)
 async function get_closed_subtitle_url(lang_code) {
   try {
-    var json = '';
-    if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-      json = youtube_playerResponse_1c7;
-    } else {
-      var json = ytplayer.config.args.raw_player_response;
-    }
-
-    // get data from JSON
+    var json = get_json();
     var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
     for (var index in captionTracks) {
       var caption = captionTracks[index];
@@ -737,4 +722,22 @@ function parse_youtube_XML_to_object_list(youtube_xml_string) {
   }
 
   return result_array
+}
+
+// return player_response
+// or return null
+function get_json() {
+  try {
+    var json = null
+    if (ytplayer.config.args.player_response) {
+      var raw_string = ytplayer.config.args.player_response;
+      json = JSON.parse(raw_string);
+    }
+    if (ytplayer.config.args.raw_player_response) {
+      json = ytplayer.config.args.raw_player_response;
+    }
+    return json
+  } catch (error) {
+    return null
+  }
 }
