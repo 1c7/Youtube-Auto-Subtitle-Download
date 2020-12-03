@@ -2,9 +2,9 @@
 
 Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
 
-## 安装地址: 用于 Tampermonkey
+## 安装地址
 
-[Greasy Fork: Youtube 翻译中文字幕下载](https://greasyfork.org/zh-CN/scripts/38941-youtube-%E7%BF%BB%E8%AF%91%E4%B8%AD%E6%96%87%E5%AD%97%E5%B9%95%E4%B8%8B%E8%BD%BD-v2)
+[Greasy Fork](https://greasyfork.org/zh-CN/scripts/38941-youtube-%E7%BF%BB%E8%AF%91%E4%B8%AD%E6%96%87%E5%AD%97%E5%B9%95%E4%B8%8B%E8%BD%BD-v2)
 
 ## 说明
 
@@ -29,17 +29,4 @@ https://github.com/1c7/Youtube-translate-chinese-subtitle-download
   - 把代码用 `(function(){})()` 包起来了
 - 2020-12-3 升级为 v8
   - 抽象
-	- fix 逻辑, try catch 里面有可能 for loop 完了应该 return 一个默认值
-## TODO
-
-```javascript
-if (ytplayer.config.args.player_response) {
-  var raw_string = ytplayer.config.args.player_response;
-  json = JSON.parse(raw_string);
-}
-if (ytplayer.config.args.raw_player_response) {
-  json = ytplayer.config.args.raw_player_response;
-}
-```
-
-这个部分可以抽象出来变成一个函数
+  - fix 逻辑, try catch 里面有可能 for loop 完了应该 return 一个默认值
