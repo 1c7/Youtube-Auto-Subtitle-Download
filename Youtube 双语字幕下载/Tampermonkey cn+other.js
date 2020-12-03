@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v3 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v4 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        3
-// @copyright      Cheng Zheng
+// @version        4
+// @copyright      2020 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
-// @namespace https://greasyfork.org/users/5711
+// @namespace  https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
@@ -27,9 +27,6 @@
     auto 自动字幕
     closed 完整字幕 (或者叫人工字幕也可以)
 
-  时间: 
-    初次写于 2020-10-7，大量代码来自同一作者之前写的另一个脚本
-
   原理说明: 
     对于"完整字幕", Youtube 返回的时间轴完全一致，因此只需要结合在一起即可，相对比较简单。
     对于"自动字幕"，中文是一个个句子，英文是一个个单词，格式不同，时间轴也不同
@@ -38,9 +35,13 @@
 (function () {
 
   // Config
-  var NO_SUBTITLE = '没有字幕';
-  var HAVE_SUBTITLE = '下载双语字幕 (中文 + 外语)';
+  var NO_SUBTITLE = '无字幕';
+  var HAVE_SUBTITLE = '下载双语字幕 (中文+外语)';
   const NEW_LINE = '\n'
+  const BUTTON_ID = 'youtube-dual-lang-downloader-by-1c7-last-update-2020-12-3'
+  // Config
+
+  var HASH_BUTTON_ID = `#${BUTTON_ID}`
 
   // initialize
   var first_load = true; // indicate if first load this webpage or not
@@ -146,7 +147,7 @@
   }
 
   function remove_subtitle_download_button() {
-    $('#youtube-subtitle-downloader-by-1c7').remove();
+    $(HASH_BUTTON_ID).remove();
   }
 
   function init() {
@@ -171,8 +172,8 @@ border-bottom-left-radius: 3px;
 background-color: #00B75A;
 `);
 
-    div.id = 'youtube-subtitle-downloader-by-1c7';
-    div.title = 'Youtube Subtitle Download v16'; // display when cursor hover
+    div.id = BUTTON_ID;
+    div.title = 'Youtube Subtitle Downloader'; // display when cursor hover
 
     select.id = 'captions_selector';
     select.disabled = true;
@@ -295,19 +296,6 @@ padding: 4px;
         }
       }
     }
-
-    // console.log(cn_srt)
-    // 到了这一步，cn_srt 的每一个 item 应该是：
-    // var item_example = {
-    //   "startTime": "00:00:06,640",
-    //   "endTime": "00:00:09,760",
-    //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
-    //   "tStartMs": 6640,
-    //   "dDurationMs": 3120,
-    //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
-    // }
-
-    // 最后保存下来
     var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
     downloadString(srt_string, "text/plain", file_name);
   }
@@ -472,7 +460,6 @@ padding: 4px;
         // 自动字幕
         if (auto_subtitle_exist) {
           var auto_sub_name = get_auto_subtitle_name()
-          // var lang_name = auto_sub_name + " (自动字幕暂不支持双语) "
           var lang_name = `中文 + ${auto_sub_name}`
           caption_info = {
             lang_code: 'AUTO', // later we use this to know if it's auto subtitle
@@ -509,7 +496,7 @@ padding: 4px;
   }
 
   function disable_download_button() {
-    $('#youtube-subtitle-downloader-by-1c7')
+    $(HASH_BUTTON_ID)
       .css('border', '#95a5a6')
       .css('cursor', 'not-allowed')
       .css('background-color', '#95a5a6');
@@ -519,9 +506,9 @@ padding: 4px;
       .css('background-color', '#95a5a6');
 
     if (new_material_design_version()) {
-      $('#youtube-subtitle-downloader-by-1c7').css('padding', '6px');
+      $(HASH_BUTTON_ID).css('padding', '6px');
     } else {
-      $('#youtube-subtitle-downloader-by-1c7').css('padding', '5px');
+      $(HASH_BUTTON_ID).css('padding', '5px');
     }
   }
 
@@ -648,20 +635,6 @@ padding: 4px;
       },
       fail: function (error) {
         return error
-      }
-    });
-  }
-
-  // GET request a URL
-  function get_from_url(url, callback) {
-    $.ajax({
-      url: url,
-      type: 'get',
-      success: function (r) {
-        callback(r); // pass result to callback
-      },
-      fail: function (error) {
-        callback(false); // or pass false to callback
       }
     });
   }
