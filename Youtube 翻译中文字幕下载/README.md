@@ -26,6 +26,8 @@ https://github.com/1c7/Youtube-translate-chinese-subtitle-download
   - `ytplayer.config.args.player_response;` 的部分做了改进
 - 2020-12-3 升级为 v6
   - `ytplayer.config.args.player_response;` 的部分做了抽象
+  - 把代码用 `(function(){})()` 包起来了
+
 ## TODO
 
 ```javascript
