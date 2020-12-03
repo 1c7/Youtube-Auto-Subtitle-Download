@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v8
+// @name           Youtube 翻译中文字幕下载 v9
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        8
+// @version        9
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -192,32 +192,9 @@ padding-right: 8px;
     body.appendChild(a);
   }
 
-  // Input: 语言代码（代表要从哪个语言转成中文）
-  // Ouput: 字幕的 URL，或者 false（找不到的话）
-  function get_chinese_subtitle_url(from_language_code) {
-    var json = get_json();
-    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
-    // 有多少种语言，captionTracks 就有多少个数组。
-
-    // 从 captionTracks 里面用 loop 来搜索对应语言。返回 baseUrl。
-    var baseURL = '';
-    for (var index in captionTracks) {
-      var caption = captionTracks[index];
-      if (caption.languageCode === from_language_code) {
-        baseURL = captionTracks[index].baseUrl;
-      }
-    }
-    if (baseURL == '') {
-      return false; // 上面的 loop 要是没找到对应的语言，导致 url 是空，那也只能返回  false
-    }
-    var chinese_subtitle_url = baseURL + "&tlang=zh-Hans"; // 转成中文字幕
-    return chinese_subtitle_url;
-  }
-
   // Trigger when user select <option>
   async function download_subtitle(selector) {
-    // if user select first <option>
-    // we just return, do nothing.
+    // if user select first <option>, we just return, do nothing.
     if (selector.selectedIndex == 0) {
       return;
     }
@@ -483,37 +460,17 @@ padding-right: 8px;
   // 输入: file_name: 保存的文件名
   // 输出: 无 (会触发浏览器下载一个文件)
   async function download_auto_subtitle(file_name) {
-    // console.log(`进入了 download_auto_subtitle, 参数 file_name 是 ${file_name}`)
-    // 1. English Auto Sub in json3 format
     var auto_sub_url = get_auto_subtitle_xml_url();
     var format_json3_url = auto_sub_url + '&fmt=json3'
-    // var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
-    // console.log(en_auto_sub);
-
-    // 2. 自动字幕的翻译中文
     var cn_url = format_json3_url + '&tlang=zh-Hans'
-    // console.log(cn_url);
-    var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
-    // console.log(cn_srt);
 
-    // console.log(cn_srt)
-    // 到了这一步，cn_srt 的每一个 item 应该是：
-    // var item_example = {
-    //   "startTime": "00:00:06,640",
-    //   "endTime": "00:00:09,760",
-    //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
-    //   "tStartMs": 6640,
-    //   "dDurationMs": 3120,
-    //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
-    // }
+    var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url)
+    var srt_string = to_srt(cn_srt)
 
-    // 最后保存下来
-    var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
-    // console.log(srt_string);
     downloadString(srt_string, "text/plain", file_name);
   }
 
-  function auto_sub_dual_language_to_srt(srt_array) {
+  function to_srt(srt_array) {
     // var srt_array_item_example = {
     //   "startTime": "00:00:06,640",
     //   "endTime": "00:00:09,760",
@@ -522,12 +479,10 @@ padding-right: 8px;
     //   "dDurationMs": 3120,
     //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
     // }
-
     var result_array = []
     for (let i = 0; i < srt_array.length; i++) {
       const line = srt_array[i];
       var text = line.text; // 中文
-      // var text = line.text + NEW_LINE + line.words.join(''); // 中文 \n 英文
       var item = {
         startTime: line.startTime,
         endTime: line.endTime,

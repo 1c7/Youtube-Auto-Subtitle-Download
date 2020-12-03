@@ -30,3 +30,5 @@ https://github.com/1c7/Youtube-translate-chinese-subtitle-download
 - 2020-12-3 升级为 v8
   - 抽象
   - fix 逻辑, try catch 里面有可能 for loop 完了应该 return 一个默认值
+- 2020-12-3 升级为 v9
+  - 改进逻辑，删了些东西
