@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v21
+// @name           Youtube Subtitle Downloader v22
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        21
+// @version        22
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -71,7 +71,7 @@
     v20: 2018-June-13 seem like Youtube change their URL format, now URL must have something like '&name=en'
      v20 test with: https://www.youtube.com/watch?v=tqGkOvrKGfY  https://www.youtube.com/watch?time_continue=5&v=36tggrpRoTI
 
-    v21: improve code logic
+    v21&v22: improve code logic
 */
 
 (function () {
@@ -471,8 +471,7 @@ padding: 4px;
   // later we can send a AJAX and get XML subtitle
   function get_auto_subtitle_xml_url() {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (typeof caption.kind === 'string' && caption.kind == 'asr') {
@@ -494,14 +493,15 @@ padding: 4px;
 
   function get_closed_subtitle(lang_code, callback) {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
-        if (caption.languageCode === lang_code) {
-          // 这里进来了2次，所以造成了下载2个字幕，
-          // 因为 lang_code 是 "en" 的时候可能会 match 2条纪录，一条是自动字幕，一条是完整字幕
+        if (caption.languageCode === lang_code && caption.kind != 'asr') {
+          // 必须写 caption.kind != 'asr'
+          // 否则会下载2个字幕文件（也就是这个分支会进来2次）
+          // 因为 lang_code 是 "en" 会 match 2条纪录，一条是自动字幕，一条是完整字幕
           // 自动字幕那条是 kind=asr
+          // 完成字幕那条没有 kind 属性
           var url = captionTracks[index].baseUrl;
           get_from_url(url, callback);
         }
@@ -543,13 +543,13 @@ padding: 4px;
       var content = text[i].textContent.toString();
       content = content.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
       var start = text[i].getAttribute('start');
-      var end = '';
+      var end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
 
-      if (i + 1 >= len) {
-        end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-      } else {
-        end = text[i + 1].getAttribute('start');
-      }
+      // if (i + 1 >= len) {
+      //   end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
+      // } else {
+      //   end = text[i + 1].getAttribute('start');
+      // }
 
       // we want SRT format:
       /*
@@ -619,6 +619,12 @@ padding: 4px;
     } catch (error) {
       return null
     }
+  }
+
+  function get_captionTracks() {
+    var json = get_json();
+    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    return captionTracks
   }
 
 })();
