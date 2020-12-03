@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v22
+// @name           Youtube Subtitle Downloader v23
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        22
+// @version        23
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -72,6 +72,9 @@
      v20 test with: https://www.youtube.com/watch?v=tqGkOvrKGfY  https://www.youtube.com/watch?time_continue=5&v=36tggrpRoTI
 
     v21&v22: improve code logic
+    tested in Chrome 87.0.4280.67(macOS Big Sur)
+
+    v23: change 'callback' to 'await', 回调方式太难理解了，很烦，改成了 await, 代码好理解多了
 */
 
 (function () {
@@ -79,7 +82,7 @@
   // Config
   var NO_SUBTITLE = 'No Subtitle';
   var HAVE_SUBTITLE = 'Download Subtitles';
-  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2020-12-3'
+  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2020-12-3-version-22'
   // Config
 
   var HASH_BUTTON_ID = `#${BUTTON_ID}`
@@ -99,7 +102,7 @@
   // if it doesn't, stop trying after certain time
   function start() {
     var retry_count = 0;
-    var RETRY_LIMIT = 20;
+    var RETRY_LIMIT = 30;
     // use "setInterval" is because "$(document).ready()" still not enough, still too early
     // 330 work for me.
     if (new_material_design_version()) {
@@ -258,46 +261,44 @@ padding: 4px;
   }
 
   // trigger when user select <option>
-  function download_subtitle(selector) {
-    // if user select first <option>
-    // we just return, do nothing.
+  async function download_subtitle(selector) {
+    // if user select first <option>, we just return, do nothing.
     if (selector.selectedIndex == 0) {
       return;
     }
 
     var caption = caption_array[selector.selectedIndex - 1];
-    // because first <option> is for display
-    // so index - 1 
+    // because first <option> is for display, so index - 1 
+
+    var result = null;
+    var filename = null; // 保存文件名
 
     // if user choose auto subtitle
     if (caption.lang_code == 'AUTO') {
-      get_auto_subtitle(function (r) {
-        if (r != false) {
-          var srt = parse_youtube_XML_to_SRT(r);
-          var title = get_file_name('auto');
-          downloadString(srt, "text/plain", title);
-        }
-      });
+      result = await get_auto_subtitle();
+      filename = get_file_name(get_auto_subtitle_name());
     } else {
       // closed subtitle
-      var lang_code = caption.lang_code;
-      var lang_name = caption.lang_name;
-      get_closed_subtitle(lang_code, function (r) {
-        if (r != false) {
-          var srt = parse_youtube_XML_to_SRT(r);
-          var title = get_file_name(lang_name);
-          downloadString(srt, "text/plain", title);
-        }
-      });
+      let lang_code = caption.lang_code;
+      let lang_name = caption.lang_name;
+      result = await get_closed_subtitle(lang_code);
+      filename = get_file_name(lang_name);
     }
-    // after download, select first <option>
+
+    let srt = parse_youtube_XML_to_SRT(result);
+    downloadString(srt, "text/plain", filename);
+
+    // After download, select first <option>
     selector.options[0].selected = true;
   }
 
 
   // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
   function get_file_name(x) {
-    return '(' + x + ')' + document.title + '.srt';
+    // var method_1 = '(' + x + ')' + document.title + '.srt'; // 如果有通知数，文件名也会带上，比较烦，这种方式不好
+    // var method_2 = '(' + x + ')' + get_title() + '.srt';
+    var method_3 = `(${x})${get_title()}_video_id_${get_video_id()}.srt`;
+    return method_3
   }
 
   // detect if "auto subtitle" and "closed subtitle" exist
@@ -474,7 +475,7 @@ padding: 4px;
       var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
-        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+        if (typeof caption.kind === 'string' && caption.kind === 'asr') {
           return captionTracks[index].baseUrl;
         }
         // ASR – A caption track generated using automatic speech recognition.
@@ -486,12 +487,16 @@ padding: 4px;
     }
   }
 
-  function get_auto_subtitle(callback) {
+  async function get_auto_subtitle() {
     var url = get_auto_subtitle_xml_url();
-    get_from_url(url, callback);
+    if (url == false) {
+      return false;
+    }
+    var result = await get(url)
+    return result
   }
 
-  function get_closed_subtitle(lang_code, callback) {
+  async function get_closed_subtitle(lang_code) {
     try {
       var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
@@ -500,10 +505,11 @@ padding: 4px;
           // 必须写 caption.kind != 'asr'
           // 否则会下载2个字幕文件（也就是这个分支会进来2次）
           // 因为 lang_code 是 "en" 会 match 2条纪录，一条是自动字幕，一条是完整字幕
-          // 自动字幕那条是 kind=asr
-          // 完成字幕那条没有 kind 属性
-          var url = captionTracks[index].baseUrl;
-          get_from_url(url, callback);
+          // "自动字幕"那条是 kind=asr
+          // "完整字幕"那条没有 kind 属性
+          let url = captionTracks[index].baseUrl;
+          let result = await get(url)
+          return result
         }
       }
       return false;
@@ -511,19 +517,6 @@ padding: 4px;
       return false;
     }
 
-  }
-
-  function get_from_url(url, callback) {
-    $.ajax({
-      url: url,
-      type: 'get',
-      success: function (r) {
-        callback(r);
-      },
-      fail: function (error) {
-        callback(false);
-      }
-    });
   }
 
   // Youtube return XML. we want SRT  
@@ -545,6 +538,9 @@ padding: 4px;
       var start = text[i].getAttribute('start');
       var end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
 
+      // 保留这段代码
+      // 如果希望字幕的结束时间和下一行的开始时间相同（连在一起）
+      // 可以取消下面的注释
       // if (i + 1 >= len) {
       //   end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
       // } else {
@@ -584,14 +580,11 @@ padding: 4px;
   // return "English (auto-generated)" or a default name;
   function get_auto_subtitle_name() {
     try {
-      var json = get_json();
-      if (typeof json.captions !== "undefined") {
-        var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
-        for (var index in captionTracks) {
-          var caption = captionTracks[index];
-          if (typeof caption.kind === 'string' && caption.kind == 'asr') {
-            return captionTracks[index].name.simpleText;
-          }
+      var captionTracks = get_captionTracks();
+      for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+          return captionTracks[index].name.simpleText;
         }
       }
       return 'Auto Subtitle';
@@ -609,7 +602,7 @@ padding: 4px;
         json = youtube_playerResponse_1c7;
       }
       if (ytplayer.config.args.player_response) {
-        var raw_string = ytplayer.config.args.player_response;
+        let raw_string = ytplayer.config.args.player_response;
         json = JSON.parse(raw_string);
       }
       if (ytplayer.config.args.raw_player_response) {
@@ -622,9 +615,31 @@ padding: 4px;
   }
 
   function get_captionTracks() {
-    var json = get_json();
-    var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    let json = get_json();
+    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
     return captionTracks
+  }
+
+  function get_title() {
+    return ytplayer.config.args.title;
+  }
+
+  function get_video_id() {
+    return ytplayer.config.args.video_id;
+  }
+
+  // Usage: var result = await get(url)
+  function get(url) {
+    return $.ajax({
+      url: url,
+      type: 'get',
+      success: function (r) {
+        return r
+      },
+      fail: function (error) {
+        return error
+      }
+    });
   }
 
 })();
