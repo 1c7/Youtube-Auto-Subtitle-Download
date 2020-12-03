@@ -21,6 +21,7 @@
   https://www.youtube.com/watch?v=nGlQkaoIfBI   1门语言
   https://www.youtube.com/watch?v=O5nskjZ_GoI   13门语言
   https://www.youtube.com/watch?v=VfEz3DIbkvo   测试自动字幕（西班牙语）
+  https://www.youtube.com/watch?v=WSnKbcfsT1E
 */
 
 (function () {
