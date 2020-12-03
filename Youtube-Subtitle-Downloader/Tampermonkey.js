@@ -48,33 +48,10 @@
   1:36:33  super long subtitle
 
   [Code Explain]
-  mainly three part
-    1. UI specific (add button on page etc)
-    2. detech if subtitle exists
-    3. transform subtitle format & download
-
-   [Changelog]
-    v1~v15: I forgot, and I am too lazy to check git log
-
-    v16: add support for auto subtitle
-
-    v17: fix few minor issue in v16, to make sure all user get update, bump up 1 version
-
-    v18: fix https://greasyfork.org/zh-CN/forum/discussion/38299/x?locale=zh-CN  video too long issue
-    (for example 1:36:33) and cause subtitle error
-    reason is the 'downloadFile' function 
-    using a <a> element 'href' attribute to download .srt file.
-    and this 'href' can't handle string that's too long
-
-    v19: fix HTML html entity problem, for example: apostrophe as &#39;
-
-    v20: 2018-June-13 seem like Youtube change their URL format, now URL must have something like '&name=en'
-     v20 test with: https://www.youtube.com/watch?v=tqGkOvrKGfY  https://www.youtube.com/watch?time_continue=5&v=36tggrpRoTI
-
-    v21&v22: improve code logic
-    tested in Chrome 87.0.4280.67(macOS Big Sur)
-
-    v23: change 'callback' to 'await', 回调方式太难理解了，很烦，改成了 await, 代码好理解多了
+  Three part
+    1. UI specific (add button on page)
+    2. Detect if subtitle exists
+    3. Transform subtitle format & download
 */
 
 (function () {
@@ -82,7 +59,8 @@
   // Config
   var NO_SUBTITLE = 'No Subtitle';
   var HAVE_SUBTITLE = 'Download Subtitles';
-  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2020-12-3-version-22'
+  var TEXT_LOADING = 'Loading...';
+  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2020-12-3'
   // Config
 
   var HASH_BUTTON_ID = `#${BUTTON_ID}`
@@ -205,31 +183,33 @@
       option = document.createElement('option'),
       controls = document.getElementById('watch7-headline'); // Youtube video title DIV
 
-    div.setAttribute('style', `display: table; 
-margin-top:4px;
-border: 1px solid rgb(0, 183, 90); 
-cursor: pointer; color: rgb(255, 255, 255); 
-border-top-left-radius: 3px; 
-border-top-right-radius: 3px; 
-border-bottom-right-radius: 3px; 
-border-bottom-left-radius: 3px; 
-background-color: #00B75A;
-`);
+    var css_div = `display: table; 
+    margin-top:4px;
+    border: 1px solid rgb(0, 183, 90); 
+    cursor: pointer; color: rgb(255, 255, 255); 
+    border-top-left-radius: 3px; 
+    border-top-right-radius: 3px; 
+    border-bottom-right-radius: 3px; 
+    border-bottom-left-radius: 3px; 
+    background-color: #00B75A;
+    `;
+    div.setAttribute('style', css_div);
 
     div.id = BUTTON_ID;
     div.title = 'Youtube Subtitle Download v16'; // display when cursor hover
 
     select.id = 'captions_selector';
     select.disabled = true;
-    select.setAttribute('style', `display:block; 
-border: 1px solid rgb(0, 183, 90); 
-cursor: pointer; 
-color: rgb(255, 255, 255); 
-background-color: #00B75A;
-padding: 4px;
-`);
+    let css_select = `display:block; 
+    border: 1px solid rgb(0, 183, 90); 
+    cursor: pointer; 
+    color: rgb(255, 255, 255); 
+    background-color: #00B75A;
+    padding: 4px;
+    `;
+    select.setAttribute('style', css_select);
 
-    option.textContent = 'Loading...';
+    option.textContent = TEXT_LOADING;
     option.selected = true;
     select.appendChild(option);
 
@@ -475,7 +455,7 @@ padding: 4px;
       var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
-        if (typeof caption.kind === 'string' && caption.kind === 'asr') {
+        if (caption.kind === 'asr') {
           return captionTracks[index].baseUrl;
         }
         // ASR – A caption track generated using automatic speech recognition.
