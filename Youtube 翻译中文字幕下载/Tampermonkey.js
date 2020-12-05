@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v9
+// @name           Youtube 翻译中文字幕下载 v10
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
-// @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        9
+// @require        https://code.jquery.com/jquery-1.12.4.min.js
+// @version        10
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -234,7 +234,7 @@ padding-right: 8px;
 
   // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
   function get_file_name(x) {
-    return `(${x}) ${document.title}.srt`;
+    return `(${x})${get_title()}.srt`;
   }
 
   // 载入有多少种语言, 然后加到 <select> 里
@@ -250,10 +250,6 @@ padding-right: 8px;
     var auto_subtitle_url = get_auto_subtitle_xml_url();
     if (auto_subtitle_url != false) {
       auto_subtitle_exist = true;
-      // console.log('自动字幕的确存在');
-    } else {
-      // console.log('自动字幕不存在');
-      // console.log(auto_subtitle_url);
     }
 
     // get closed subtitle
@@ -312,7 +308,7 @@ padding-right: 8px;
             // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
             var lang_code = caption.getAttribute('lang_code')
             var lang_translated = caption.getAttribute('lang_translated')
-            var lang_name = `${lang_translated} 翻译成 中文`
+            var lang_name = `${lang_code_to_local_name(lang_code, lang_translated)} 翻译成 中文`
             caption_info = {
               lang_code: lang_code, // for AJAX request
               lang_name: lang_name, // display to user
@@ -371,43 +367,6 @@ padding-right: 8px;
       Second = '0' + Second;
     }
     return Hour + ':' + Minute + ':' + Second + ',' + MilliSecond;
-  }
-
-  function downloadFile(fileName, content) {
-    var version = getChromeVersion();
-
-    // dummy element for download
-    if ($('#youtube-subtitle-downloader-dummy-element-for-download').length > 0) {} else {
-      $("body").append('<a id="youtube-subtitle-downloader-dummy-element-for-download"></a>');
-    }
-    var dummy = $('#youtube-subtitle-downloader-dummy-element-for-download');
-
-    // 判断 Chrome 版本选择下载方法，Chrome 52 和 53 的文件下载方式不一样
-    if (version > 52) {
-      dummy.attr('download', fileName);
-      dummy.attr('href', 'data:Content-type: text/plain,' + htmlDecode(content));
-      dummy[0].click();
-    } else {
-      downloadViaBlob(fileName, htmlDecode(content));
-    }
-  }
-
-  // 复制自： http://www.alloyteam.com/2014/01/use-js-file-download/
-  // Chrome 53 之后这个函数失效。52有效。
-  function downloadViaBlob(fileName, content) {
-    var aLink = document.createElement('a');
-    var blob = new Blob([content]);
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", false, false);
-    aLink.download = fileName;
-    aLink.href = URL.createObjectURL(blob);
-    aLink.dispatchEvent(evt);
-  }
-
-  //http://stackoverflow.com/questions/4900436/how-to-detect-the-installed-chrome-version
-  function getChromeVersion() {
-    var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-    return raw ? parseInt(raw[2], 10) : false;
   }
 
   // https://css-tricks.com/snippets/javascript/unescape-html-in-js/
@@ -558,8 +517,7 @@ padding-right: 8px;
     return srt_array
   }
 
-  // 把毫秒转成 srt 时间
-  // 代码来源网络
+  // 毫秒转成 srt 时间
   function ms_to_srt($milliseconds) {
     var $seconds = Math.floor($milliseconds / 1000);
     var $minutes = Math.floor($seconds / 60);
@@ -666,13 +624,13 @@ padding-right: 8px;
       text = htmlDecode(text);
 
       var start = text_nodes[i].getAttribute('start');
-      var end = '';
+      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
 
-      if (i + 1 >= len) {
-        end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
-      } else {
-        end = text_nodes[i + 1].getAttribute('start');
-      }
+      // if (i + 1 >= len) {
+      //   end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+      // } else {
+      //   end = text_nodes[i + 1].getAttribute('start');
+      // }
 
       var start_time = process_time(parseFloat(start));
       var end_time = process_time(parseFloat(end));
@@ -704,5 +662,31 @@ padding-right: 8px;
     } catch (error) {
       return null
     }
+  }
+
+  // Input a language code, output that language name in current locale
+  // 如果当前语言是中文简体, Input: "de" Output: 德语
+  // if current locale is English(US), Input: "de" Output: "Germany"
+  function lang_code_to_local_name(languageCode, fallback_name) {
+    try {
+      var captionTracks = get_captionTracks()
+      for (var i in captionTracks) {
+        var caption = captionTracks[i];
+        if (caption.languageCode === languageCode) {
+          let simpleText = captionTracks[i].name.simpleText;
+          if (simpleText) {
+            return simpleText
+          } else {
+            return fallback_name
+          }
+        }
+      }
+    } catch (error) {
+      return fallback_name
+    }
+  }
+
+  function get_title() {
+    return ytplayer.config.args.title;
   }
 })();
