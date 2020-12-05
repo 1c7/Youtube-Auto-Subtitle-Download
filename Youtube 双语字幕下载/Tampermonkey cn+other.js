@@ -702,7 +702,7 @@ padding: 4px;
       var end_time = item.endTime
       var text = item.text
 
-      var new_line = "\n";
+      var new_line = NEW_LINE;
       result = result + index + new_line;
 
       result = result + start_time;
