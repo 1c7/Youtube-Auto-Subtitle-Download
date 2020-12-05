@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v25
+// @name           Youtube Subtitle Downloader v26
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        25
+// @version        26
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -196,7 +196,6 @@
     div.setAttribute('style', css_div);
 
     div.id = BUTTON_ID;
-    div.title = 'Youtube Subtitle Download v16'; // display when cursor hover
 
     select.id = 'captions_selector';
     select.disabled = true;
@@ -341,12 +340,16 @@
         if (closed_subtitle_exist) {
           for (var i = 0, il = captions.length; i < il; i++) {
             caption = captions[i];
+            let lang_code = caption.getAttribute('lang_code')
+            // let lang_original = caption.getAttribute('lang_original')
+            // let lang_translated = caption.getAttribute('lang_translated')
+            let lang_name = lang_code_to_local_name(lang_code)
             caption_info = {
-              lang_code: caption.getAttribute('lang_code'), // for AJAX request
-              lang_name: caption.getAttribute('lang_translated') // for display only
+              lang_code: lang_code,
+              lang_name: lang_name,
             };
             caption_array.push(caption_info);
-            // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
+            // 加到 caption_array 里, 一个全局变量, 待会要靠它来下载
             option = document.createElement('option');
             option.textContent = caption_info.lang_name;
             select.appendChild(option);
@@ -598,6 +601,25 @@
     let json = get_json();
     let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
     return captionTracks
+  }
+
+  // Input a language code, output that language name in current locale
+  // 如果当前语言是中文简体, Input: "de" Output: 德语
+  // if current locale is English(US), Input: "de" Output: "Germany"
+  function lang_code_to_local_name(languageCode) {
+    var captionTracks = get_captionTracks()
+    for (var index in captionTracks) {
+      var caption = captionTracks[index];
+      if (caption.languageCode === languageCode) {
+        let simpleText = captionTracks[index].name.simpleText;
+        if (simpleText) {
+          return simpleText
+        } else {
+          return languageCode
+        }
+      }
+    }
+    return languageCode
   }
 
   function get_title() {
