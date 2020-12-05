@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v4 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v5 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @require        http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version        4
+// @require        https://code.jquery.com/jquery-1.12.4.min.js
+// @version        5
 // @copyright      2020 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -409,7 +409,7 @@ padding: 4px;
 
   // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
   function get_file_name(x) {
-    return '(' + x + ')' + document.title + '.srt';
+    return `(${x})${get_title()}.srt`;
   }
 
   // Detect if "auto subtitle" and "closed subtitle" exist
@@ -479,7 +479,7 @@ padding: 4px;
             // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
             var lang_code = caption.getAttribute('lang_code')
             var lang_translated = caption.getAttribute('lang_translated')
-            var lang_name = `中文 + ${lang_translated}`
+            var lang_name = `中文 + ${lang_code_to_local_name(lang_code, lang_translated)}`
             caption_info = {
               lang_code: lang_code, // for AJAX request
               lang_name: lang_name, // display to user
@@ -663,13 +663,13 @@ padding: 4px;
       text = htmlDecode(text);
 
       var start = text_nodes[i].getAttribute('start');
-      var end = '';
+      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
 
-      if (i + 1 >= len) {
-        end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
-      } else {
-        end = text_nodes[i + 1].getAttribute('start');
-      }
+      // if (i + 1 >= len) {
+      //   end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+      // } else {
+      //   end = text_nodes[i + 1].getAttribute('start');
+      // }
 
       var start_time = process_time(parseFloat(start));
       var end_time = process_time(parseFloat(end));
@@ -715,62 +715,6 @@ padding: 4px;
     return result;
   }
 
-  // Youtube return XML. we want SRT  
-  // input: Youtube XML format
-  // output: SRT format
-  function parse_youtube_XML_to_SRT(youtube_xml_string) {
-    if (youtube_xml_string === '' || youtube_xml_string === undefined || youtube_xml_string === null) {
-      return false;
-    }
-
-    var result = '';
-    var BOM = '\uFEFF';
-    result = BOM + result; // store final SRT result
-
-    var text = youtube_xml_string.getElementsByTagName('text');
-    var len = text.length;
-    for (var i = 0; i < len; i++) {
-      var index = i + 1;
-      var content = text[i].textContent.toString();
-      content = content.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
-      var start = text[i].getAttribute('start');
-      var end = '';
-
-      if (i + 1 >= len) {
-        end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-      } else {
-        end = text[i + 1].getAttribute('start');
-      }
-
-      // we want SRT format:
-      /*
-          1
-          00:00:01,939 --> 00:00:04,350
-          everybody Craig Adams here I'm a
-
-          2
-          00:00:04,350 --> 00:00:06,720
-          filmmaker on YouTube who's digging
-      */
-      var new_line = "\n";
-      result = result + index + new_line;
-      // 1
-
-      var start_time = process_time(parseFloat(start));
-      var end_time = process_time(parseFloat(end));
-      result = result + start_time;
-      result = result + ' --> ';
-      result = result + end_time + new_line;
-      // 00:00:01,939 --> 00:00:04,350
-
-      content = htmlDecode(content);
-      // turn HTML entity back to text. example: &#39; back to apostrophe (')
-
-      result = result + content + new_line + new_line;
-    }
-    return result;
-  }
-
   // return "English (auto-generated)" or a default name;
   function get_auto_subtitle_name() {
     try {
@@ -809,6 +753,32 @@ padding: 4px;
     } catch (error) {
       return null
     }
+  }
+
+  // Input a language code, output that language name in current locale
+  // 如果当前语言是中文简体, Input: "de" Output: 德语
+  // if current locale is English(US), Input: "de" Output: "Germany"
+  function lang_code_to_local_name(languageCode, fallback_name) {
+    try {
+      var captionTracks = get_captionTracks()
+      for (var i in captionTracks) {
+        var caption = captionTracks[i];
+        if (caption.languageCode === languageCode) {
+          let simpleText = captionTracks[i].name.simpleText;
+          if (simpleText) {
+            return simpleText
+          } else {
+            return fallback_name
+          }
+        }
+      }
+    } catch (error) {
+      return fallback_name
+    }
+  }
+
+  function get_title() {
+    return ytplayer.config.args.title;
   }
 
 })();
