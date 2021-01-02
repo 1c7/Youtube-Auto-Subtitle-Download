@@ -13,45 +13,46 @@
 
 /*
   [What is this?]
-  This "Tampermonkey script" allow you download Youtube "Automatic subtitle" and "closed subtitle"
+  This Tampermonkey script allows you to download Youtube "Automatic subtitle" and "closed subtitle".
 
   [Note]
-  If it doesn't work(rarely), try refresh.
-  if problem still exist. Email: guokrfans@gmail.com
+  If it doesn't work (rarely), try to refresh the page.
+  If problem still exists after refreshing, send an email to guokrfans@gmail.com.
 
-  [Who build this]
+  [Who built this?]
   Author :  Cheng Zheng
   Email  :  guokrfans@gmail.com
   Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
-  If you want improve the script, Github Pull Request are welcome
+  If you want to improve the script, Github pull requests are welcome.
 
-  [Note]
+  [Note for Developers]
   Few things before you read the code:
-  0. Some code comments are written in Chinese
-  1. Youtube have 2 UI: Material design and The old design
-  2. Code need handle both Auto & Closed subtitle
+  0. Some comments are written in Chinese.
+  1. Youtube has 2 interfaces: Material Design and The Old Design.
+  2. This code handles both "Auto" and "Closed" subtitles.
 
-  (Explain: "Tampermonkey script" mean
-  you have to install a Chrome extension call "Tampermonkey", and then install this script)
+  [What is "Tampermonkey"?]
+  "Tampermonkey script" means that you needs to install a browser extension called "Tampermonkey" before installing this script.
+  Tempermonkey is available for most modern web browsers, such as Chrome, Firefox, Safari, Microsoft Edge, and Opera.
 
   [Test Video]
   https://www.youtube.com/watch?v=bkVsus8Ehxs
-  only have English closed subtitle, nothing else (no auto subtitle)
+  This videos only has a closed English subtitle, with no auto subtitles.
 
   https://www.youtube.com/watch?v=-WEqFzyrbbs
   no subtitle at all
 
   https://www.youtube.com/watch?v=9AzNEG1GB-k
-  have a lot subtitle 
+  have a lot of subtitles
 
   https://www.youtube.com/watch?v=tqGkOvrKGfY
   1:36:33  super long subtitle
 
-  [Code Explain]
-  Three part
-    1. UI specific (add button on page)
-    2. Detect if subtitle exists
-    3. Transform subtitle format & download
+  [How does it work?]
+  The code can be roughly divided into three parts:
+    1. Add a button on the page. (UI)
+    2. Detect if subtitle exists.
+    3. Convert subtitle format, then download.
 */
 
 (function () {
