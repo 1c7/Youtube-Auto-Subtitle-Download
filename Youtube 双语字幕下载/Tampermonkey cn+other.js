@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v5 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v6 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        5
+// @version        6
 // @copyright      2020 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -779,6 +779,12 @@ padding: 4px;
 
   function get_title() {
     return ytplayer.config.args.title;
+  }
+
+  function get_captionTracks() {
+    let json = get_json();
+    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    return captionTracks
   }
 
 })();

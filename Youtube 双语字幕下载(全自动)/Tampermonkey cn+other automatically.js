@@ -1,25 +1,28 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v5 (中文+任选的一门双语,比如英语)（全自动下载，页面打开就马上下载）
+// @name           Youtube 双语字幕下载 v6 (全自动下载，页面打开就下载）
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        5
-// @copyright      2020 Cheng Zheng
+// @require        https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js
+// @version        6
+// @copyright      2020-2021 Cheng Zheng
 // @grant GM_xmlhttpRequest
-// @description   全自动下载，字幕格式是 "中文 \n 英语"（\n 是换行符的意思) 自动下载会以英文优先，如果找不到"英文"就找"英文(自动识别)"如果也找不到，就选第一门语言（比如德语法语等）如果第一门语言也没有，就用"自动识别"的语言
+// @description   全自动下载，字幕格式是 "中文 \n 英语"（\n 是换行符的意思) 下载以英文优先，如果找不到"英文"就找"英文(自动识别)", 如果也找不到，就选第一门语言（比如德语法语等），此脚本**仅适合**下载字幕超级频繁的用户
 // @namespace  https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
+  写于2021-1-16
   测试视频
-    https://www.youtube.com/watch?v=DEgzuMmJtu8
-    https://www.youtube.com/watch?v=pwZpJzpE2lQ
-    https://www.youtube.com/watch?v=F0QwAhUnpr4
+    https://www.youtube.com/watch?v=DEgzuMmJtu8 只有一个自动字幕
+    https://www.youtube.com/watch?v=pwZpJzpE2lQ 只有一个自动字幕
+    https://www.youtube.com/watch?v=F0QwAhUnpr4 只有一个英语字幕（非自动）
 
   作者联系方式:
     QQ 1003211008
     邮件 guokrfans@gmail.com
     Github@1c7
+    微信 agoodob
 
   使用场景:
     此文件仅针对于 Tampermonkey (Chrome 上的一款插件)
@@ -226,12 +229,57 @@ padding: 4px;
   }
 
   // 页面打开就马上自动下载字幕（如果有字幕的话）
-  // 英文为主，如果没有英文就选择第一个语言（不管是什么语言）
+  // 下载的优先级(从高到低）：英文的 closed, 英文的 auto，如果没有英文就选第一个语言（不管是什么语言）
   function download_subtitle_automatically() {
+    const EnglishLanguageCode = 'en'
     var captionTracks = get_captionTracks()
+
+    // 如果没有任何字幕（也没有自动字幕）
+    if (captionTracks.length == 0) {
+      return; // 直接退出
+    }
+
+    // 只有1个字幕，那也没什么可选的，直接下载就是了
+    if (captionTracks.length == 1) {
+      var only_caption = captionTracks[0];
+      var is_auto_subtitle = only_caption.kind == 'asr'
+
+      // 只有一个自动字幕 (比如 https://www.youtube.com/watch?v=DEgzuMmJtu8 )
+      if (is_auto_subtitle) {
+        download_auto_subtitle();
+        return; // 下载完就直接退出，后续的也不用执行了
+      }
+      // 只有一个 closed 字幕, (比如 https://www.youtube.com/watch?v=F0QwAhUnpr4 )
+      download_closed_subtitle(only_caption.languageCode)
+      return;
+    }
+
+    // 有多个字幕(至少2个)
+
+    // 如果找得到 en 的 closed 字幕就直接下载
+    for (var i in captionTracks) {
+      var caption = captionTracks[i];
+      if (caption.languageCode === EnglishLanguageCode && caption.kind != 'asr') {
+        download_closed_subtitle(caption.languageCode)
+        return;
+      }
+    }
+
+    // 如果找得到 en 的 auto 字幕就直接下载
     for (var i in captionTracks) {
       var caption = captionTracks[i];
       console.log(caption);
+      if (caption.languageCode === EnglishLanguageCode && caption.kind == 'asr') {
+        download_closed_subtitle(caption.languageCode)
+        return;
+      }
+    }
+
+    // 到这里了，说明完全没有 en 的字幕
+    for (var i in captionTracks) {
+      var caption = captionTracks[i];
+      download_closed_subtitle(caption.languageCode) // 那就不管了，直接下载第一个，收工
+      return;
     }
   }
 
@@ -266,7 +314,17 @@ padding: 4px;
   // 下载自动字幕的中英双语
   // 输入: file_name: 保存的文件名
   // 输出: 无 (会触发浏览器下载一个文件)
+  // 这个自动字幕支持英语和其他语言
   async function download_auto_subtitle(file_name) {
+
+    // 如果没传入文件名参数，自己构建一个
+    var save_file_name = file_name
+    if (save_file_name == undefined || save_file_name == null) {
+      var auto_sub_name = get_auto_subtitle_name()
+      var lang_name = `中文 + ${auto_sub_name}`
+      save_file_name = get_file_name(lang_name);
+    }
+
     // 1. English Auto Sub in json3 format
     var auto_sub_url = get_auto_subtitle_xml_url();
     var format_json3_url = auto_sub_url + '&fmt=json3'
@@ -316,7 +374,7 @@ padding: 4px;
       }
     }
     var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
-    downloadString(srt_string, "text/plain", file_name);
+    downloadString(srt_string, "text/plain", save_file_name);
   }
 
   function auto_sub_dual_language_to_srt(srt_array) {
@@ -390,6 +448,13 @@ padding: 4px;
     }
 
     // 如果用户选的是完整字幕
+    download_closed_subtitle(lang_code)
+
+    // after download, select first <option>
+    selector.options[0].selected = true;
+  }
+
+  async function download_closed_subtitle(lang_code) {
     // 原文
     // sub mean "subtitle"
     var sub_original_url = await get_closed_subtitle_url(lang_code)
@@ -418,11 +483,10 @@ padding: 4px;
     }
 
     var srt_string = object_array_to_SRT_string(dual_language_srt)
-    var title = get_file_name(lang_name);
+    var lang_name = lang_code_to_local_name(lang_code)
+    var file_name_prefix = `中文+${lang_name}`
+    var title = get_file_name(file_name_prefix);
     downloadString(srt_string, "text/plain", title);
-
-    // after download, select first <option>
-    selector.options[0].selected = true;
   }
 
 
@@ -781,7 +845,7 @@ padding: 4px;
   // Input a language code, output that language name in current locale
   // 如果当前语言是中文简体, Input: "de" Output: 德语
   // if current locale is English(US), Input: "de" Output: "Germany"
-  function lang_code_to_local_name(languageCode, fallback_name) {
+  function lang_code_to_local_name(languageCode, fallback_name = null) {
     try {
       var captionTracks = get_captionTracks()
       for (var i in captionTracks) {
@@ -802,6 +866,12 @@ padding: 4px;
 
   function get_title() {
     return ytplayer.config.args.title;
+  }
+
+  function get_captionTracks() {
+    let json = get_json();
+    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    return captionTracks
   }
 
 })();
