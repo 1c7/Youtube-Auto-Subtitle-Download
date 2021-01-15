@@ -30,3 +30,14 @@ Click Green "Install" button
 ![双语-菜单打开前](img/dual/1-v2.jpg)       
 ![双语-菜单打开后](img/dual/2-v2.jpg)       
 ![双语-文件](img/dual/3.jpg)       
+
+## 说明
+这里的字幕下载可以说是很齐全了
+1. 可以下载原语言（英语，中文，德语，法语等等）（单语）
+2. 可以下载原语言翻译成中文之后的语言（单语）
+3. 可以下载中文+外语两种语言一起（双语）
+
+![picture 1](img/all.png)  
+
+https://greasyfork.org/zh-CN/users/5711-1c7
+自己按需安装使用即可
