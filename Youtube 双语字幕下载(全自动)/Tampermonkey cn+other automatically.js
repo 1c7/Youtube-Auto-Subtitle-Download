@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v6 (全自动下载，页面打开就下载）
+// @name           Youtube 双语字幕下载 v7 (全自动下载，页面打开就下载）
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
 // @require        https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js
-// @version        6
+// @version        7
 // @copyright      2020-2021 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   全自动下载，字幕格式是 "中文 \n 英语"（\n 是换行符的意思) 下载以英文优先，如果找不到"英文"就找"英文(自动识别)", 如果也找不到，就选第一门语言（比如德语法语等），此脚本**仅适合**下载字幕超级频繁的用户
@@ -17,6 +17,7 @@
     https://www.youtube.com/watch?v=DEgzuMmJtu8 只有一个自动字幕
     https://www.youtube.com/watch?v=pwZpJzpE2lQ 只有一个自动字幕
     https://www.youtube.com/watch?v=F0QwAhUnpr4 只有一个英语字幕（非自动）
+    https://www.youtube.com/watch?v=3npuPXvA_g8 只有一个英语字幕（非自动）
 
   作者联系方式:
     QQ 1003211008
@@ -39,6 +40,13 @@
     对于"完整字幕", Youtube 返回的时间轴完全一致，因此只需要结合在一起即可，相对比较简单。
     对于"自动字幕"，中文是一个个句子，英文是一个个单词，格式不同，时间轴也不同
     因此，会基于中文的句子时间（时间轴），把英文放进去
+  
+  说明:
+    对于有些视频，比如 https://www.youtube.com/watch?v=ndEH1yHs3do （只有一个英语(自动生成)的字幕)
+    如果在 Youtube 上手动用"自动翻译"功能，翻译成中文会失败 (Console 里可以看到 404 报错)
+    但是某一次尝试又可以显示翻译后的中文，
+    总而言之，如果获取中文(翻译而成的)字幕失败了
+    就退化成下载单语字幕
 */
 (function () {
 
@@ -242,15 +250,7 @@ padding: 4px;
     // 只有1个字幕，那也没什么可选的，直接下载就是了
     if (captionTracks.length == 1) {
       var only_caption = captionTracks[0];
-      var is_auto_subtitle = only_caption.kind == 'asr'
-
-      // 只有一个自动字幕 (比如 https://www.youtube.com/watch?v=DEgzuMmJtu8 )
-      if (is_auto_subtitle) {
-        download_auto_subtitle();
-        return; // 下载完就直接退出，后续的也不用执行了
-      }
-      // 只有一个 closed 字幕, (比如 https://www.youtube.com/watch?v=F0QwAhUnpr4 )
-      download_closed_subtitle(only_caption.languageCode)
+      download_track(only_caption);
       return;
     }
 
@@ -440,21 +440,87 @@ padding: 4px;
     var lang_name = caption.lang_name;
 
     // if user choose auto subtitle // 如果用户选的是自动字幕
-    if (caption.lang_code == 'AUTO') {
-      var file_name = get_file_name(lang_name);
-      download_auto_subtitle(file_name);
-      selector.options[0].selected = true; // after download, select first <option>
-      return
-    }
+    // if (caption.lang_code == 'AUTO') {
+    //   var file_name = get_file_name(lang_name);
+    //   download_auto_subtitle(file_name);
+    //   selector.options[0].selected = true; // after download, select first <option>
+    //   return
+    // }
 
     // 如果用户选的是完整字幕
-    download_closed_subtitle(lang_code)
+    // download_closed_subtitle(lang_code)
+    download_subtitle_auto_or_closed(lang_code)
 
     // after download, select first <option>
     selector.options[0].selected = true;
   }
 
+  async function download_subtitle_auto_or_closed(lang_code) {
+    console.log('进入了 download_subtitle_auto_or_closed')
+    var tracks = get_subtitle_tracks(lang_code)
+    for (var i = 0; i < tracks.length; i++) {
+      download_track(tracks[i]);
+    }
+  }
+
+  async function download_track(track) {
+    // var track_example = {
+    //   "baseUrl": "https://www.youtube.com/api/timedtext?v=ndEH1yHs3do&asr_langs=de,en,es,fr,it,ja,ko,nl,pt,ru&caps=asr&exp=xftt&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1611013233&sparams=ip,ipbits,expire,v,asr_langs,caps,exp,xorp,xoaf&signature=BE20789C5F677B5BD1125F72C0705ED7FE5279D5.88DA199671617E6D814E3F3A6A037AC1DD49E999&key=yt8&kind=asr&lang=en",
+    //   "name": {
+    //     "simpleText": "英语 (自动生成)"
+    //   },
+    //   "vssId": "a.en",
+    //   "languageCode": "en",
+    //   "kind": "asr",
+    //   "isTranslatable": true
+    // }
+    var boolean_original = false; // 获取"原语言"字幕成功或失败
+    var boolean_translated = false; // 获取"翻译"字幕成功或失败
+
+    // 尝试获取原语言字幕
+    var baseUrl = track.baseUrl
+    try {
+      var baseUrl_xml = await get(baseUrl);
+      boolean_original = true;
+    } catch (error) {
+      console.log('尝试下载原语言字幕失败');
+      console.log(error);
+    }
+    var baseUrl_object = parse_youtube_XML_to_object_list(baseUrl_xml)
+
+    console.log(baseUrl)
+    console.log(baseUrl_xml)
+    console.log(baseUrl_object)
+
+    // 尝试获取中文(翻译而来)字幕
+    var cnUrl = baseUrl + "&tlang=" + "zh-Hans"
+    try {
+      var cnUrl_xml = await get(cnUrl);
+      boolean_translated = true;
+    } catch (error) {
+      console.log('尝试下载中文字幕失败');
+      console.log(error);
+    }
+
+    // 双语字幕获取成功
+    if (boolean_original && boolean_translated) {
+      console.log('双语字幕获取成功');
+      // TODO: 因为找不到例子视频，这部分暂时没法写
+    }
+
+    // 单语字幕获取成功
+    if (boolean_original) {
+      console.log('单语字幕获取成功');
+      var base_SRT_String = object_array_to_SRT_string(baseUrl_object)
+      var lang_name = lang_code_to_local_name(track.languageCode)
+      var title = get_file_name(lang_name);
+      downloadString(base_SRT_String, "text/plain", title);
+    }
+
+  }
+
   async function download_closed_subtitle(lang_code) {
+    console.log('进入了 download_closed_subtitle')
     // 原文
     // sub mean "subtitle"
     var sub_original_url = await get_closed_subtitle_url(lang_code)
@@ -498,7 +564,8 @@ padding: 4px;
   // Detect if "auto subtitle" and "closed subtitle" exist
   // And add <option> into <select>
   function load_language_list(select) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
+      console.log('进入了读取语言列表')
       // auto
       var auto_subtitle_exist = false;
 
@@ -507,15 +574,87 @@ padding: 4px;
       var captions = null;
 
       // get auto subtitle
-      var auto_subtitle_url = get_auto_subtitle_xml_url();
-      if (auto_subtitle_url != false) {
-        auto_subtitle_exist = true;
-      }
+      // var auto_subtitle_url = get_auto_subtitle_xml_url();
+      // if (auto_subtitle_url != false) {
+      //   auto_subtitle_exist = true;
+      //   // console.log('自动字幕存在鸭');
+      //   // console.log(auto_subtitle_url);
+      // }
+      // return;
 
       // get closed subtitle
-      var list_url = 'https://video.google.com/timedtext?v=' + get_video_id() + '&type=list&hl=zh-CN';
+      // var list_url = 'https://video.google.com/timedtext?v=' + get_video_id() + '&type=list&hl=zh-CN';
       // https://video.google.com/timedtext?v=if36bqHypqk&type=list&hl=en // 英文
       // https://video.google.com/timedtext?v=n1zpnN-6pZQ&type=list&hl=zh-CN // 中文
+      // var result = await get(list_url)
+      // console.log(result);
+
+
+      var captionTracks = get_captionTracks()
+      /*
+      var captionTracks_example = [{
+        "baseUrl": "https://www.youtube.com/api/timedtext?v=ndEH1yHs3do&asr_langs=de,en,es,fr,it,ja,ko,nl,pt,ru&caps=asr&exp=xftt&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1611013233&sparams=ip,ipbits,expire,v,asr_langs,caps,exp,xorp,xoaf&signature=BE20789C5F677B5BD1125F72C0705ED7FE5279D5.88DA199671617E6D814E3F3A6A037AC1DD49E999&key=yt8&kind=asr&lang=en",
+        "name": {
+          "simpleText": "英语 (自动生成)"
+        },
+        "vssId": "a.en",
+        "languageCode": "en",
+        "kind": "asr",
+        "isTranslatable": true
+      }]
+      */
+      // 如果什么字幕都没有
+      if (captionTracks.length == 0) {
+        select.options[0].textContent = NO_SUBTITLE;
+        disable_download_button();
+        return false;
+      }
+      // if at least one type of subtitle exist
+      select.options[0].textContent = HAVE_SUBTITLE;
+      select.disabled = false;
+
+      // if (auto_subtitle_exist) {
+      //   var auto_sub_name = get_auto_subtitle_name()
+      //   var lang_name = `中文 + ${auto_sub_name}`
+      //   caption_info = {
+      //     lang_code: 'AUTO', // later we use this to know if it's auto subtitle
+      //     lang_name: lang_name // for display only
+      //   };
+      //   caption_array.push(caption_info);
+
+      //   option = document.createElement('option');
+      //   option.textContent = caption_info.lang_name;
+      //   select.appendChild(option);
+      // }
+
+      // console.log('开始循环');
+      for (let i = 0; i < captionTracks.length; i++) {
+        const caption = captionTracks[i];
+        var baseUrl = caption.baseUrl // example: https://www.youtube.com/api/timedtext?v=ndEH1yHs3do&asr_langs=de,en,es,fr,it,ja,ko,nl,pt,ru&caps=asr&exp=xftt&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1611014244&sparams=ip,ipbits,expire,v,asr_langs,caps,exp,xorp,xoaf&signature=7598A4500FEBED9F45DAD16B22B4E6198252ED18.51CC425B41177775A71F492BE8507140731B7AAB&key=yt8&kind=asr&lang=en
+        // <transcript>
+        // <text start="1.12" dur="4.639">at this point in the texturing process</text>
+        // <text start="3.12" dur="5.6">we have some important decisions to make</text>
+        // <text start="5.759" dur="3.76">is this skull going to be really old is</text>
+        // <text start="8.72" dur="3.12">it going to be</text>
+        // <text start="9.519" dur="4.24">a brand new skull is this skull</text>
+        // </transcript>
+        // console.log(baseUrl)
+        var languageCode = caption.languageCode
+        var name = caption.name.simpleText
+        var lang_name = `中文 + ${name}`
+        caption_info = {
+          lang_code: languageCode, // for AJAX request
+          lang_name: lang_name, // display to user
+        };
+        caption_array.push(caption_info);
+        // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
+        option = document.createElement('option');
+        option.textContent = caption_info.lang_name;
+        select.appendChild(option);
+      }
+      resolve();
+
+      return;
 
       GM_xmlhttpRequest({
         method: 'GET',
@@ -693,6 +832,26 @@ padding: 4px;
     }
   }
 
+  // input: lang_code like 'en'
+  // output: array
+  function get_subtitle_tracks(lang_code) {
+    var array = []
+    try {
+      var json = get_json();
+      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (caption.languageCode === lang_code) {
+          array.push(captionTracks[index]) // for language like 'en' 可能有2条纪录，一条 kind==asr 是自动识别的，另一条没有  kind 属性代表是  closed 字幕
+        }
+      }
+      return array
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
   // Input: lang_code like 'en'
   // Output: URL (String)
   async function get_closed_subtitle_url(lang_code) {
@@ -750,13 +909,13 @@ padding: 4px;
       text = htmlDecode(text);
 
       var start = text_nodes[i].getAttribute('start');
-      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+      // var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
 
-      // if (i + 1 >= len) {
-      //   end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
-      // } else {
-      //   end = text_nodes[i + 1].getAttribute('start');
-      // }
+      if (i + 1 >= len) {
+        end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+      } else {
+        end = text_nodes[i + 1].getAttribute('start');
+      }
 
       var start_time = process_time(parseFloat(start));
       var end_time = process_time(parseFloat(end));
@@ -777,10 +936,13 @@ padding: 4px;
     Input: [ {startTime: "", endTime: "", text: ""}, {...}, {...} ]
     Output: SRT
   */
-  function object_array_to_SRT_string(object_array) {
-    var result = '';
-    var BOM = '\uFEFF';
-    result = BOM + result; // store final SRT result
+  function object_array_to_SRT_string(object_array, file_encoding_with_BOM = true) {
+    var result = ''; // store final SRT result
+
+    if (file_encoding_with_BOM) {
+      var BOM = '\uFEFF';
+      result = BOM + result;
+    }
 
     for (var i = 0; i < object_array.length; i++) {
       var item = object_array[i]
