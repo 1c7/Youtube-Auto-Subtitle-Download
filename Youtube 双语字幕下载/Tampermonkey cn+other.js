@@ -244,19 +244,8 @@ padding: 4px;
     return srt_array
   }
 
-  // 下载自动字幕的中英双语
-  // 输入: file_name: 保存的文件名
-  // 输出: 无 (会触发浏览器下载一个文件)
-  async function download_auto_subtitle(file_name) {
-    // 1. English Auto Sub in json3 format
-    var auto_sub_url = get_auto_subtitle_xml_url();
-    var format_json3_url = auto_sub_url + '&fmt=json3'
-    var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
-
-    // 2. 自动字幕的翻译中文
-    var cn_url = format_json3_url + '&tlang=zh-Hans'
-    var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
-
+  //原有的有问题的匹配代码，提出方法
+  function match_srt_old(en_auto_sub, cn_srt) {
     // 3. 处理英文，插入到句子里, 也就是插入到 cn_srt 的每个元素里（新加一个属性叫 words)
     var events = en_auto_sub.events;
     for (let i = 0; i < events.length; i++) { // loop events
@@ -296,6 +285,87 @@ padding: 4px;
         }
       }
     }
+  }
+
+  function process_word(word) {
+    w = word.trim()
+    return w
+  }
+
+  function process_segs(segs, event) {
+    if (!event['segs']) {
+        return
+    }
+    for (var i = 0; i < event['segs'].length; i++) {
+        var seg = event['segs'][i]
+        var word = process_word(seg['utf8'])
+        if (word) {
+            segs.push(word)
+        }
+    }
+  }
+
+  function fmt_segs(segs) {
+    ret = []
+    for (var i = 0; i < segs.length; i++) {
+        if (i == 0) {
+            ret.push(segs[i])
+        } else {
+            ret.push(" " + segs[i])
+        }
+    }
+    return ret
+  }
+
+  function match_srt_new(en_auto_sub, cn_srt) {
+    var events = en_auto_sub.events
+    if (cn_srt.length == 0 || events.length == 0) {
+        return
+    }
+    var cn_i = 0
+    var segs = []
+    var en_i = 0
+    for (; en_i < events.length; en_i++) { // loop en events
+        var event = events[en_i]
+        var tStartMs = event.tStartMs
+        var dDurationMs = event.dDurationMs
+        if (tStartMs == cn_srt[cn_i].tStartMs && dDurationMs == cn_srt[cn_i].dDurationMs) {
+            if (cn_i > 0) {
+                cn_srt[cn_i-1].words = fmt_segs([...segs])
+                segs = []
+            }
+            cn_i++
+            if (cn_i == cn_srt.length) { //到达最后一个元素
+                break
+            }
+        }
+        process_segs(segs, event)
+    }
+    //process last sentence
+    segs = []
+    for (; en_i < events.length; en_i++) { 
+        var event = events[en_i]
+        process_segs(segs, event)
+    }
+    cn_srt[cn_i-1].words = fmt_segs(segs)
+  }
+
+  // 下载自动字幕的中英双语
+  // 输入: file_name: 保存的文件名
+  // 输出: 无 (会触发浏览器下载一个文件)
+  async function download_auto_subtitle(file_name) {
+    // 1. English Auto Sub in json3 format
+    var auto_sub_url = get_auto_subtitle_xml_url();
+    var format_json3_url = auto_sub_url + '&fmt=json3'
+    var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
+
+    // 2. 自动字幕的翻译中文
+    var cn_url = format_json3_url + '&tlang=zh-Hans'
+    var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
+
+    // match_srt_old(en_auto_sub, cn_srt)
+    match_srt_new(en_auto_sub, cn_srt) //新的匹配方法
+
     var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
     downloadString(srt_string, "text/plain", file_name);
   }
