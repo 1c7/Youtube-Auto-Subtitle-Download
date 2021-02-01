@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v6 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v7 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        6
+// @version        7
 // @copyright      2020 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -31,6 +31,9 @@
     对于"完整字幕", Youtube 返回的时间轴完全一致，因此只需要结合在一起即可，相对比较简单。
     对于"自动字幕"，中文是一个个句子，英文是一个个单词，格式不同，时间轴也不同
     因此，会基于中文的句子时间（时间轴），把英文放进去
+  
+  特别感谢:
+    ytian：解决英文字幕匹配错误的问题 (https://github.com/1c7/Youtube-Auto-Subtitle-Download/pull/11)
 */
 (function () {
 
