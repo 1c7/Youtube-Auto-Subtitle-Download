@@ -12,6 +12,9 @@
 // ==/UserScript==
 
 /*
+  这个代码 fork 自 "Youtube 双语字幕下载"
+  因此有 90% 的代码类似
+
   写于2021-1-16
   测试视频
     https://www.youtube.com/watch?v=DEgzuMmJtu8 只有一个自动字幕

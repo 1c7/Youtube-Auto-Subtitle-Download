@@ -698,6 +698,7 @@ padding: 4px;
     }
   }
 
+  // 把 ajax 请求简单 wrap 一下方便使用
   // Usage: var result = await get(url)
   function get(url) {
     return $.ajax({
@@ -735,9 +736,10 @@ padding: 4px;
       text = text.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
       text = htmlDecode(text);
 
-      var start = text_nodes[i].getAttribute('start');
-      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
+      var start = text_nodes[i].getAttribute('start'); // 开始时间
+      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur')); // 结束时间
 
+      // 如果需要"结束时间"和下一行的"开始时间"是连续的，取消下面代码的注释
       // if (i + 1 >= len) {
       //   end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
       // } else {
@@ -850,6 +852,8 @@ padding: 4px;
     }
   }
 
+  // 获取当前视频的标题 (String), 比如 "How Does the Earth Move? Crash Course Geography #5"
+  // https://www.youtube.com/watch?v=ljjLV-5Sa98
   function get_title() {
     return ytplayer.config.args.title;
   }
