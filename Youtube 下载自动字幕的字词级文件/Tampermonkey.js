@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name           Youtube 下载字幕-字词级 JSON
+// @name           Youtube 下载自动字幕的字词级 JSON
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
@@ -14,7 +14,7 @@
 
 	// Config
 	var NO_SUBTITLE = '无字幕: 检测不到自动字幕';
-	var HAVE_SUBTITLE = '下载自动字幕 (字词级 JSON)';
+	var HAVE_SUBTITLE = '下载自动字幕 (字词级)';
 	var TEXT_LOADING = '加载中...';
 	const BUTTON_ID = 'youtube-download-word-level-subtitle-last-update-2021-2-21'
 	// Config
@@ -209,13 +209,16 @@
 		var filename = null; // 保存文件名
 
 		// if user choose auto subtitle
-		if (caption.lang_code == 'AUTO') {
-			console.log('进入了下载自动字幕');
+		if (caption.lang_code == 'AUTO-original') {
 			result = await get_auto_subtitle();
-			filename = get_file_name(get_auto_subtitle_name());
+			filename = get_file_name(`原版 JSON-${get_auto_subtitle_name()}`);
+			downloadString(JSON.stringify(result), "text/plain", filename);
+		}
+
+		if (caption.lang_code == 'AUTO-simplify') {
+			result = await get_auto_subtitle();
+			filename = get_file_name(`简化版 JSON-${get_auto_subtitle_name()}`);
 			let json = parse_youtube_XML_to_JSON(result);
-			// console.log('最后要下载到文件的结果是');
-			// console.log(json);
 			downloadString(JSON.stringify(json), "text/plain", filename);
 		}
 
@@ -269,11 +272,19 @@
 		// if auto subtitle exist
 		if (auto_subtitle_exist) {
 			caption_info = {
-				lang_code: 'AUTO', // later we use this to know if it's auto subtitle
-				lang_name: `${get_auto_subtitle_name()}.json`, // for display only
+				lang_code: 'AUTO-original',
+				lang_name: `${get_auto_subtitle_name()} (原版)`,
 			};
 			caption_array.push(caption_info);
+			option = document.createElement('option');
+			option.textContent = caption_info.lang_name;
+			select.appendChild(option);
 
+			caption_info = {
+				lang_code: 'AUTO-simplify',
+				lang_name: `${get_auto_subtitle_name()} (简化版)`,
+			};
+			caption_array.push(caption_info);
 			option = document.createElement('option');
 			option.textContent = caption_info.lang_name;
 			select.appendChild(option);
