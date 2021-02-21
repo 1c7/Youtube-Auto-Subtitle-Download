@@ -281,6 +281,17 @@
     return method_3
   }
 
+	// 拿完整字幕的 XML
+	async function get_closed_subtitles() {
+		var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
+		// Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
+		var result = await get(list_url)
+		// <transcript_list docid="4231220476879025040">
+		// 	<track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
+		// </transcript_list>
+		return result
+	}
+
   // detect if "auto subtitle" and "closed subtitle" exist
   // and add <option> into <select>
   function load_language_list(select) {
