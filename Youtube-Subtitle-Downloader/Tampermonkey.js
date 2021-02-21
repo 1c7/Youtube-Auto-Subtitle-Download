@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v28
+// @name           Youtube Subtitle Downloader v29
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        28
+// @version        29
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -13,46 +13,50 @@
 
 /*
   [What is this?]
-  This Tampermonkey script allows you to download Youtube "Automatic subtitle" and "closed subtitle".
+    This Tampermonkey script allows you to download Youtube "Automatic subtitle" and "closed subtitle".
 
   [Note]
-  If it doesn't work (rarely), try to refresh the page.
-  If problem still exists after refreshing, send an email to guokrfans@gmail.com.
+    If it doesn't work (rarely), try to refresh the page.
+    If problem still exists after refreshing, send an email to guokrfans@gmail.com.
 
   [Who built this?]
-  Author :  Cheng Zheng
-  Email  :  guokrfans@gmail.com
-  Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
-  If you want to improve the script, Github pull requests are welcome.
+    Author :  Cheng Zheng (郑诚)
+    Email  :  guokrfans@gmail.com
+    Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
+    If you want to improve the script, Github pull requests are welcome.
 
   [Note for Developers]
-  Few things before you read the code:
-  0. Some comments are written in Chinese.
-  1. Youtube has 2 interfaces: Material Design and The Old Design.
-  2. This code handles both "Auto" and "Closed" subtitles.
+    Few things before you read the code:
+    0. Some comments are written in Chinese.
+    1. Youtube has 2 interfaces: Material Design and The Old Design.
+    2. This code handles both "Auto" and "Closed" subtitles.
 
   [What is "Tampermonkey"?]
-  "Tampermonkey script" means that you needs to install a browser extension called "Tampermonkey" before installing this script.
-  Tempermonkey is available for most modern web browsers, such as Chrome, Firefox, Safari, Microsoft Edge, and Opera.
+    "Tampermonkey script" means that you needs to install a browser extension called "Tampermonkey" before installing this script.
+    Tempermonkey is available for most modern web browsers, such as Chrome, Firefox, Safari, Microsoft Edge, and Opera.
 
   [Test Video]
-  https://www.youtube.com/watch?v=bkVsus8Ehxs
-  This videos only has a closed English subtitle, with no auto subtitles.
+    https://www.youtube.com/watch?v=bkVsus8Ehxs
+    This videos only has a closed English subtitle, with no auto subtitles.
 
-  https://www.youtube.com/watch?v=-WEqFzyrbbs
-  no subtitle at all
+    https://www.youtube.com/watch?v=-WEqFzyrbbs
+    no subtitle at all
 
-  https://www.youtube.com/watch?v=9AzNEG1GB-k
-  have a lot of subtitles
+    https://www.youtube.com/watch?v=9AzNEG1GB-k
+    have a lot of subtitles
 
-  https://www.youtube.com/watch?v=tqGkOvrKGfY
-  1:36:33  super long subtitle
+    https://www.youtube.com/watch?v=tqGkOvrKGfY
+    1:36:33  super long subtitle
 
   [How does it work?]
-  The code can be roughly divided into three parts:
-    1. Add a button on the page. (UI)
-    2. Detect if subtitle exists.
-    3. Convert subtitle format, then download.
+    The code can be roughly divided into three parts:
+      1. Add a button on the page. (UI)
+      2. Detect if subtitle exists.
+      3. Convert subtitle format, then download.
+  
+  [Test Enviroment]
+    Works best on Chrome + Tampermonkey. 
+    There are plenty Chromium-based Browser, I do not guarantee this work on all of them;
 */
 
 (function () {
@@ -61,7 +65,7 @@
   var NO_SUBTITLE = 'No Subtitle';
   var HAVE_SUBTITLE = 'Download Subtitles';
   var TEXT_LOADING = 'Loading...';
-  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2020-12-3'
+  const BUTTON_ID = 'youtube-subtitle-downloader-by-1c7-last-update-2021-2-21'
   // Config
 
   var HASH_BUTTON_ID = `#${BUTTON_ID}`
@@ -272,7 +276,6 @@
     selector.options[0].selected = true;
   }
 
-
   // Return something like: "(English)How Did Python Become A Data Science Powerhouse?.srt"
   function get_file_name(x) {
     // var method_1 = '(' + x + ')' + document.title + '.srt'; // 如果有通知数，文件名也会带上，比较烦，这种方式不好
@@ -281,20 +284,20 @@
     return method_3
   }
 
-	// 拿完整字幕的 XML
-	async function get_closed_subtitles() {
-		var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
-		// Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
-		var result = await get(list_url)
-		// <transcript_list docid="4231220476879025040">
-		// 	<track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
-		// </transcript_list>
-		return result
-	}
+  // 拿完整字幕的 XML
+  async function get_closed_subtitles() {
+    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
+    // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
+    var result = await get(list_url)
+    // <transcript_list docid="4231220476879025040">
+    // 	<track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
+    // </transcript_list>
+    return result
+  }
 
   // detect if "auto subtitle" and "closed subtitle" exist
   // and add <option> into <select>
-  function load_language_list(select) {
+  async function load_language_list(select) {
     // auto
     var auto_subtitle_exist = false;
 
@@ -308,66 +311,59 @@
       auto_subtitle_exist = true;
     }
 
-    // get closed subtitle
-    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
-    // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url: list_url,
-      onload: function (xhr) {
-        captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
-        if (captions.length != 0) {
-          closed_subtitle_exist = true;
-        }
+    // does closed subtitle exists?
+    var tracks_xml = await get_closed_subtitles();
+    captions = new DOMParser().parseFromString(tracks_xml, "text/xml").getElementsByTagName('track');
+    if (captions.length != 0) {
+      closed_subtitle_exist = true;
+    }
 
-        // if no subtitle at all, just say no and stop
-        if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
-          select.options[0].textContent = NO_SUBTITLE;
-          disable_download_button();
-          return false;
-        }
+    // if no subtitle at all, just say no and stop
+    if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
+      select.options[0].textContent = NO_SUBTITLE;
+      disable_download_button();
+      return false;
+    }
 
-        // if at least one type of subtitle exist
-        select.options[0].textContent = HAVE_SUBTITLE;
-        select.disabled = false;
+    // if at least one type of subtitle exist
+    select.options[0].textContent = HAVE_SUBTITLE;
+    select.disabled = false;
 
-        var caption = null; // for inside loop
-        var option = null; // for <option>
-        var caption_info = null; // for our custom object
+    var caption = null; // for inside loop
+    var option = null; // for <option>
+    var caption_info = null; // for our custom object
 
-        // if auto subtitle exist
-        if (auto_subtitle_exist) {
-          caption_info = {
-            lang_code: 'AUTO', // later we use this to know if it's auto subtitle
-            lang_name: get_auto_subtitle_name() // for display only
-          };
-          caption_array.push(caption_info);
+    // if auto subtitle exist
+    if (auto_subtitle_exist) {
+      caption_info = {
+        lang_code: 'AUTO', // later we use this to know if it's auto subtitle
+        lang_name: get_auto_subtitle_name() // for display only
+      };
+      caption_array.push(caption_info);
 
-          option = document.createElement('option');
-          option.textContent = caption_info.lang_name;
-          select.appendChild(option);
-        }
+      option = document.createElement('option');
+      option.textContent = caption_info.lang_name;
+      select.appendChild(option);
+    }
 
-        // if closed_subtitle_exist
-        if (closed_subtitle_exist) {
-          for (var i = 0, il = captions.length; i < il; i++) {
-            caption = captions[i];
-            let lang_code = caption.getAttribute('lang_code')
-            let lang_translated = caption.getAttribute('lang_translated')
-            let lang_name = lang_code_to_local_name(lang_code, lang_translated)
-            caption_info = {
-              lang_code: lang_code,
-              lang_name: lang_name,
-            };
-            caption_array.push(caption_info);
-            // 加到 caption_array 里, 一个全局变量, 待会要靠它来下载
-            option = document.createElement('option');
-            option.textContent = caption_info.lang_name;
-            select.appendChild(option);
-          }
-        }
+    // if closed_subtitle_exist
+    if (closed_subtitle_exist) {
+      for (var i = 0, il = captions.length; i < il; i++) {
+        caption = captions[i];
+        let lang_code = caption.getAttribute('lang_code')
+        let lang_translated = caption.getAttribute('lang_translated')
+        let lang_name = lang_code_to_local_name(lang_code, lang_translated)
+        caption_info = {
+          lang_code: lang_code,
+          lang_name: lang_name,
+        };
+        caption_array.push(caption_info);
+        // 加到 caption_array 里, 一个全局变量, 待会要靠它来下载
+        option = document.createElement('option');
+        option.textContent = caption_info.lang_name;
+        select.appendChild(option);
       }
-    });
+    }
   }
 
   function disable_download_button() {
