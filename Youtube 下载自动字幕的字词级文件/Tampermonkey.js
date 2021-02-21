@@ -1,18 +1,18 @@
 // ==UserScript==
-// @name           Youtube 下载自动字幕的字词级 JSON
+// @name           Youtube 下载自动字幕 (字词级) v3
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        2
+// @version        3
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description   字词级字幕仅适用于自动字幕（机器识别出来的），拿这种格式的字幕，意义是方便分句。 格式有原版 (&fmt=json3) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}
+// @description   (下载 .json 文件）字词级字幕仅适用于自动字幕（机器识别出来的）(完整字幕没有字词级的）下载字词级字幕的意义是方便分句。 格式有原版 (&fmt=json3) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}
 // ==/UserScript==
 
 
 (function () {
   // 可配置项
-  var NO_SUBTITLE = '无字幕: 检测不到自动字幕';
+  var NO_SUBTITLE = '无自动字幕';
   var HAVE_SUBTITLE = '下载自动字幕 (字词级)';
   var TEXT_LOADING = '加载中...';
   const BUTTON_ID = 'youtube-download-word-level-subtitle-last-update-2021-2-21'
@@ -406,11 +406,11 @@
   function parse_youtube_XML_to_JSON(json) {
     var final_result = [];
 
-    var template_example = {
-      startTime: null,
-      endTime: null,
-      text: null
-    }
+    // var template_example = {
+    //   startTime: null,
+    //   endTime: null,
+    //   text: null
+    // }
 
     var events = json.events
 
