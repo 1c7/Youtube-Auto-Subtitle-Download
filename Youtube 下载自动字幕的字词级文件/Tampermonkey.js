@@ -6,10 +6,11 @@
 // @version        3
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description   (下载 .json 文件）字词级字幕仅适用于自动字幕（机器识别出来的）(完整字幕没有字词级的）下载字词级字幕的意义是方便分句。 格式有原版 (&fmt=json3) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}
+// @description   （下载 .json 文件）字词级字幕仅适用于自动字幕（也就是机器用语音转文字识别出来的字幕）（完整字幕没有字词级的）下载字词级的意义是方便分句。可下载两种格式：原版 (&fmt=json3 从 Youtube 获取的原样返回) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}。 json 格式不可配合视频直接播放，需要其他软件进行进一步处理（把词拼成句子，转成 srt 格式）
+// @license  MIT
 // ==/UserScript==
 
-
+// 初次写于2021-2-21
 (function () {
   // 可配置项
   var NO_SUBTITLE = '无自动字幕';
