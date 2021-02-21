@@ -288,11 +288,15 @@
   async function get_closed_subtitles() {
     var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
     // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
-    var result = await get(list_url)
-    // <transcript_list docid="4231220476879025040">
-    // 	<track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
-    // </transcript_list>
-    return result
+    return new Promise(function (resolve, reject) {
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: list_url,
+        onload: function (xhr) {
+          resolve(xhr.responseText)
+        }
+      })
+    })
   }
 
   // detect if "auto subtitle" and "closed subtitle" exist
@@ -312,8 +316,8 @@
     }
 
     // does closed subtitle exists?
-    var tracks_xml = await get_closed_subtitles();
-    captions = new DOMParser().parseFromString(tracks_xml, "text/xml").getElementsByTagName('track');
+    var tracks_xml_string = await get_closed_subtitles();
+    captions = new DOMParser().parseFromString(tracks_xml_string, "text/xml").getElementsByTagName('track');
     if (captions.length != 0) {
       closed_subtitle_exist = true;
     }
