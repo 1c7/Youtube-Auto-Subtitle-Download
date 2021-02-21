@@ -3,10 +3,10 @@
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        1
+// @version        2
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
-// @description   字词级字幕仅适用于自动字幕（机器识别出来的），拿这种格式的字幕，意义是方便分句。 格式 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}
+// @description   字词级字幕仅适用于自动字幕（机器识别出来的），拿这种格式的字幕，意义是方便分句。 格式有原版 (&fmt=json3) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}
 // ==/UserScript==
 
 
@@ -232,18 +232,6 @@
 		return method_3
 	}
 
-	// 拿完整字幕的 XML
-	async function get_closed_subtitles() {
-		// get closed subtitle
-		var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
-		// Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
-		var result = await get(list_url)
-		// <transcript_list docid="4231220476879025040">
-		// 	<track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
-		// </transcript_list>
-		return result
-	}
-
 	// detect if "auto subtitle" and "closed subtitle" exist
 	// and add <option> into <select>
 	function load_language_list(select) {
@@ -458,64 +446,6 @@
 			}
 		}
 		return final_result;
-	}
-
-	// Youtube return XML. we want SRT  
-	// input: Youtube XML format
-	// output: SRT format
-	function parse_youtube_XML_to_SRT(youtube_xml_string) {
-		if (youtube_xml_string === '') {
-			return false;
-		}
-		var text = youtube_xml_string.getElementsByTagName('text');
-		var result = '';
-		var BOM = '\uFEFF';
-		result = BOM + result; // store final SRT result
-		var len = text.length;
-		for (var i = 0; i < len; i++) {
-			var index = i + 1;
-			var content = text[i].textContent.toString();
-			content = content.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
-			var start = text[i].getAttribute('start');
-			var end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-
-			// 保留这段代码
-			// 如果希望字幕的结束时间和下一行的开始时间相同（连在一起）
-			// 可以取消下面的注释
-			// if (i + 1 >= len) {
-			//   end = parseFloat(text[i].getAttribute('start')) + parseFloat(text[i].getAttribute('dur'));
-			// } else {
-			//   end = text[i + 1].getAttribute('start');
-			// }
-
-			// we want SRT format:
-			/*
-			    1
-			    00:00:01,939 --> 00:00:04,350
-			    everybody Craig Adams here I'm a
-
-			    2
-			    00:00:04,350 --> 00:00:06,720
-			    filmmaker on YouTube who's digging
-			*/
-			var new_line = "\n";
-			result = result + index + new_line;
-			// 1
-
-			var start_time = process_time(parseFloat(start));
-			var end_time = process_time(parseFloat(end));
-			result = result + start_time;
-			result = result + ' --> ';
-			result = result + end_time + new_line;
-			// 00:00:01,939 --> 00:00:04,350
-
-			content = htmlDecode(content);
-			// turn HTML entity back to text. example: &#39; back to apostrophe (')
-
-			result = result + content + new_line + new_line;
-			// everybody Craig Adams here I'm a
-		}
-		return result;
 	}
 
 	// return "English (auto-generated)" or a default name;
