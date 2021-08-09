@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v29
+// @name           Youtube Subtitle Downloader v30
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        29
+// @version        30
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -57,6 +57,12 @@
   [Test Enviroment]
     Works best on Chrome + Tampermonkey. 
     There are plenty Chromium-based Browser, I do not guarantee this work on all of them;
+
+  个别情况下不能用是因为 jQuery 的 CDN 无法载入，解决办法是修改这一行
+  // @require https://code.jquery.com/jquery-1.12.4.min.js
+  改成一个别的 jQuery 地址，比如
+  https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
+  https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
 */
 
 (function () {
@@ -118,6 +124,7 @@
   // (new Material design version would trigger this "yt-navigate-finish" event. old version would not.)
   var body = document.getElementsByTagName("body")[0];
   body.addEventListener("yt-navigate-finish", function (event) {
+    // 2021-8-9 测试结果：yt-navigate-finish 可以正常触发
     if (current_page_is_video_page() === false) {
       return;
     }
@@ -128,20 +135,6 @@
     if (first_load === false) {
       remove_subtitle_download_button();
       init();
-    }
-  });
-
-  // trigger when loading new page
-  // (old version would trigger "spfdone" event. new Material design version not sure yet.)
-  window.addEventListener("spfdone", function (e) {
-    if (current_page_is_video_page()) {
-      remove_subtitle_download_button();
-      var checkExist = setInterval(function () {
-        if ($('#watch7-headline').length) {
-          init();
-          clearInterval(checkExist);
-        }
-      }, 330);
     }
   });
 
@@ -636,8 +629,21 @@
     }
   }
 
+  // 获取视频标题
   function get_title() {
-    return ytplayer.config.args.title;
+    // 先尝试拿到标题
+    var title_element = document.querySelector(
+      "h1.title.style-scope.ytd-video-primary-info-renderer"
+    );
+    if (title_element != null) {
+      var title = title_element.innerText;
+      // 能拿到就返回
+      if (title != undefined && title != null && title != "") {
+        return title;
+      }
+    }
+    // fallback 方案
+    return ytplayer.config.args.title; // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
   }
 
   function get_video_id() {
