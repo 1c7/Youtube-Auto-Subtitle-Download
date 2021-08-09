@@ -1,16 +1,25 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v7 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v8 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        7
-// @copyright      2020 Cheng Zheng
+// @version        8
+// @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
 // @namespace  https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
+  友情提示:
+    如果本脚本不能使用，有一定概率是因为 jQuery 的 CDN 在你的网络环境下无法载入，
+    也就是以下这一句的问题：
+    @require        https://code.jquery.com/jquery-1.12.4.min.js
+
+    解决办法：去网上随便找一个 jQuery 的 CDN 地址，替换掉这个，比如
+    https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
+    https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
+
   作者联系方式:
     QQ 1003211008
     邮件 guokrfans@gmail.com
@@ -18,7 +27,7 @@
 
   使用场景:
     此文件仅针对于 Tampermonkey (Chrome 上的一款插件)
-    需要安装在 Tampermonkey 里
+    (意思是需要安装在 Tampermonkey 里来运行)
 
   解决什么问题：
     下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思
@@ -33,7 +42,11 @@
     因此，会基于中文的句子时间（时间轴），把英文放进去
   
   特别感谢:
-    ytian：解决英文字幕匹配错误的问题 (https://github.com/1c7/Youtube-Auto-Subtitle-Download/pull/11)
+    ytian(tianyebj)：解决英文字幕匹配错误的问题 (https://github.com/1c7/Youtube-Auto-Subtitle-Download/pull/11)
+
+  备忘:
+    如果要把字符串保存下来, 使用: 
+    downloadString(srt_string, "text/plain", file_name);
 */
 (function () {
 
@@ -153,6 +166,14 @@
     $(HASH_BUTTON_ID).remove();
   }
 
+  // 把 console.log 包装一层, 方便"开启"/"关闭"
+  // 这样可以在代码里遗留很多 console.log，实际运行时"关闭"掉不输出, 调试时"开启"
+  // function logging(...args) {
+  //   if(typeof(console) !== 'undefined') {
+  //     console.log(...args);
+  //   }
+  // }
+
   function init() {
     inject_our_script();
     first_load = false;
@@ -227,13 +248,23 @@ padding: 4px;
 
     var json = await get(url);
     var events = json.events;
-    for (let index = 0; index < events.length; index++) {
-      const event = events[index];
+    for (var i = 0; i < events.length; i++) {
+      const event = events[i];
+
+      if(event.segs === undefined){
+        continue
+      }
+      if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
+        continue
+      }
+
+      // 先把数据都拿到
       var tStartMs = event.tStartMs
       var dDurationMs = event.dDurationMs
       var segs = event.segs
-      var text = segs[0].utf8;
+      var text = segs.map(seg => seg.utf8).join("")
 
+      // 然后构造
       var item = {
         startTime: ms_to_srt(tStartMs),
         endTime: ms_to_srt(tStartMs + dDurationMs),
@@ -290,12 +321,14 @@ padding: 4px;
     }
   }
 
+  // 去除两边空格
   function process_word(word) {
     w = word.trim()
     return w
   }
 
-  function process_segs(segs, event) {
+  function process_segs(array, event) {
+    // 如果没有 segs 也没有进一步处理的必要了，直接退出
     if (!event['segs']) {
         return
     }
@@ -303,7 +336,7 @@ padding: 4px;
         var seg = event['segs'][i]
         var word = process_word(seg['utf8'])
         if (word) {
-            segs.push(word)
+            array.push(word)
         }
     }
   }
@@ -322,14 +355,27 @@ padding: 4px;
 
   function match_srt_new(en_auto_sub, cn_srt) {
     var events = en_auto_sub.events
+
+    // 如果中英文任意一边的内容长度为 0，没啥好处理的，直接退出
     if (cn_srt.length == 0 || events.length == 0) {
         return
     }
+
     var cn_i = 0
     var segs = []
     var en_i = 0
-    for (; en_i < events.length; en_i++) { // loop en events
+
+    for (; en_i < events.length; en_i++) { // 遍历英文的 events
         var event = events[en_i]
+        
+        if(event.segs === undefined){
+          continue
+        }
+
+        if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
+          continue
+        }
+
         var tStartMs = event.tStartMs
         var dDurationMs = event.dDurationMs
         if (tStartMs == cn_srt[cn_i].tStartMs && dDurationMs == cn_srt[cn_i].dDurationMs) {
@@ -361,9 +407,14 @@ padding: 4px;
     var auto_sub_url = get_auto_subtitle_xml_url();
     var format_json3_url = auto_sub_url + '&fmt=json3'
     var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
+    // console.log(en_auto_sub);
+    // downloadString(JSON.stringify(en_auto_sub), "text/plain", "english.json");
 
     // 2. 自动字幕的翻译中文
     var cn_url = format_json3_url + '&tlang=zh-Hans'
+    // var cn_auto_sub = await get(cn_url);
+    // downloadString(JSON.stringify(cn_auto_sub), "text/plain", "cn.json");
+
     var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
 
     // match_srt_old(en_auto_sub, cn_srt)
