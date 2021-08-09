@@ -417,9 +417,13 @@
 
     for (var i = 0; i < events.length; i++) {
       var event = events[i];
+
+      // 对于内容(segs)为空的，直接跳过
       if (event.segs == undefined) {
         continue
       }
+
+      // aAppend 就是只有一个 \n
       if (event.aAppend != undefined) {
         continue
       }
