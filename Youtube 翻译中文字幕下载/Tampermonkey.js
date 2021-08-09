@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v10
+// @name           Youtube 翻译中文字幕下载 v11
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        10
+// @version        11
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -499,10 +499,18 @@ padding-right: 8px;
     var events = json.events;
     for (let index = 0; index < events.length; index++) {
       const event = events[index];
+
+      if(event.segs === undefined){
+        continue
+      }
+      if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
+        continue
+      }
+
       var tStartMs = event.tStartMs
       var dDurationMs = event.dDurationMs
       var segs = event.segs
-      var text = segs[0].utf8;
+      var text = segs.map(seg => seg.utf8).join("")
 
       var item = {
         startTime: ms_to_srt(tStartMs),
