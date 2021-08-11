@@ -583,15 +583,18 @@
   // return player_response
   // or return null
   function get_json() {
+    var json = null
     try {
-      var json = null
+      // 如果有缓存，返回缓存
       if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
         json = youtube_playerResponse_1c7;
       }
+      // 尝试方法1
       if (ytplayer.config.args.player_response) {
         let raw_string = ytplayer.config.args.player_response;
         json = JSON.parse(raw_string);
       }
+      // 尝试方法2
       if (ytplayer.config.args.raw_player_response) {
         json = ytplayer.config.args.raw_player_response;
       }
@@ -631,7 +634,7 @@
 
   // 获取视频标题
   function get_title() {
-    // 先尝试拿到标题
+    // 方法1：先尝试拿到标题
     var title_element = document.querySelector(
       "h1.title.style-scope.ytd-video-primary-info-renderer"
     );
@@ -642,7 +645,7 @@
         return title;
       }
     }
-    // fallback 方案
+    // 方法2：如果方法1失效用这个
     return ytplayer.config.args.title; // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
   }
 
