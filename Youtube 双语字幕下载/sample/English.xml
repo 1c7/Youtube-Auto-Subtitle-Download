@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<transcript>
+  <text start="0.589" dur="6.121">hello in this video I would like to</text>
+  <text start="3.6" dur="5.88">share what I&amp;#39;ve learned about setting up</text>
+  <text start="6.71" dur="5.08">shadows and shadow casting and shadow</text>
+  <text start="9.48" dur="5.6">occlusion and stuff like that in a</text>
+  <text start="11.79" dur="5.999">top-down game but and the coded engine</text>
+  <text start="15.08" dur="6.16">because there&amp;#39;s some kind of weird kind</text>
+  <text start="17.789" dur="5.101">of issues and yeah I spend a lot of time</text>
+  <text start="21.24" dur="6.15">thinking that all and I thought why not</text>
+  <text start="22.89" dur="7.41">share a lot of information um so let&amp;#39;s</text>
+  <text start="27.39" dur="6.5">just start on got an engine let&amp;#39;s create</text>
+  <text start="30.3" dur="3.59">an new project</text>
+  <text start="43.96" dur="10.03">all right I&amp;#39;ve now created a new color</text>
+  <text start="47.3" dur="11.82">project right here on the desktop also</text>
+  <text start="53.99" dur="9.36">I&amp;#39;ve prepared a little asset folder it&amp;#39;s</text>
+  <text start="59.12" dur="5.82">just a folder containing couple of all</text>
+  <text start="63.35" dur="3.62">of simple assets to test the shadow</text>
+  <text start="64.94" dur="6.75">stuff</text>
+  <text start="66.97" dur="11.56">let&amp;#39;s drag and drop services until</text>
+  <text start="71.69" dur="12.84">surfaces on panel and gold and without</text>
+  <text start="78.53" dur="11.52">say are imported project some switching</text>
+  <text start="84.53" dur="9.18">to a 2d scene I could now just simply</text>
+  <text start="90.05" dur="5.87">drag and drop those cubes here onto the</text>
+  <text start="93.71" dur="2.21">sea</text>
+  <text start="96.649" dur="7.5">likes us I don&amp;#39;t want to do that because</text>
+  <text start="100.28" dur="7.83">I want to apply a couple of changes to</text>
+  <text start="104.149" dur="8.341">the cubes and I do not want to have to</text>
+  <text start="108.11" dur="7.02">do that was every Q individually which</text>
+  <text start="112.49" dur="8.549">is why I&amp;#39;m going to create a new cube</text>
+  <text start="115.13" dur="13.079">scene but some actually let&amp;#39;s use this</text>
+  <text start="121.039" dur="12.091">blank scene for that leading source</text>
+  <text start="128.209" dur="10.741">cubes again create a no to the earth</text>
+  <text start="133.13" dur="10.669">root node for that scene adding is</text>
+  <text start="138.95" dur="11.33">bright note and just dragging our cube</text>
+  <text start="143.799" dur="14.111">match asset and the texture fulfilled of</text>
+  <text start="150.28" dur="13.45">inspector here next thing I&amp;#39;m going to</text>
+  <text start="157.91" dur="10.47">do is to add a shadow occluder no it&amp;#39;s</text>
+  <text start="163.73" dur="7.8">called light of glory to D and now we</text>
+  <text start="168.38" dur="10.439">are getting a little exclamation mark I</text>
+  <text start="171.53" dur="11.22">came here bringing it tells us at um are</text>
+  <text start="178.819" dur="10.161">supposed to create a polygon shape that</text>
+  <text start="182.75" dur="10.2">defines the shape of the of circular</text>
+  <text start="188.98" dur="6.46">just clicking into the scene now while</text>
+  <text start="192.95" dur="5.43">the lighter color 2d is selected prompts</text>
+  <text start="195.44" dur="8.699">us researchers suggest into rights of</text>
+  <text start="198.38" dur="10.939">polygons yes we want to do that and now</text>
+  <text start="204.139" dur="8.961">we just click into the scene to create</text>
+  <text start="209.319" dur="3.781">points of quality</text>
+  <text start="214.84" dur="8.65">all right I clicked on basically the the</text>
+  <text start="221.93" dur="6.96">corners of the cube that touches the</text>
+  <text start="223.49" dur="7.68">ground although some tape of the cutest</text>
+  <text start="228.89" dur="6.09">faces down don&amp;#39;t words and it&amp;#39;s</text>
+  <text start="231.17" dur="19.53">basically all those shapes that&amp;#39;s going</text>
+  <text start="234.98" dur="23.939">to throw a shadow so let&amp;#39;s save sad</text>
+  <text start="250.7" dur="11.039">scene all right and we are going to</text>
+  <text start="258.919" dur="6.241">create another scene which is our um</text>
+  <text start="261.739" dur="5.661">they scene where everything comes</text>
+  <text start="265.16" dur="2.24">together</text>
+  <text start="278.07" dur="10.18">also initialize a initializing that one</text>
+  <text start="280.81" dur="11.45">lesson note today as a road nod now we</text>
+  <text start="288.25" dur="4.01">can&amp;#39;t can&amp;#39;t just drag and drop our</text>
+  <text start="292.56" dur="8.02">result is a cube seen into here which is</text>
+  <text start="298.449" dur="5.751">automatically going to instantiate sat</text>
+  <text start="300.58" dur="7.07">scene which is indicated by this little</text>
+  <text start="304.2" dur="3.45">again right here</text>
+  <text start="309.96" dur="9.16">the lectins of note and hitting ctrl d a</text>
+  <text start="313.33" dur="10.14">couple of times just duplicated not now</text>
+  <text start="319.12" dur="9.6">I&amp;#39;ve got four cubes I want two of those</text>
+  <text start="323.47" dur="7.74">cubes to be a little larger or actually</text>
+  <text start="328.72" dur="4.79">now I want your son to be to be a little</text>
+  <text start="331.21" dur="2.3">smaller</text>
+  <text start="337.89" dur="5.19">so I&amp;#39;m just letting this cave to 0.5</text>
+  <text start="345.6" dur="11.62">all right next thing is we are going to</text>
+  <text start="351.1" dur="8.43">create our light that I don&amp;#39;t I don&amp;#39;t</text>
+  <text start="357.22" dur="4.77">think I want to create another scene</text>
+  <text start="359.53" dur="6.38">because right now I&amp;#39;m planning just to</text>
+  <text start="361.99" dur="3.92">have one single light</text>
+  <text start="372.609" dur="5.62">those are known for that is called light</text>
+  <text start="374.989" dur="8.34">today we are getting another exclamation</text>
+  <text start="378.229" dur="9.35">mark indicator which is just telling us</text>
+  <text start="383.329" dur="5.64">that we are supposed to add our light</text>
+  <text start="387.579" dur="9.07">texture now</text>
+  <text start="388.969" dur="11.03">so God accuses extras to give a form to</text>
+  <text start="396.649" dur="3.35">the light basically</text>
+  <text start="403.42" dur="13.77">so let&amp;#39;s drag and drop this is light ing</text>
+  <text start="408.91" dur="10.97">here it is out here right now it&amp;#39;s not</text>
+  <text start="417.19" dur="4.83">nothing really I suppose over here</text>
+  <text start="419.88" dur="3.97">because we need to set up a couple of</text>
+  <text start="422.02" dur="7.77">more things with the stuff to work</text>
+  <text start="423.85" dur="13.74">first of all let&amp;#39;s also create another</text>
+  <text start="429.79" dur="10.65">sprite using this light orb image which</text>
+  <text start="437.59" dur="5.28">is just um this is not really</text>
+  <text start="440.44" dur="8.4">necessarily but it is it helps us to</text>
+  <text start="442.87" dur="11.22">locate the position of selectors just</text>
+  <text start="448.84" dur="12.59">makes it look a little bit nicer what I</text>
+  <text start="454.09" dur="7.34">meant to do was okay</text>
+  <text start="464.669" dur="6.821">the next thing is to add some kind of</text>
+  <text start="468.22" dur="6.39">ground to oversee because right now we</text>
+  <text start="471.49" dur="6.84">have just so clear color as background</text>
+  <text start="474.61" dur="10.17">and salad can&amp;#39;t work the top of salt</text>
+  <text start="478.33" dur="8.7">color okay let the ground I have to cut</text>
+  <text start="484.78" dur="8.849">this ground P&amp;amp;G was just some kind of</text>
+  <text start="487.03" dur="10.05">grainy noisy texture moving this image</text>
+  <text start="493.629" dur="8.641">to the very top of our know tree here</text>
+  <text start="497.08" dur="7.709">makes it so that it&amp;#39;s rendered first</text>
+  <text start="502.27" dur="10.199">which in turn makes it so that it</text>
+  <text start="504.789" dur="11.12">appears below or other sprouts now our</text>
+  <text start="512.469" dur="3.44">life becomes submersible as well</text>
+  <text start="525.63" dur="8.07">however the header Okuda still don&amp;#39;t</text>
+  <text start="529.99" dur="8.789">shadow closer don&amp;#39;t throw any shadow</text>
+  <text start="533.7" dur="9.16">because we need to enable this in July</text>
+  <text start="538.779" dur="8.49">to denote as a array area and the</text>
+  <text start="542.86" dur="13.53">inspector called shadow offices and that</text>
+  <text start="547.269" dur="13.101">enabled too long now as you can see our</text>
+  <text start="556.39" dur="3.98">cubes or throwing issue</text>
+  <text start="567.07" dur="8.26">so let&amp;#39;s check sour old in the actual</text>
+  <text start="570.55" dur="8.89">game and perhaps you&amp;#39;re not something</text>
+  <text start="575.33" dur="8.25">which is it doesn&amp;#39;t look quite right</text>
+  <text start="579.44" dur="7.5">the problem is that shadows are rendered</text>
+  <text start="583.58" dur="9.33">on top of the sprites that cast a shadow</text>
+  <text start="586.94" dur="7.88">oh this line should be visible for</text>
+  <text start="592.91" dur="4.11">example was that line here</text>
+  <text start="594.82" dur="11.13">yes the shadow should be obviously</text>
+  <text start="597.02" dur="15.09">behind objects are casted let&amp;#39;s fix up a</text>
+  <text start="605.95" dur="8.77">second ago what we need to do is to</text>
+  <text start="612.11" dur="9.53">change and I filled in the inspector</text>
+  <text start="614.72" dur="11.16">again we are going to the cube scene and</text>
+  <text start="621.64" dur="7.9">selecting our sprite in here under</text>
+  <text start="625.88" dur="10.53">visibility we find a filter called light</text>
+  <text start="629.54" dur="12.06">mouse what this does is that it finds a</text>
+  <text start="636.41" dur="7.8">layer which is a note is affected by a</text>
+  <text start="641.6" dur="5.24">light source we want to change that</text>
+  <text start="644.21" dur="4.86">layer for example is a second one</text>
+  <text start="646.84" dur="5.8">important thing is that it is on a</text>
+  <text start="649.07" dur="7.56">different layer there&amp;#39;s a light mask</text>
+  <text start="652.64" dur="8.82">from our light or clear light Okuda</text>
+  <text start="656.63" dur="10.89">remains on at mask 1 despite us now on</text>
+  <text start="661.46" dur="11.67">the layer to safe set C test play and</text>
+  <text start="667.52" dur="13.74">okay now shadow is no longer ended on</text>
+  <text start="673.13" dur="11.01">top of our game that&amp;#39;s nice however now</text>
+  <text start="681.26" dur="5.61">our sprites are not at all affected by</text>
+  <text start="684.14" dur="5.78">the light source which may or may not be</text>
+  <text start="686.87" dur="6.69">a problem depending on again for example</text>
+  <text start="689.92" dur="10.42">let us add another node choosing</text>
+  <text start="693.56" dur="10.92">they seen here the sounds going to be a</text>
+  <text start="700.34" dur="6.18">canvas modulate what sir does</text>
+  <text start="704.48" dur="3.75">they said it&amp;#39;s a set of more lights so</text>
+  <text start="706.52" dur="5.36">my economist basically with a color</text>
+  <text start="708.23" dur="3.65">let&amp;#39;s pick a dark color</text>
+  <text start="717.88" dur="7.63">suplexes so you could imagine that now</text>
+  <text start="721.49" dur="6.87">it perhaps at night no once again at</text>
+  <text start="725.51" dur="6.84">least a a much darker place are up some</text>
+  <text start="728.36" dur="8.94">kind of factory or so let&amp;#39;s jump into</text>
+  <text start="732.35" dur="8.849">the game again and what we notice here</text>
+  <text start="737.3" dur="7.649">is that all the cubes are way to darkman</text>
+  <text start="741.199" dur="10.651">right because the right beside a bright</text>
+  <text start="744.949" dur="15.811">light source and the way that makes it</text>
+  <text start="751.85" dur="13.169">even darker to really make this effect</text>
+  <text start="760.76" dur="6.42">clear almost pitch-black now even selves</text>
+  <text start="765.019" dur="4.891">or right beside a light source which</text>
+  <text start="767.18" dur="5.51">shouldn&amp;#39;t be the case doesn&amp;#39;t look nice</text>
+  <text start="769.91" dur="8.94">so what can we do here</text>
+  <text start="772.69" dur="9.329">let&amp;#39;s go to the light to D again and set</text>
+  <text start="778.85" dur="3.169">the item colors</text>
+  <text start="789.36" dur="8.24">we thought it&amp;#39;s a light now effects</text>
+  <text start="793.05" dur="9.51">items that are on Zack almost glare too</text>
+  <text start="797.6" dur="8.14">as well so it affects for circular or</text>
+  <text start="802.56" dur="6.589">clear which is on there one and the cube</text>
+  <text start="805.74" dur="7.4">sprite which is on there too</text>
+  <text start="809.149" dur="7.771">however this item call mosque down here</text>
+  <text start="813.14" dur="8.439">which is different from this one up here</text>
+  <text start="816.92" dur="7.69">this is was in range area and that&amp;#39;s a</text>
+  <text start="821.579" dur="4.801">bonus reasons a shadow area this item</text>
+  <text start="824.61" dur="4.83">cool mosque is exclusively for the</text>
+  <text start="826.38" dur="7.29">shadow clusters and in here you do not</text>
+  <text start="829.44" dur="9.209">set it to the second layer that should</text>
+  <text start="833.67" dur="6.72">give us a result we have a this is where</text>
+  <text start="838.649" dur="7.711">it&amp;#39;s going to get a little bit weird</text>
+  <text start="840.39" dur="9.09">because if we do a test by now well as</text>
+  <text start="846.36" dur="10.2">the shadows are once again rendered on</text>
+  <text start="849.48" dur="10.859">top of our sprites that skips up let&amp;#39;s</text>
+  <text start="856.56" dur="10.64">play over on the left here after engine</text>
+  <text start="860.339" dur="11.431">of the editor I mean on the right and</text>
+  <text start="867.2" dur="12.389">changed something in our almost layer</text>
+  <text start="871.77" dur="10.92">setup of Saladino all right</text>
+  <text start="879.589" dur="7.421">that&amp;#39;s interesting even those settings</text>
+  <text start="882.69" dur="8.85">are exactly identical to when we started</text>
+  <text start="887.01" dur="8.63">the game now we exactly have the effect</text>
+  <text start="891.54" dur="8.549">we want the shadows are rendered in</text>
+  <text start="895.64" dur="7.21">these subscribes not covering sprouts</text>
+  <text start="900.089" dur="5.31">what the sprites are still affected by</text>
+  <text start="902.85" dur="6.479">the light source even though it&amp;#39;s the</text>
+  <text start="905.399" dur="6.481">canvas is modulated it&amp;#39;s very dark the</text>
+  <text start="909.329" dur="5.221">cubes are</text>
+  <text start="911.88" dur="6.48">very visible arisen the light source you</text>
+  <text start="914.55" dur="5.52">can see that the pixels of the cubes</text>
+  <text start="918.36" dur="4.56">that are closer to the light source our</text>
+  <text start="920.07" dur="7.4">brightest and so said our auras are</text>
+  <text start="922.92" dur="9.72">removed so I believe this is a book and</text>
+  <text start="927.47" dur="11.37">I actually reported that one said God it</text>
+  <text start="932.64" dur="6.2">helped yes yeah let me know let&amp;#39;s play</text>
+  <text start="939.32" dur="10.89">at it again just for szeliga enjoying</text>
+  <text start="946.5" dur="6.29">the item called mosque in that door and</text>
+  <text start="950.21" dur="5.89">changing it back to the initial state</text>
+  <text start="952.79" dur="4.08">when we started the game different</text>
+  <text start="956.1" dur="7.38">result</text>
+  <text start="956.87" dur="10.48">this can&amp;#39;t be intended actually let&amp;#39;s</text>
+  <text start="963.48" dur="6.11">automate since that&amp;#39;s at a script to our</text>
+  <text start="967.35" dur="2.24">light</text>
+  <text start="977.589" dur="3.81">let&amp;#39;s still put in script</text>
+  <text start="986.05" dur="8.43">and within the ready function shadow</text>
+  <text start="992.139" dur="8.221">Adam Cole mosques that&amp;#39;s a building</text>
+  <text start="994.48" dur="8.279">question now let&amp;#39;s just so that you know</text>
+  <text start="1000.36" dur="4.919">item code mask equals a shadow item</text>
+  <text start="1002.759" dur="4.74">called mask obviously that&amp;#39;s a silly</text>
+  <text start="1005.279" dur="7.131">lines that shouldn&amp;#39;t change anything</text>
+  <text start="1007.499" dur="11.31">shouldn&amp;#39;t have any effect let&amp;#39;s start oh</text>
+  <text start="1012.41" dur="6.989">well it does have a effect this is what</text>
+  <text start="1018.809" dur="3.81">we want</text>
+  <text start="1019.399" dur="5.89">shadows are rendered under the sprites</text>
+  <text start="1022.619" dur="4.97">and the sprites are affected by our</text>
+  <text start="1025.289" dur="5.67">light source</text>
+  <text start="1027.589" dur="6.281">yeah and hopefully this is going to get</text>
+  <text start="1030.959" dur="5.88">fixed and this weird workaround it&amp;#39;s no</text>
+  <text start="1033.87" dur="7.5">longer necessary but right now if you</text>
+  <text start="1036.839" dur="10.47">just use this one signal line added to</text>
+  <text start="1041.37" dur="9.539">your light sources you can achieve this</text>
+  <text start="1047.309" dur="5.37">effect I spent a lot of time trying to</text>
+  <text start="1050.909" dur="3.841">figure this out perhaps there is still</text>
+  <text start="1052.679" dur="5.071">some way or I&amp;#39;m misunderstanding</text>
+  <text start="1054.75" dur="5.779">something if you know a better way to</text>
+  <text start="1057.75" dur="4.889">achieve this it&amp;#39;s out of the silly</text>
+  <text start="1060.529" dur="4.12">workaround likes out please let me know</text>
+  <text start="1062.639" dur="10.051">a photo time-being</text>
+  <text start="1064.649" dur="10.971">beliefs how to compute that makes a</text>
+  <text start="1072.69" dur="2.93">scene a little bit nicer</text>
+  <text start="1081.66" dur="4.61">I&amp;#39;m going to add an animation player</text>
+  <text start="1087.68" dur="3.39">move the light around</text>
+  <text start="1114.09" dur="48.37">an amazing light position over some</text>
+  <text start="1120.39" dur="44.4">three seconds Nexus is a little bit</text>
+  <text start="1162.46" dur="2.33">smoother</text>
+  <text start="1167.4" dur="7.56">oops no medically that&amp;#39;s this animation</text>
+  <text start="1176.79" dur="8.77">nice another thing we can do is using</text>
+  <text start="1180.37" dur="11.81">normal maps so let&amp;#39;s just go into a cube</text>
+  <text start="1185.56" dur="9.47">scene here let&amp;#39;s select the sprite note</text>
+  <text start="1192.18" dur="6.81">and I&amp;#39;ve prepared a normal map here</text>
+  <text start="1195.03" dur="3.96">let&amp;#39;s drop certain tip</text>
+  <text start="1204.83" dur="10.59">oh and now what we have pretty nice</text>
+  <text start="1209.51" dur="13.41">scene I find our cubes now not only cast</text>
+  <text start="1215.42" dur="11.58">a shadow but also are affected by the</text>
+  <text start="1222.92" dur="6.57">light source dynamically the society</text>
+  <text start="1227" dur="9.93">pickles right up depending on the</text>
+  <text start="1229.49" dur="10.28">position of lightens besides facing the</text>
+  <text start="1236.93" dur="6.18">light source are brighter than the sides</text>
+  <text start="1239.77" dur="5.88">it&amp;#39;s in a way though it really looks</text>
+  <text start="1243.11" dur="9.41">like the light sources now on a</text>
+  <text start="1245.65" dur="16.81">particular side of a cube and that is a</text>
+  <text start="1252.52" dur="12.31">here is our final scene cool of course</text>
+  <text start="1262.46" dur="4.53">I&amp;#39;m going to upload this to github or</text>
+  <text start="1264.83" dur="4.47">good luck we will see you can check that</text>
+  <text start="1266.99" dur="8.55">out going to puts up your into the</text>
+  <text start="1269.3" dur="8.67">description and you could let me know if</text>
+  <text start="1275.54" dur="6.89">you would like me to make more videos in</text>
+  <text start="1277.97" dur="4.46">the future similar to this one</text>
+</transcript>

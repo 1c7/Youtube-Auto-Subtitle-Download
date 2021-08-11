@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<transcript>
+  <text start="0.589" dur="6.121">你好，在这个视频中，我想</text>
+  <text start="3.6" dur="5.88">分享我在自上而下的游戏中设置</text>
+  <text start="6.71" dur="5.08">阴影、阴影投射和阴影</text>
+  <text start="9.48" dur="5.6">遮挡等方面的知识，</text>
+  <text start="11.79" dur="5.999">但是还有编码引擎，</text>
+  <text start="15.08" dur="6.16">因为有一些奇怪</text>
+  <text start="17.789" dur="5.101">的问题，是的 我花了很多时间</text>
+  <text start="21.24" dur="6.15">思考这一切，我想为什么不</text>
+  <text start="22.89" dur="7.41">分享很多信息，嗯，所以让</text>
+  <text start="27.39" dur="6.5">我们开始使用引擎吧，让我们创建</text>
+  <text start="30.3" dur="3.59">一个新</text>
+  <text start="43.96" dur="10.03">项目吧，我现在已经在桌面上创建了一个新的颜色</text>
+  <text start="47.3" dur="11.82">项目</text>
+  <text start="53.99" dur="9.36">我准备了一个小资产文件夹，它</text>
+  <text start="59.12" dur="5.82">只是一个包含所有简单资产的文件夹，</text>
+  <text start="63.35" dur="3.62">用于测试阴影的</text>
+  <text start="64.94" dur="6.75">东西</text>
+  <text start="66.97" dur="11.56">让我们拖放服务，直到</text>
+  <text start="71.69" dur="12.84">面板和黄金上的表面，不用</text>
+  <text start="78.53" dur="11.52">说导入项目一些切换</text>
+  <text start="84.53" dur="9.18">到二维场景我现在可以 只是简单地</text>
+  <text start="90.05" dur="5.87">将这些立方体拖放到海面上</text>
+  <text start="93.71" dur="2.21"></text>
+  <text start="96.649" dur="7.5">就像我们一样我不想这样做，因为</text>
+  <text start="100.28" dur="7.83">我想对立方体进行一些更改，</text>
+  <text start="104.149" dur="8.341">而且我不想</text>
+  <text start="108.11" dur="7.02">每个 Q 都单独这样做，这</text>
+  <text start="112.49" dur="8.549">就是为什么 我去 ng 创建一个新的立方体</text>
+  <text start="115.13" dur="13.079">场景，但有些实际上让我们使用这个</text>
+  <text start="121.039" dur="12.091">空白场景作为主要的源</text>
+  <text start="128.209" dur="10.741">立方体再次为该场景创建一个对地球根节点的否</text>
+  <text start="133.13" dur="10.669">添加是</text>
+  <text start="138.95" dur="11.33">明亮的音符，只需拖动我们的立方体</text>
+  <text start="143.799" dur="14.111">匹配资产和</text>
+  <text start="150.28" dur="13.45">检查器在这里完成的纹理 接下来我</text>
+  <text start="157.91" dur="10.47">要做的是添加一个阴影遮挡器，不，它</text>
+  <text start="163.73" dur="7.8">被称为 D 的荣耀之光，现在我们</text>
+  <text start="168.38" dur="10.439">得到了一个小感叹号，我</text>
+  <text start="171.53" dur="11.22">来到这里告诉我们</text>
+  <text start="178.819" dur="10.161">应该创建一个多边形形状来</text>
+  <text start="182.75" dur="10.2">定义 圆形的形状</text>
+  <text start="188.98" dur="6.46">现在只需单击进入场景，</text>
+  <text start="192.95" dur="5.43">而选择较浅的颜色 2d 提示</text>
+  <text start="195.44" dur="8.699">我们研究人员建议进入</text>
+  <text start="198.38" dur="10.939">多边形的权限是的，我们想要这样做，现在</text>
+  <text start="204.139" dur="8.961">我们只需单击进入场景即可创建</text>
+  <text start="209.319" dur="3.781">质量点，</text>
+  <text start="214.84" dur="8.65">我点击了 基本上</text>
+  <text start="221.93" dur="6.96">是立方体的角接触</text>
+  <text start="223.49" dur="7.68">地面，虽然一些最可爱的</text>
+  <text start="228.89" dur="6.09">面朝下的胶带没有文字，而且</text>
+  <text start="231.17" dur="19.53">基本上所有这些形状</text>
+  <text start="234.98" dur="23.939">都会投下阴影，所以让我们保存悲伤的</text>
+  <text start="250.7" dur="11.039">场景吧 我是的，我们将</text>
+  <text start="258.919" dur="6.241">创建另一个场景，这就是我们的</text>
+  <text start="261.739" dur="5.661">场景，所有东西都</text>
+  <text start="265.16" dur="2.24">聚集在一起，</text>
+  <text start="278.07" dur="10.18">同时初始化一个</text>
+  <text start="280.81" dur="11.45">今天的课程笔记作为道路点头，现在我们</text>
+  <text start="288.25" dur="4.01">不能只是拖放我们的</text>
+  <text start="292.56" dur="8.02">结果是一个立方体 在这里看到它会</text>
+  <text start="298.449" dur="5.751">自动实例化坐</text>
+  <text start="300.58" dur="7.07">场景，这里再次由这个小点指示</text>
+  <text start="304.2" dur="3.45"></text>
+  <text start="309.96" dur="9.16">注凝集素和按 ctrl da</text>
+  <text start="313.33" dur="10.14">几次只是复制而不是现在</text>
+  <text start="319.12" dur="9.6">我有四个立方体我想要这些</text>
+  <text start="323.47" dur="7.74">立方体中的两个是一个 稍微大一点或者实际上</text>
+  <text start="328.72" dur="4.79">现在我希望你的儿子小一点</text>
+  <text start="331.21" dur="2.3"></text>
+  <text start="337.89" dur="5.19">所以我只是让这个洞穴变成0.5</text>
+  <text start="345.6" dur="11.62">好吧接下来我们要</text>
+  <text start="351.1" dur="8.43">创造我们的光，我不，我不</text>
+  <text start="357.22" dur="4.77">认为我想要 创建另一个场景，</text>
+  <text start="359.53" dur="6.38">因为现在我计划只</text>
+  <text start="361.99" dur="3.92">拥有一个</text>
+  <text start="372.609" dur="5.62">被称为今天的光的单灯，</text>
+  <text start="374.989" dur="8.34">我们得到另一个</text>
+  <text start="378.229" dur="9.35">感叹号指示器，它只是</text>
+  <text start="383.329" dur="5.64">告诉我们现在应该添加我们的光</text>
+  <text start="387.579" dur="9.07">纹理，</text>
+  <text start="388.969" dur="11.03">所以上帝 指责分机 ras 基本上给光一个形式</text>
+  <text start="396.649" dur="3.35"></text>
+  <text start="403.42" dur="13.77">所以让我们拖放这是光</text>
+  <text start="408.91" dur="10.97">在这里它现在在这里它</text>
+  <text start="417.19" dur="4.83">不是真的我想在这里</text>
+  <text start="419.88" dur="3.97">因为我们需要先设置</text>
+  <text start="422.02" dur="7.77">一些东西才能</text>
+  <text start="423.85" dur="13.74">工作 最重要的是，让我们也</text>
+  <text start="429.79" dur="10.65">使用这个光球图像创建另一个精灵，这</text>
+  <text start="437.59" dur="5.28">只是嗯，这</text>
+  <text start="440.44" dur="8.4">不一定，但它可以帮助我们</text>
+  <text start="442.87" dur="11.22">定位选择器的位置，只是</text>
+  <text start="448.84" dur="12.59">让它看起来更好一点，</text>
+  <text start="454.09" dur="7.34">我的意思</text>
+  <text start="464.669" dur="6.821">是下一个 事情是添加某种</text>
+  <text start="468.22" dur="6.39">地面来监督，因为现在</text>
+  <text start="471.49" dur="6.84">我们只有如此清晰的颜色作为背景</text>
+  <text start="474.61" dur="10.17">和沙拉不能工作盐的顶部</text>
+  <text start="478.33" dur="8.7">颜色好吧让地面我必须切割</text>
+  <text start="484.78" dur="8.849">这块地面宝洁只是某种</text>
+  <text start="487.03" dur="10.05">颗粒状嘈杂 将此图像移动</text>
+  <text start="493.629" dur="8.641">到我们已知树的最顶部的纹理</text>
+  <text start="497.08" dur="7.709">使其首先被渲染</text>
+  <text start="502.27" dur="10.199">，这反过来又使它</text>
+  <text start="504.789" dur="11.12">出现在下面或其他芽现在我们的</text>
+  <text start="512.469" dur="3.44">生活也变得潜水了</text>
+  <text start="525.63" dur="8.07">但是标题 Okuda 仍然没有</text>
+  <text start="529.99" dur="8.789">阴影 ser 不要投掷任何阴影，</text>
+  <text start="533.7" dur="9.16">因为我们需要在 7 月启用它</text>
+  <text start="538.779" dur="8.49">来表示一个数组区域，并且</text>
+  <text start="542.86" dur="13.53">检查员称为影子办公室，</text>
+  <text start="547.269" dur="13.101">现在启用时间过长，因为您可以看到我们的</text>
+  <text start="556.39" dur="3.98">立方体或投掷问题，</text>
+  <text start="567.07" dur="8.26">所以让我们在实际中检查一下旧的</text>
+  <text start="570.55" dur="8.89">游戏，也许你不是什么</text>
+  <text start="575.33" dur="8.25">它看起来不太正确</text>
+  <text start="579.44" dur="7.5">的问题是阴影是</text>
+  <text start="583.58" dur="9.33">在投射阴影的精灵顶部渲染的</text>
+  <text start="586.94" dur="7.88">哦，这条线应该是可见的，</text>
+  <text start="592.91" dur="4.11">例如这里是那条线</text>
+  <text start="594.82" dur="11.13">是的，阴影应该是 显然</text>
+  <text start="597.02" dur="15.09">后面的物体被投射让我们先</text>
+  <text start="605.95" dur="8.77">修复一下我们需要做的是</text>
+  <text start="612.11" dur="9.53">改变我再次填写检查员</text>
+  <text start="614.72" dur="11.16">我们将进入立方体场景并</text>
+  <text start="621.64" dur="7.9">在可见性下选择我们的精灵</text>
+  <text start="625.88" dur="10.53">我们找到一个名为light mouse的过滤器</text>
+  <text start="629.54" dur="12.06">这是什么 确实是它找到了一个</text>
+  <text start="636.41" dur="7.8">图层，它是一个受光源影响的音符</text>
+  <text start="641.6" dur="5.24"></text>
+  <text start="644.21" dur="4.86">，例如我们想要更改该图层是第二个</text>
+  <text start="646.84" dur="5.8">重要的事情是它在</text>
+  <text start="649.07" dur="7.56">不同的图层上有一个</text>
+  <text start="652.64" dur="8.82">来自我们的光或清晰的光罩</text>
+  <text start="656.63" dur="10.89">尽管我们现在处于</text>
+  <text start="661.46" dur="11.67">安全设置 C 测试播放的层，但 ight Okuda 仍然保持在掩码 1 上，</text>
+  <text start="667.52" dur="13.74">现在阴影不再在</text>
+  <text start="673.13" dur="11.01">我们的游戏顶部结束，这很好，但是现在</text>
+  <text start="681.26" dur="5.61">我们的精灵完全</text>
+  <text start="684.14" dur="5.78">不受光源的影响，这可能或 可能</text>
+  <text start="686.87" dur="6.69">不是问题，例如，</text>
+  <text start="689.92" dur="10.42">让我们添加另一个节点，选择</text>
+  <text start="693.56" dur="10.92">他们在这里看到的声音将成为</text>
+  <text start="700.34" dur="6.18">画布调制什么先生</text>
+  <text start="704.48" dur="3.75">他们说这是一组更多的灯光所以</text>
+  <text start="706.52" dur="5.36">我的经济学家基本上有一种颜色</text>
+  <text start="708.23" dur="3.65">让我们选择深色</text>
+  <text start="717.88" dur="7.63">suplexes 所以你可以想象现在</text>
+  <text start="721.49" dur="6.87">它可能在晚上不会再</text>
+  <text start="725.51" dur="6.84">有至少一个更暗的地方在</text>
+  <text start="728.36" dur="8.94">某种工厂里，所以让</text>
+  <text start="732.35" dur="8.849">我们再次跳入游戏，我们注意到</text>
+  <text start="737.3" dur="7.649">这里所有的立方体都是黑暗人的方式，</text>
+  <text start="741.199" dur="10.651">因为 明亮的光源旁边的右侧，</text>
+  <text start="744.949" dur="15.811">以及</text>
+  <text start="751.85" dur="13.169">使这种效果变得更暗的方式，使这种效果变得</text>
+  <text start="760.76" dur="6.42">清晰，现在几乎是漆黑</text>
+  <text start="765.019" dur="4.891">一片，甚至自己或在</text>
+  <text start="767.18" dur="5.51">不应该是这种情况的光源旁边看起来都不好看，</text>
+  <text start="769.91" dur="8.94">所以我们该怎么办？  在这里做，</text>
+  <text start="772.69" dur="9.329">让我们再次将灯光设置为 D 并设置</text>
+  <text start="778.85" dur="3.169"></text>
+  <text start="789.36" dur="8.24">我们认为它是灯光的</text>
+  <text start="793.05" dur="9.51">物品颜色现在影响 Zack 上的物品也几乎眩光</text>
+  <text start="797.6" dur="8.14">，因此它影响圆形或</text>
+  <text start="802.56" dur="6.589">透明，哪个在那里，立方体</text>
+  <text start="805.74" dur="7.4">精灵哪个是 在那里</text>
+  <text start="809.149" dur="7.771">但是这个项目在这里调用清真寺与这里的</text>
+  <text start="813.14" dur="8.439">这个不同</text>
+  <text start="816.92" dur="7.69">这是在射程区域这是一个</text>
+  <text start="821.579" dur="4.801">额外的原因阴影区域这个项目</text>
+  <text start="824.61" dur="4.83">很酷的清真寺专门用于</text>
+  <text start="826.38" dur="7.29">阴影簇并且在这里你没有</text>
+  <text start="829.44" dur="9.209">设置它 到第二层应该</text>
+  <text start="833.67" dur="6.72">给我们一个结果我们有一个这是</text>
+  <text start="838.649" dur="7.711">它会变得有点奇怪的地方</text>
+  <text start="840.39" dur="9.09">因为如果我们现在做一个测试</text>
+  <text start="846.36" dur="10.2">因为阴影再次渲染在</text>
+  <text start="849.48" dur="10.859">我们跳过的精灵顶部让我们</text>
+  <text start="856.56" dur="10.64">玩 在编辑器引擎之后的左侧这里</text>
+  <text start="860.339" dur="11.431">我的意思是在右侧并</text>
+  <text start="867.2" dur="12.389">在我们几乎分层的 Saladino 设置中更改了一些东西，</text>
+  <text start="871.77" dur="10.92"></text>
+  <text start="879.589" dur="7.421">这很有趣，即使这些设置</text>
+  <text start="882.69" dur="8.85">与我们开始游戏时完全相同，</text>
+  <text start="887.01" dur="8.63">现在我们完全拥有 ef 完美的</text>
+  <text start="891.54" dur="8.549">我们希望在这些订阅中渲染阴影</text>
+  <text start="895.64" dur="7.21">不覆盖</text>
+  <text start="900.089" dur="5.31">豆芽 精灵仍然</text>
+  <text start="902.85" dur="6.479">受光源影响 即使</text>
+  <text start="905.399" dur="6.481">它的画布被调制 非常暗</text>
+  <text start="909.329" dur="5.221">立方体</text>
+  <text start="911.88" dur="6.48">非常明显 出现光源时，您</text>
+  <text start="914.55" dur="5.52">可以看到</text>
+  <text start="918.36" dur="4.56">更接近光源的立方体是我们</text>
+  <text start="920.07" dur="7.4">最亮的，所以说我们的光环被</text>
+  <text start="922.92" dur="9.72">移除了所以我相信这是一本书，</text>
+  <text start="927.47" dur="11.37">我实际上报告说有人说上帝它有</text>
+  <text start="932.64" dur="6.2">帮助是的让我知道让</text>
+  <text start="939.32" dur="10.89">我们再玩一次，只是为了让 szeliga 享受</text>
+  <text start="946.5" dur="6.29">这个项目 在那扇门上调用了 mosque 并</text>
+  <text start="950.21" dur="5.89"></text>
+  <text start="952.79" dur="4.08">在我们开始游戏时将其改回初始状态 不同的</text>
+  <text start="956.1" dur="7.38">结果</text>
+  <text start="956.87" dur="10.48">这实际上无法实现 让我们</text>
+  <text start="963.48" dur="6.11">自动化 因为那是在我们的灯光下的脚本</text>
+  <text start="967.35" dur="2.24"></text>
+  <text start="977.589" dur="3.81">让我们仍然在脚本</text>
+  <text start="986.05" dur="8.43">和就绪函数中放入阴影</text>
+  <text start="992.139" dur="8.221">Adam Cole 清真寺这是一个建筑</text>
+  <text start="994.48" dur="8.279">问题，现在让我们知道</text>
+  <text start="1000.36" dur="4.919">项目代码掩码等于一个名为掩码的影子项目，</text>
+  <text start="1002.759" dur="4.74">显然这是一条</text>
+  <text start="1005.279" dur="7.131">不应该改变任何东西的愚蠢行</text>
+  <text start="1007.499" dur="11.31">不应该有任何影响，让我们开始</text>
+  <text start="1012.41" dur="6.989">吧，它确实有效果，这就是</text>
+  <text start="1018.809" dur="3.81">我们想要</text>
+  <text start="1019.399" dur="5.89">在精灵下渲染阴影的效果</text>
+  <text start="1022.619" dur="4.97">，精灵受我们的光源影响</text>
+  <text start="1025.289" dur="5.67"></text>
+  <text start="1027.589" dur="6.281">是的，希望这会得到</text>
+  <text start="1030.959" dur="5.88">修复，这个奇怪的解决方法不是</text>
+  <text start="1033.87" dur="7.5">不再需要但现在如果你</text>
+  <text start="1036.839" dur="10.47">只是使用添加到</text>
+  <text start="1041.37" dur="9.539">你的光源的这条信号线你可以实现这种</text>
+  <text start="1047.309" dur="5.37">效果我花了很多时间试图</text>
+  <text start="1050.909" dur="3.841">弄清楚这一点也许还有</text>
+  <text start="1052.679" dur="5.071">一些方法或者我误解了</text>
+  <text start="1054.75" dur="5.779">一些如果你知道</text>
+  <text start="1057.75" dur="4.889">实现这一目标的更好方法是摆脱愚蠢的</text>
+  <text start="1060.529" dur="4.12">解决方法喜欢请让我</text>
+  <text start="1062.639" dur="10.051">知道照片时间</text>
+  <text start="1064.649" dur="10.971">信念如何计算使</text>
+  <text start="1072.69" dur="2.93">场景更好一点</text>
+  <text start="1081.66" dur="4.61">我将添加一个动画播放器</text>
+  <text start="1087.68" dur="3.39">在惊人的灯光周围移动</text>
+  <text start="1114.09" dur="48.37">灯光 定位超过</text>
+  <text start="1120.39" dur="44.4">三秒 Nexus 有点</text>
+  <text start="1162.46" dur="2.33">平滑</text>
+  <text start="1167.4" dur="7.56">哎呀没有医学意义 这动画</text>
+  <text start="1176.79" dur="8.77">很好 我们可以做的另一件事是使用</text>
+  <text start="1180.37" dur="11.81">法线贴图 所以让我们在这里进入一个立方体</text>
+  <text start="1185.56" dur="9.47">场景让我们选择精灵 注意</text>
+  <text start="1192.18" dur="6.81">，我在这里准备了一个法线贴图，</text>
+  <text start="1195.03" dur="3.96">让我们放下某些提示</text>
+  <text start="1204.83" dur="10.59">哦，现在我们有了非常漂亮的</text>
+  <text start="1209.51" dur="13.41">场景，我发现我们的立方体现在不仅投下</text>
+  <text start="1215.42" dur="11.58">了阴影，而且还受到</text>
+  <text start="1222.92" dur="6.57">光源的动态影响，</text>
+  <text start="1227" dur="9.93">社会根据</text>
+  <text start="1229.49" dur="10.28">除了面向光源外，</text>
+  <text start="1236.93" dur="6.18">灯光的位置比侧面更亮</text>
+  <text start="1239.77" dur="5.88">，在某种程度上，虽然现在看起来确实</text>
+  <text start="1243.11" dur="9.41"></text>
+  <text start="1245.65" dur="16.81">像立方体特定侧面的光源，</text>
+  <text start="1252.52" dur="12.31">这是我们的最终场景，当然</text>
+  <text start="1262.46" dur="4.53">我要去 将此上传到 github 或</text>
+  <text start="1264.83" dur="4.47">祝您好运，我们会看到您可以查看</text>
+  <text start="1266.99" dur="8.55">是否将您的</text>
+  <text start="1269.3" dur="8.67">描述添加到描述中，如果</text>
+  <text start="1275.54" dur="6.89">您希望我将来制作更多类似于此视频的视频，请告诉我</text>
+  <text start="1277.97" dur="4.46"></text>
+</transcript>
