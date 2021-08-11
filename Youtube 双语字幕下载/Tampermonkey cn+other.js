@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v8 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v9 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        8
+// @version        9
 // @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -47,6 +47,9 @@
   备忘:
     如果要把字符串保存下来, 使用: 
     downloadString(srt_string, "text/plain", file_name);
+
+  用于测试的视频: 
+    https://www.youtube.com/watch?v=JfBZfnkg1uM
 */
 (function () {
 
@@ -240,231 +243,6 @@ padding: 4px;
     body.appendChild(a);
   }
 
-
-  // 输入: url (String)
-  // 输出: SRT (Array)
-  async function auto_sub_in_chinese_fmt_json3_to_srt(url) {
-    var srt_array = []
-
-    var json = await get(url);
-    var events = json.events;
-    for (var i = 0; i < events.length; i++) {
-      const event = events[i];
-
-      if(event.segs === undefined){
-        continue
-      }
-      if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
-        continue
-      }
-
-      // 先把数据都拿到
-      var tStartMs = event.tStartMs
-      var dDurationMs = event.dDurationMs
-      var segs = event.segs
-      var text = segs.map(seg => seg.utf8).join("")
-
-      // 然后构造
-      var item = {
-        startTime: ms_to_srt(tStartMs),
-        endTime: ms_to_srt(tStartMs + dDurationMs),
-        text: text,
-
-        tStartMs: tStartMs,
-        dDurationMs: dDurationMs,
-      }
-      srt_array.push(item);
-    }
-    return srt_array
-  }
-
-  //原有的有问题的匹配代码，提出方法
-  function match_srt_old(en_auto_sub, cn_srt) {
-    // 3. 处理英文，插入到句子里, 也就是插入到 cn_srt 的每个元素里（新加一个属性叫 words)
-    var events = en_auto_sub.events;
-    for (let i = 0; i < events.length; i++) { // loop events
-      let event = events[i];
-      if (event.aAppend == 1) { // 这样的元素内部只有一个换行符，对我们没有意义，跳过
-        continue
-      }
-      var segs = event.segs
-      if (segs == undefined) { // 这样的元素也没意义，跳过
-        continue
-      }
-      var tStartMs = event.tStartMs
-      var dDurationMs = event.dDurationMs
-
-      for (let j = 0; j < segs.length; j++) { // loop segs
-        const seg = segs[j];
-        var word = seg.utf8 // 词的内容
-
-        var word_offset = seg.tOffsetMs === undefined ? 0 : seg.tOffsetMs;
-        var word_start_time = tStartMs + word_offset // 词的开始时间
-
-        for (let z = 0; z < cn_srt.length; z++) { // loop each word and put into cn_srt
-          const srt_line = cn_srt[z];
-          var line_start_time_ms = srt_line.tStartMs
-          var line_end_time_ms = srt_line.tStartMs + dDurationMs
-
-          // 如果词的开始时间，刚好处于这个句子的 [开始时间, 结束时间] 区间之内
-          if (word_start_time >= line_start_time_ms && word_start_time <= line_end_time_ms) {
-            // push 到 words 数组里
-            if (cn_srt[z].words === undefined) {
-              cn_srt[z].words = [word]
-            } else {
-              var final_word = ` ${word.trim()}` // 去掉单词本身的空格（不管有没有）然后给单词前面加一个空格
-              cn_srt[z].words.push(final_word)
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // 去除两边空格
-  function process_word(word) {
-    w = word.trim()
-    return w
-  }
-
-  function process_segs(array, event) {
-    // 如果没有 segs 也没有进一步处理的必要了，直接退出
-    if (!event['segs']) {
-        return
-    }
-    for (var i = 0; i < event['segs'].length; i++) {
-        var seg = event['segs'][i]
-        var word = process_word(seg['utf8'])
-        if (word) {
-            array.push(word)
-        }
-    }
-  }
-
-  function fmt_segs(segs) {
-    ret = []
-    for (var i = 0; i < segs.length; i++) {
-        if (i == 0) {
-            ret.push(segs[i])
-        } else {
-            ret.push(" " + segs[i])
-        }
-    }
-    return ret
-  }
-
-  function match_srt_new(en_auto_sub, cn_srt) {
-    var events = en_auto_sub.events
-
-    // 如果中英文任意一边的内容长度为 0，没啥好处理的，直接退出
-    if (cn_srt.length == 0 || events.length == 0) {
-        return
-    }
-
-    var cn_i = 0
-    var segs = []
-    var en_i = 0
-
-    for (; en_i < events.length; en_i++) { // 遍历英文的 events
-        var event = events[en_i]
-        
-        if(event.segs === undefined){
-          continue
-        }
-
-        if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
-          continue
-        }
-
-        var tStartMs = event.tStartMs
-        var dDurationMs = event.dDurationMs
-        if (tStartMs == cn_srt[cn_i].tStartMs && dDurationMs == cn_srt[cn_i].dDurationMs) {
-            if (cn_i > 0) {
-                cn_srt[cn_i-1].words = fmt_segs([...segs])
-                segs = []
-            }
-            cn_i++
-            if (cn_i == cn_srt.length) { //到达最后一个元素
-                break
-            }
-        }
-        process_segs(segs, event)
-    }
-    //process last sentence
-    segs = []
-    for (; en_i < events.length; en_i++) { 
-        var event = events[en_i]
-        process_segs(segs, event)
-    }
-    cn_srt[cn_i-1].words = fmt_segs(segs)
-  }
-
-  // 下载自动字幕的中英双语
-  // 输入: file_name: 保存的文件名
-  // 输出: 无 (会触发浏览器下载一个文件)
-  async function download_auto_subtitle(file_name) {
-    // 1. English Auto Sub in json3 format
-    var auto_sub_url = get_auto_subtitle_xml_url();
-    var format_json3_url = auto_sub_url + '&fmt=json3'
-    var en_auto_sub = await get(format_json3_url); // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/en.json
-    // console.log(en_auto_sub);
-    // downloadString(JSON.stringify(en_auto_sub), "text/plain", "english.json");
-
-    // 2. 自动字幕的翻译中文
-    var cn_url = format_json3_url + '&tlang=zh-Hans'
-    // var cn_auto_sub = await get(cn_url);
-    // downloadString(JSON.stringify(cn_auto_sub), "text/plain", "cn.json");
-
-    var cn_srt = await auto_sub_in_chinese_fmt_json3_to_srt(cn_url) // 格式参考 Youtube-Subtitle-Downloader/fmt=json3/zh-Hans.json
-
-    // match_srt_old(en_auto_sub, cn_srt)
-    match_srt_new(en_auto_sub, cn_srt) //新的匹配方法
-
-    var srt_string = auto_sub_dual_language_to_srt(cn_srt) // 结合中文和英文
-    downloadString(srt_string, "text/plain", file_name);
-  }
-
-  function auto_sub_dual_language_to_srt(srt_array) {
-    // var srt_array_item_example = {
-    //   "startTime": "00:00:06,640",
-    //   "endTime": "00:00:09,760",
-    //   "text": "在与朋友的长时间交谈中以及与陌生人的简短交谈中",
-    //   "tStartMs": 6640,
-    //   "dDurationMs": 3120,
-    //   "words": ["in", " a", " long", " conversation", " with", " a", " friend", " and", "a", " short", " chat", " with", " a", " stranger", "the", " endless", " streams"]
-    // }
-
-    var result_array = []
-    for (let i = 0; i < srt_array.length; i++) {
-      const line = srt_array[i];
-      var text = line.text + NEW_LINE + line.words.join(''); // 中文 \n 英文
-      var item = {
-        startTime: line.startTime,
-        endTime: line.endTime,
-        text: text
-      }
-      result_array.push(item)
-    }
-
-    var srt_string = object_array_to_SRT_string(result_array)
-    return srt_string
-  }
-
-  // 把毫秒转成 srt 时间
-  // 代码来源网络
-  function ms_to_srt($milliseconds) {
-    var $seconds = Math.floor($milliseconds / 1000);
-    var $minutes = Math.floor($seconds / 60);
-    var $hours = Math.floor($minutes / 60);
-    var $milliseconds = $milliseconds % 1000;
-    var $seconds = $seconds % 60;
-    var $minutes = $minutes % 60;
-    return ($hours < 10 ? '0' : '') + $hours + ':' +
-      ($minutes < 10 ? '0' : '') + $minutes + ':' +
-      ($seconds < 10 ? '0' : '') + $seconds + ',' +
-      ($milliseconds < 100 ? '0' : '') + ($milliseconds < 10 ? '0' : '') + $milliseconds;
-  }
-
   // Trigger when user select <option>
   async function download_subtitle(selector) {
     // if user select first <option>
@@ -482,45 +260,36 @@ padding: 4px;
     // 然后去拿英文，然后把英文的每个词，拿去和中文的每个句子的开始时间和结束时间进行对比
     // 如果"英文单词的开始时间"在"中文句子的开始-结束时间"区间内，那么认为这个英文单词属于这一句中文
 
+    // 2021-8-11 更新
+    // 自动字幕的改了，和完整字幕一样了。
+
     var caption = caption_array[selector.selectedIndex - 1]; // because first <option> is for display, so index-1 
     var lang_code = caption.lang_code;
     var lang_name = caption.lang_name;
 
-    // if user choose auto subtitle // 如果用户选的是自动字幕
+    // 初始化2个变量
+    var origin_url = null;
+    var translated_url = null;
+
+    // if user choose auto subtitle 
+    // 如果用户选的是自动字幕
     if (caption.lang_code == 'AUTO') {
-      var file_name = get_file_name(lang_name);
-      download_auto_subtitle(file_name);
-      selector.options[0].selected = true; // after download, select first <option>
-      return
+      origin_url = get_auto_subtitle_xml_url();
+    } else {
+      // 如果用户选的是完整字幕
+      origin_url = await get_closed_subtitle_url(lang_code)
     }
 
-    // 如果用户选的是完整字幕
-    // 原文
-    // sub mean "subtitle"
-    var sub_original_url = await get_closed_subtitle_url(lang_code)
-    var sub_original_xml = await get(sub_original_url);
+    translated_url = origin_url + '&tlang=zh-Hans'
 
-    // 中文
-    var sub_translated_url = sub_original_url + "&tlang=" + "zh-Hans"
-    var sub_translated_xml = await get(sub_translated_url);
+    var original_xml = await get(origin_url);
+    var translated_xml = await get(translated_url);
 
     // 根据时间轴融合这俩
-    var sub_original_srt = parse_youtube_XML_to_object_list(sub_original_xml)
-    var sub_translated_srt = parse_youtube_XML_to_object_list(sub_translated_xml)
-    // 'sub_original_srt' and 'sub_translated_srt' have the same length
 
-    var dual_language_srt = []
-    for (let index = 0; index < sub_original_srt.length; index++) {
-      const original = sub_original_srt[index];
-      const translated = sub_translated_srt[index];
-      var text = translated.text + NEW_LINE + original.text; // 中文 \n 英文
-      var item = {
-        startTime: original.startTime,
-        endTime: original.endTime,
-        text: text
-      }
-      dual_language_srt.push(item)
-    }
+    var original_srt = parse_youtube_XML_to_object_list(original_xml)
+    var translated_srt = parse_youtube_XML_to_object_list(translated_xml)
+    var dual_language_srt = merge_srt(original_srt, translated_srt);
 
     var srt_string = object_array_to_SRT_string(dual_language_srt)
     var title = get_file_name(lang_name);
@@ -528,6 +297,27 @@ padding: 4px;
 
     // after download, select first <option>
     selector.options[0].selected = true;
+  }
+
+  // 把两个语言的 srt 数组组合起来，
+  // 比如把英文和中文的组合起来。
+  function merge_srt(srt_A, srt_B) {
+    var dual_language_srt = [];
+
+    for (let index = 0; index < srt_A.length; index++) {
+      const element_A = srt_A[index];
+      const element_B = srt_B[index];
+
+      var text = element_B.text + NEW_LINE + element_A.text; // 中文 \n 英文
+      var item = {
+        startTime: element_A.startTime,
+        endTime: element_A.endTime,
+        text: text,
+      };
+
+      dual_language_srt.push(item);
+    }
+    return dual_language_srt;
   }
 
 
@@ -538,9 +328,10 @@ padding: 4px;
 
   // Detect if "auto subtitle" and "closed subtitle" exist
   // And add <option> into <select>
+  // 加载语言列表
   function load_language_list(select) {
     // auto
-    var auto_subtitle_exist = false;
+    var auto_subtitle_exist = false; // 自动字幕是否存在(默认 false)
 
     // closed
     var closed_subtitle_exist = false;
@@ -619,6 +410,7 @@ padding: 4px;
     });
   }
 
+  // 禁用下载按钮
   function disable_download_button() {
     $(HASH_BUTTON_ID)
       .css('border', '#95a5a6')
@@ -706,13 +498,24 @@ padding: 4px;
   // turn HTML entity back to text, example: &quot; should be "
   function htmlDecode(input) {
     var e = document.createElement('div');
-    e.class = 'dummy-element-for-tampermonkey-Youtube-Subtitle-Downloader-script-to-decode-html-entity';
+    e.class = 'dummy-element-for-tampermonkey-Youtube-cn-other-subtitle-script-to-decode-html-entity-2021-8-11';
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
   }
 
+  // 获得自动字幕的地址
   // return URL or null;
   // later we can send a AJAX and get XML subtitle
+  // 例子输出: https://www.youtube.com/api/timedtext?v=JfBZfnkg1uM&asr_langs=de,en,es,fr,it,ja,ko,nl,pt,ru&caps=asr&exp=xftt,xctw&xorp=true&xoaf=5&hl=zh-CN&ip=0.0.0.0&ipbits=0&expire=1628691971&sparams=ip,ipbits,expire,v,asr_langs,caps,exp,xorp,xoaf&signature=55984444BD75E34DB9FE809058CCF7DE5B1AB3B5.193DC32A1E0183D8D627D229C9C111E174FF56FF&key=yt8&kind=asr&lang=en
+  /*
+    如果直接访问这个地址，里面的格式是 XML，比如
+    <transcript>
+      <text start="0.589" dur="6.121">hello in this video I would like to</text>
+      <text start="3.6" dur="5.88">share what I&#39;ve learned about setting up</text>
+      <text start="6.71" dur="5.08">shadows and shadow casting and shadow</text>
+      <text start="9.48" dur="5.6">occlusion and stuff like that in a</text>
+    </transcript>
+  */
   function get_auto_subtitle_xml_url() {
     try {
       var json = get_json();
@@ -905,8 +708,21 @@ padding: 4px;
 
   // 获取当前视频的标题 (String), 比如 "How Does the Earth Move? Crash Course Geography #5"
   // https://www.youtube.com/watch?v=ljjLV-5Sa98
+  // 获取视频标题
   function get_title() {
-    return ytplayer.config.args.title;
+    // 方法1：先尝试拿到标题
+    var title_element = document.querySelector(
+      "h1.title.style-scope.ytd-video-primary-info-renderer"
+    );
+    if (title_element != null) {
+      var title = title_element.innerText;
+      // 能拿到就返回
+      if (title != undefined && title != null && title != "") {
+        return title;
+      }
+    }
+    // 方法2：如果方法1失效用这个
+    return ytplayer.config.args.title; // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
   }
 
   function get_captionTracks() {
