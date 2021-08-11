@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v9 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v10 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        9
+// @version        10
 // @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -590,15 +590,24 @@ padding: 4px;
       text = text.replace(/(<([^>]+)>)/ig, ""); // remove all html tag.
       text = htmlDecode(text);
 
-      var start = text_nodes[i].getAttribute('start'); // 开始时间
-      var end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur')); // 结束时间
+      var attr_start = text_nodes[i].getAttribute('start'); // 开始时间
+      var attr_dur = text_nodes[i].getAttribute('dur');
 
-      // 如果需要"结束时间"和下一行的"开始时间"是连续的，取消下面代码的注释
-      // if (i + 1 >= len) {
-      //   end = parseFloat(text_nodes[i].getAttribute('start')) + parseFloat(text_nodes[i].getAttribute('dur'));
-      // } else {
-      //   end = text_nodes[i + 1].getAttribute('start');
-      // }
+      var start = parseFloat(attr_start)
+      var dur = parseFloat(attr_dur)
+      var end = start + dur; // 结束时间
+
+      // 如果下一行的"开始时间", 在当前行的"结束时间"之后，那么代表这一行和下一行没有串行。屏幕上不会同时显示两行字幕。  
+      // 如果下一行的"开始时间"，早于当前行的"结束时间"，那么我们把当前行的结束时间，改为下一行的开始时间
+      var next_line_index = i + 1;
+      if (next_line_index < len) {
+        var next_line = text_nodes[next_line_index]
+        var next_line_attr_start = next_line.getAttribute('start');
+        var next_line_start = parseFloat(next_line_attr_start)
+        if (end > next_line_start){
+          end = next_line_start
+        }
+      }
 
       var start_time = process_time(parseFloat(start));
       var end_time = process_time(parseFloat(end));
