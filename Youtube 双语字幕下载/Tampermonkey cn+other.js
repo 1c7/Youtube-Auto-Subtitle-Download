@@ -7,6 +7,7 @@
 // @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
+// @license       MIT
 // @namespace  https://greasyfork.org/users/5711
 // ==/UserScript==
 
