@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v30
+// @name           Youtube Subtitle Downloader v31
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
@@ -278,19 +278,19 @@
   }
 
   // 拿完整字幕的 XML
-  async function get_closed_subtitles() {
-    var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
-    // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
-    return new Promise(function (resolve, reject) {
-      GM_xmlhttpRequest({
-        method: 'GET',
-        url: list_url,
-        onload: function (xhr) {
-          resolve(xhr.responseText)
-        }
-      })
-    })
-  }
+  // async function get_closed_subtitles() {
+  //   var list_url = 'https://video.google.com/timedtext?hl=en&v=' + get_url_video_id() + '&type=list';
+  //   // Example: https://video.google.com/timedtext?hl=en&v=if36bqHypqk&type=list
+  //   return new Promise(function (resolve, reject) {
+  //     GM_xmlhttpRequest({
+  //       method: 'GET',
+  //       url: list_url,
+  //       onload: function (xhr) {
+  //         resolve(xhr.responseText)
+  //       }
+  //     })
+  //   })
+  // }
 
   // detect if "auto subtitle" and "closed subtitle" exist
   // and add <option> into <select>
@@ -309,9 +309,14 @@
     }
 
     // does closed subtitle exists?
-    var tracks_xml_string = await get_closed_subtitles();
-    captions = new DOMParser().parseFromString(tracks_xml_string, "text/xml").getElementsByTagName('track');
-    if (captions.length != 0) {
+    // var tracks_xml_string = await get_closed_subtitles();
+    // captions = new DOMParser().parseFromString(tracks_xml_string, "text/xml").getElementsByTagName('track');
+    // if (captions.length != 0) {
+    //   closed_subtitle_exist = true;
+    // }
+
+    var captionTracks = get_captionTracks()
+    if (captionTracks.length > 0) {
       closed_subtitle_exist = true;
     }
 
@@ -345,10 +350,13 @@
 
     // if closed_subtitle_exist
     if (closed_subtitle_exist) {
-      for (var i = 0, il = captions.length; i < il; i++) {
-        caption = captions[i];
-        let lang_code = caption.getAttribute('lang_code')
-        let lang_translated = caption.getAttribute('lang_translated')
+      for (var i = 0, il = captionTracks.length; i < il; i++) {
+        var caption = captionTracks[i];
+        if (caption.kind == 'asr') {
+          continue
+        }
+        let lang_code = caption.languageCode
+        let lang_translated = caption.name.simpleText
         let lang_name = lang_code_to_local_name(lang_code, lang_translated)
         caption_info = {
           lang_code: lang_code,
@@ -486,15 +494,15 @@
   async function get_closed_subtitle(lang_code) {
     try {
       var captionTracks = get_captionTracks()
-      for (var index in captionTracks) {
-        var caption = captionTracks[index];
+      for (var i in captionTracks) {
+        var caption = captionTracks[i];
         if (caption.languageCode === lang_code && caption.kind != 'asr') {
           // 必须写 caption.kind != 'asr'
           // 否则会下载2个字幕文件（也就是这个分支会进来2次）
           // 因为 lang_code 是 "en" 会 match 2条纪录，一条是自动字幕，一条是完整字幕
           // "自动字幕"那条是 kind=asr
           // "完整字幕"那条没有 kind 属性
-          let url = captionTracks[index].baseUrl;
+          let url = captionTracks[i].baseUrl;
           let result = await get(url)
           return result
         }
@@ -580,33 +588,37 @@
     }
   }
 
-  // return player_response
-  // or return null
-  function get_json() {
-    var json = null
-    try {
-      // 如果有缓存，返回缓存
-      if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-        json = youtube_playerResponse_1c7;
-      }
-      // 尝试方法1
-      if (ytplayer.config.args.player_response) {
-        let raw_string = ytplayer.config.args.player_response;
-        json = JSON.parse(raw_string);
-      }
-      // 尝试方法2
-      if (ytplayer.config.args.raw_player_response) {
-        json = ytplayer.config.args.raw_player_response;
-      }
-      return json
-    } catch (error) {
-      return null
-    }
+  // return player_response or return null
+  // function get_json() {
+  //   var json = null
+  //   try {
+  //     // 如果有缓存，返回缓存
+  //     if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
+  //       json = youtube_playerResponse_1c7;
+  //     }
+  //     // 尝试方法1
+  //     if (ytplayer.config.args.player_response) {
+  //       let raw_string = ytplayer.config.args.player_response;
+  //       json = JSON.parse(raw_string);
+  //     }
+  //     // 尝试方法2
+  //     if (ytplayer.config.args.raw_player_response) {
+  //       json = ytplayer.config.args.raw_player_response;
+  //     }
+  //     return json
+  //   } catch (error) {
+  //     return null
+  //   }
+  // }
+
+
+  function get_youtube_data(){
+    return document.getElementsByTagName("ytd-app")[0].data.playerResponse
   }
 
   function get_captionTracks() {
-    let json = get_json();
-    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    let data = get_youtube_data();
+    var captionTracks = data.captions.playerCaptionsTracklistRenderer.captionTracks
     return captionTracks
   }
 
