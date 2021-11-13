@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v11
+// @name           Youtube 翻译中文字幕下载 v12
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        11
+// @version        12
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -244,7 +244,6 @@ padding-right: 8px;
 
     // closed
     var closed_subtitle_exist = false;
-    var captions = null;
 
     // get auto subtitle
     var auto_subtitle_url = get_auto_subtitle_xml_url();
@@ -252,76 +251,66 @@ padding-right: 8px;
       auto_subtitle_exist = true;
     }
 
-    // get closed subtitle
-    var list_url = 'https://video.google.com/timedtext?v=' + get_video_id() + '&type=list&hl=zh-CN';
-    // https://video.google.com/timedtext?v=if36bqHypqk&type=list&hl=en // 英文
-    // https://video.google.com/timedtext?v=n1zpnN-6pZQ&type=list&hl=zh-CN // 中文
+    var captionTracks = get_captionTracks()
+    if (captionTracks.length > 0) {
+      closed_subtitle_exist = true;
+    }
 
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url: list_url,
-      onload: function (xhr) {
+    // if no subtitle at all, just say no and stop
+    if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
+      select.options[0].textContent = NO_SUBTITLE;
+      disable_download_button();
+      return false;
+    }
 
-        captions = new DOMParser().parseFromString(xhr.responseText, "text/xml").getElementsByTagName('track');
-        if (captions.length != 0) {
-          closed_subtitle_exist = true;
+    // if at least one type of subtitle exist
+    select.options[0].textContent = HAVE_SUBTITLE;
+    select.disabled = false;
+
+    // if at least one type of subtitle exist
+    select.options[0].textContent = HAVE_SUBTITLE;
+    select.disabled = false;
+
+    var caption = null; // for inside loop
+    var option = null; // for <option>
+    var caption_info = null; // for our custom object
+
+    // 自动字幕
+    if (auto_subtitle_exist) {
+      var auto_sub_name = get_auto_subtitle_name()
+      var lang_name = `${auto_sub_name} 翻译成 中文`
+      caption_info = {
+        lang_code: 'AUTO', // later we use this to know if it's auto subtitle
+        lang_name: lang_name // for display only
+      };
+      caption_array.push(caption_info);
+
+      option = document.createElement('option');
+      option.textContent = caption_info.lang_name;
+      select.appendChild(option);
+    }
+
+    // if closed_subtitle_exist
+    if (closed_subtitle_exist) {
+      for (var i = 0, il = captionTracks.length; i < il; i++) {
+        var caption = captionTracks[i];
+        if (caption.kind == 'asr') {
+          continue
         }
-
-        // if no subtitle at all, just say no and stop
-        if (auto_subtitle_exist == false && closed_subtitle_exist == false) {
-          select.options[0].textContent = NO_SUBTITLE;
-          disable_download_button();
-          return false;
-        }
-
-        // if at least one type of subtitle exist
-        select.options[0].textContent = HAVE_SUBTITLE;
-        select.disabled = false;
-
-        // if at least one type of subtitle exist
-        select.options[0].textContent = HAVE_SUBTITLE;
-        select.disabled = false;
-
-        var caption = null; // for inside loop
-        var option = null; // for <option>
-        var caption_info = null; // for our custom object
-
-        // 自动字幕
-        if (auto_subtitle_exist) {
-          var auto_sub_name = get_auto_subtitle_name()
-          var lang_name = `${auto_sub_name} 翻译成 中文`
-          caption_info = {
-            lang_code: 'AUTO', // later we use this to know if it's auto subtitle
-            lang_name: lang_name // for display only
-          };
-          caption_array.push(caption_info);
-
-          option = document.createElement('option');
-          option.textContent = caption_info.lang_name;
-          select.appendChild(option);
-        }
-
-        // if closed_subtitle_exist
-        if (closed_subtitle_exist) {
-          for (var i = 0, il = captions.length; i < il; i++) {
-            caption = captions[i];
-            // console.log(caption); // <track id="0" name="" lang_code="en" lang_original="English" lang_translated="English" lang_default="true"/>
-            var lang_code = caption.getAttribute('lang_code')
-            var lang_translated = caption.getAttribute('lang_translated')
-            var lang_name = `${lang_code_to_local_name(lang_code, lang_translated)} 翻译成 中文`
-            caption_info = {
-              lang_code: lang_code, // for AJAX request
-              lang_name: lang_name, // display to user
-            };
-            caption_array.push(caption_info);
-            // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
-            option = document.createElement('option');
-            option.textContent = caption_info.lang_name;
-            select.appendChild(option);
-          }
-        }
+        let lang_code = caption.languageCode
+        let lang_translated = caption.name.simpleText
+        var lang_name = `${lang_code_to_local_name(lang_code, lang_translated)} 翻译成 中文`
+        caption_info = {
+          lang_code: lang_code, // for AJAX request
+          lang_name: lang_name, // display to user
+        };
+        caption_array.push(caption_info);
+        // 注意这里是加到 caption_array, 一个全局变量, 待会要靠它来下载
+        option = document.createElement('option');
+        option.textContent = caption_info.lang_name;
+        select.appendChild(option);
       }
-    });
+    }
   }
 
   // 处理时间. 比如 start="671.33"  start="37.64"  start="12" start="23.029"
@@ -382,8 +371,7 @@ padding-right: 8px;
   // later we can send a AJAX and get XML subtitle
   function get_auto_subtitle_xml_url() {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (typeof caption.kind === 'string' && caption.kind == 'asr') {
@@ -458,14 +446,11 @@ padding-right: 8px;
   function get_auto_subtitle_name() {
     const name = "自动字幕"
     try {
-      var json = get_json();
-      if (typeof json.captions !== "undefined") {
-        var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
-        for (var index in captionTracks) {
-          var caption = captionTracks[index];
-          if (typeof caption.kind === 'string' && caption.kind == 'asr') {
-            return captionTracks[index].name.simpleText;
-          }
+      var captionTracks = get_captionTracks()
+      for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+          return captionTracks[index].name.simpleText;
         }
       }
       return name;
@@ -593,8 +578,7 @@ padding-right: 8px;
   // Output: URL (String)
   async function get_closed_subtitle_url(lang_code) {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (caption.languageCode === lang_code && caption.kind != 'asr') {
@@ -654,22 +638,14 @@ padding-right: 8px;
     return result_array
   }
 
-  // return player_response
-  // or return null
-  function get_json() {
-    try {
-      var json = null
-      if (ytplayer.config.args.player_response) {
-        var raw_string = ytplayer.config.args.player_response;
-        json = JSON.parse(raw_string);
-      }
-      if (ytplayer.config.args.raw_player_response) {
-        json = ytplayer.config.args.raw_player_response;
-      }
-      return json
-    } catch (error) {
-      return null
-    }
+  function get_youtube_data(){
+    return document.getElementsByTagName("ytd-app")[0].data.playerResponse
+  }
+
+  function get_captionTracks() {
+    let data = get_youtube_data();
+    var captionTracks = data.captions.playerCaptionsTracklistRenderer.captionTracks
+    return captionTracks
   }
 
   // Input a language code, output that language name in current locale
