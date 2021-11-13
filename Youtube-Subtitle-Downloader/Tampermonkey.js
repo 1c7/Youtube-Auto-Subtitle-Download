@@ -300,20 +300,12 @@
 
     // closed
     var closed_subtitle_exist = false;
-    var captions = null;
 
     // get auto subtitle
     var auto_subtitle_url = get_auto_subtitle_xml_url();
     if (auto_subtitle_url != false) {
       auto_subtitle_exist = true;
     }
-
-    // does closed subtitle exists?
-    // var tracks_xml_string = await get_closed_subtitles();
-    // captions = new DOMParser().parseFromString(tracks_xml_string, "text/xml").getElementsByTagName('track');
-    // if (captions.length != 0) {
-    //   closed_subtitle_exist = true;
-    // }
 
     var captionTracks = get_captionTracks()
     if (captionTracks.length > 0) {
@@ -331,7 +323,6 @@
     select.options[0].textContent = HAVE_SUBTITLE;
     select.disabled = false;
 
-    var caption = null; // for inside loop
     var option = null; // for <option>
     var caption_info = null; // for our custom object
 
