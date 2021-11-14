@@ -343,6 +343,7 @@ padding: 4px;
       auto_subtitle_exist = true;
     }
 
+    // if there are "closed" subtitle?
     var captionTracks = get_captionTracks()
     if (captionTracks != undefined && typeof captionTracks === 'object' && captionTracks.length > 0) {
       closed_subtitle_exist = true;
