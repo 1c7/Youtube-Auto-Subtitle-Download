@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v31
+// @name           Youtube Subtitle Downloader v32
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        31
+// @version        32
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -308,7 +308,7 @@
     }
 
     var captionTracks = get_captionTracks()
-    if (captionTracks.length > 0) {
+    if (captionTracks != undefined && typeof captionTracks === 'object' && captionTracks.length > 0) {
       closed_subtitle_exist = true;
     }
 
@@ -609,7 +609,7 @@
 
   function get_captionTracks() {
     let data = get_youtube_data();
-    var captionTracks = data.captions.playerCaptionsTracklistRenderer.captionTracks
+    var captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     return captionTracks
   }
 
