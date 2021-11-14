@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 下载自动字幕 (字词级) v3
+// @name           Youtube 下载自动字幕 (字词级) v4
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        3
+// @version        4
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   （下载 .json 文件）字词级字幕仅适用于自动字幕（也就是机器用语音转文字识别出来的字幕）（完整字幕没有字词级的）下载字词级的意义是方便分句。可下载两种格式：原版 (&fmt=json3 从 Youtube 获取的原样返回) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}。 json 格式不可配合视频直接播放，需要其他软件进行进一步处理（把词拼成句子，转成 srt 格式）
@@ -468,30 +468,13 @@
     }
   }
 
-  // return player_response
-  // or return null
-  function get_json() {
-    try {
-      var json = null
-      if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-        json = youtube_playerResponse_1c7;
-      }
-      if (ytplayer.config.args.player_response) {
-        let raw_string = ytplayer.config.args.player_response;
-        json = JSON.parse(raw_string);
-      }
-      if (ytplayer.config.args.raw_player_response) {
-        json = ytplayer.config.args.raw_player_response;
-      }
-      return json
-    } catch (error) {
-      return null
-    }
+  function get_youtube_data(){
+    return document.getElementsByTagName("ytd-app")[0].data.playerResponse
   }
 
   function get_captionTracks() {
-    let json = get_json();
-    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    let data = get_youtube_data();
+    var captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     return captionTracks
   }
 
