@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v12
+// @name           Youtube 翻译中文字幕下载 v13
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2018-2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        12
+// @version        13
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
@@ -252,7 +252,7 @@ padding-right: 8px;
     }
 
     var captionTracks = get_captionTracks()
-    if (captionTracks.length > 0) {
+    if (captionTracks != undefined && typeof captionTracks === 'object' && captionTracks.length > 0) {
       closed_subtitle_exist = true;
     }
 
@@ -644,7 +644,7 @@ padding-right: 8px;
 
   function get_captionTracks() {
     let data = get_youtube_data();
-    var captionTracks = data.captions.playerCaptionsTracklistRenderer.captionTracks
+    var captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     return captionTracks
   }
 
