@@ -1,21 +1,22 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v7 (全自动下载，页面打开就下载）
+// @name           Youtube 双语字幕下载 v8 (全自动下载，页面打开就下载）
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
 // @require        https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js
-// @version        7
+// @version        8
 // @copyright      2020-2021 Cheng Zheng
 // @grant GM_xmlhttpRequest
 // @description   全自动下载，字幕格式是 "中文 \n 英语"（\n 是换行符的意思) 下载以英文优先，如果找不到"英文"就找"英文(自动识别)", 如果也找不到，就选第一门语言（比如德语法语等），此脚本**仅适合**下载字幕超级频繁的用户
+// @license       MIT
 // @namespace  https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
-  2021-8-11 说明
-  Youtube 双语字幕下载(全自动)
-  这个已经 outdated 了，我懒得修复，除非有人催。
   这个脚本只是在 "Youtube 双语字幕下载" 的基础上加了个打开页面就马上下载的功能。没有别的。
+
+  2021-11-14 说明
+  更新到了 v7，把 get_json() 去掉了，加了 get_youtube_data()
 
   写于2021-1-16
   测试视频
@@ -248,7 +249,7 @@ padding: 4px;
     var captionTracks = get_captionTracks()
 
     // 如果没有任何字幕（也没有自动字幕）
-    if (captionTracks.length == 0) {
+    if (captionTracks == undefined || typeof captionTracks != 'object' || captionTracks.length == 0) {
       return; // 直接退出
     }
 
@@ -609,7 +610,7 @@ padding: 4px;
       }]
       */
       // 如果什么字幕都没有
-      if (captionTracks.length == 0) {
+      if (captionTracks == undefined || captionTracks.length == 0) {
         select.options[0].textContent = NO_SUBTITLE;
         disable_download_button();
         return false;
@@ -822,8 +823,7 @@ padding: 4px;
   // later we can send a AJAX and get XML subtitle
   function get_auto_subtitle_xml_url() {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (typeof caption.kind === 'string' && caption.kind == 'asr') {
@@ -842,8 +842,7 @@ padding: 4px;
   function get_subtitle_tracks(lang_code) {
     var array = []
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (caption.languageCode === lang_code) {
@@ -861,8 +860,7 @@ padding: 4px;
   // Output: URL (String)
   async function get_closed_subtitle_url(lang_code) {
     try {
-      var json = get_json();
-      var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+      var captionTracks = get_captionTracks()
       for (var index in captionTracks) {
         var caption = captionTracks[index];
         if (caption.languageCode === lang_code && caption.kind != 'asr') {
@@ -972,40 +970,16 @@ padding: 4px;
   // return "English (auto-generated)" or a default name;
   function get_auto_subtitle_name() {
     try {
-      var json = get_json();
-      if (typeof json.captions !== "undefined") {
-        var captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
-        for (var index in captionTracks) {
-          var caption = captionTracks[index];
-          if (typeof caption.kind === 'string' && caption.kind == 'asr') {
-            return captionTracks[index].name.simpleText;
-          }
+      var captionTracks = get_captionTracks()
+      for (var index in captionTracks) {
+        var caption = captionTracks[index];
+        if (typeof caption.kind === 'string' && caption.kind == 'asr') {
+          return captionTracks[index].name.simpleText;
         }
       }
       return 'Auto Subtitle';
     } catch (error) {
       return 'Auto Subtitle';
-    }
-  }
-
-  // return player_response
-  // or return null
-  function get_json() {
-    try {
-      var json = null
-      if (typeof youtube_playerResponse_1c7 !== "undefined" && youtube_playerResponse_1c7 !== null && youtube_playerResponse_1c7 !== '') {
-        json = youtube_playerResponse_1c7;
-      }
-      if (ytplayer.config.args.player_response) {
-        var raw_string = ytplayer.config.args.player_response;
-        json = JSON.parse(raw_string);
-      }
-      if (ytplayer.config.args.raw_player_response) {
-        json = ytplayer.config.args.raw_player_response;
-      }
-      return json
-    } catch (error) {
-      return null
     }
   }
 
@@ -1035,9 +1009,13 @@ padding: 4px;
     return ytplayer.config.args.title;
   }
 
+  function get_youtube_data(){
+    return document.getElementsByTagName("ytd-app")[0].data.playerResponse
+  }
+
   function get_captionTracks() {
-    let json = get_json();
-    let captionTracks = json.captions.playerCaptionsTracklistRenderer.captionTracks;
+    let data = get_youtube_data();
+    var captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     return captionTracks
   }
 
