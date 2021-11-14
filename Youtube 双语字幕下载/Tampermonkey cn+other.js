@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v11 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v12 (中文+任选的一门双语,比如英语) 
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        11
+// @version        12
 // @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -344,7 +344,7 @@ padding: 4px;
     }
 
     var captionTracks = get_captionTracks()
-    if (captionTracks.length > 0) {
+    if (captionTracks != undefined && typeof captionTracks === 'object' && captionTracks.length > 0) {
       closed_subtitle_exist = true;
     }
 
@@ -665,7 +665,7 @@ padding: 4px;
 
   function get_captionTracks() {
     let data = get_youtube_data();
-    var captionTracks = data.captions.playerCaptionsTracklistRenderer.captionTracks
+    var captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     return captionTracks
   }
 
