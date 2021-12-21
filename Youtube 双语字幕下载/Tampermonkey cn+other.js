@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v12 (中文+任选的一门双语,比如英语) 
+// @name           Youtube 双语字幕下载 v13 (中文+任选的一门双语,比如英语) (v13 开始自动字幕不再支持双语，自动字幕只能下载翻译后的中文)
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        12
+// @version        13
 // @copyright      Zheng Cheng
 // @grant GM_xmlhttpRequest
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
@@ -14,7 +14,7 @@
 /*
   友情提示:
     如果本脚本不能使用，有一定概率是因为 jQuery 的 CDN 在你的网络环境下无法载入，
-    也就是以下这一句的问题：
+    就是文件顶部的这一句有问题：
     @require        https://code.jquery.com/jquery-1.12.4.min.js
 
     解决办法：去网上随便找一个 jQuery 的 CDN 地址，替换掉这个，比如
@@ -51,6 +51,25 @@
 
   用于测试的视频: 
     https://www.youtube.com/watch?v=JfBZfnkg1uM
+  
+
+  2021-12-21 把 v12 升级到 v13
+    有多名用户分别在微博，微信，邮件，greasyfork, 四个渠道向我反馈了无法使用问题。
+    此时版本是 v12
+    测试视频1
+      https://www.youtube.com/watch?v=OWaFPsVa3ig&t=16s (有1个字幕，英语(自动生成))
+      绿色下拉菜单里选择 option "中文 + 英语 (自动生成)" 的确没有任何反应，无法下载。
+      实测发现: 英文字幕长度 284行，中文字幕长度 162行，没法一一对应，所以出错了。
+    测试视频2
+      https://www.youtube.com/watch?v=3RkhZgRNC1k (有2个字幕，英语（美国），英语(自动生成))
+      如果是中文+英语（美国） 那么两个都是885行，可以正常下载
+      但是 中文+英语（自动生成），英语是937行，中文是471行。
+    结论：
+      如果是中文+完整字幕，那么长度是一一对应的。没问题
+      如果是中文+自动生成字幕，那么长度不一样，就会有问题。
+    解决办法：
+      如果是自动字幕，只下载中文。
+      完整字幕不需要做额外修改，保留现在这样就行，可以正常工作。
 */
 (function () {
 
@@ -246,6 +265,7 @@ padding: 4px;
 
   // Trigger when user select <option>
   async function download_subtitle(selector) {
+    console.log('进入download_subtitle');
     // if user select first <option>
     // we just return, do nothing.
     if (selector.selectedIndex == 0) {
@@ -276,18 +296,26 @@ padding: 4px;
     // 如果用户选的是自动字幕
     if (caption.lang_code == 'AUTO') {
       origin_url = get_auto_subtitle_xml_url();
-    } else {
-      // 如果用户选的是完整字幕
-      origin_url = await get_closed_subtitle_url(lang_code)
+      translated_url = origin_url + '&tlang=zh-Hans'
+      var translated_xml = await get(translated_url);
+      var translated_srt = parse_youtube_XML_to_object_list(translated_xml)
+      var srt_string = object_array_to_SRT_string(translated_srt)
+      var title = get_file_name(lang_name);
+      downloadString(srt_string, "text/plain", title);
+  
+      // after download, select first <option>
+      selector.options[0].selected = true;
+      return; // 别忘了 return
     }
-
+    
+    // 如果用户选的是完整字幕
+    origin_url = await get_closed_subtitle_url(lang_code)
     translated_url = origin_url + '&tlang=zh-Hans'
 
     var original_xml = await get(origin_url);
     var translated_xml = await get(translated_url);
 
     // 根据时间轴融合这俩
-
     var original_srt = parse_youtube_XML_to_object_list(original_xml)
     var translated_srt = parse_youtube_XML_to_object_list(translated_xml)
     var dual_language_srt = merge_srt(original_srt, translated_srt);
@@ -302,6 +330,7 @@ padding: 4px;
 
   // 把两个语言的 srt 数组组合起来，
   // 比如把英文和中文的组合起来。
+  // 这个函数假设两个数组的长度是一模一样的。如果不一样就会出错，比如 srt_A 是 284 个，srt_B 是 164 个元素。
   function merge_srt(srt_A, srt_B) {
     var dual_language_srt = [];
 
@@ -366,7 +395,7 @@ padding: 4px;
     // 自动字幕
     if (auto_subtitle_exist) {
       var auto_sub_name = get_auto_subtitle_name()
-      var lang_name = `中文 + ${auto_sub_name}`
+      var lang_name = `${auto_sub_name} 翻译的中文`
       caption_info = {
         lang_code: 'AUTO', // later we use this to know if it's auto subtitle
         lang_name: lang_name // for display only
