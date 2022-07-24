@@ -1,16 +1,15 @@
 // ==UserScript==
-// @name           Youtube 下载自动字幕 (字词级) v4
+// @name           Youtube 下载自动字幕 (字词级) v5
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        4
+// @version        5
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   （下载 .json 文件）字词级字幕仅适用于自动字幕（也就是机器用语音转文字识别出来的字幕）（完整字幕没有字词级的）下载字词级的意义是方便分句。可下载两种格式：原版 (&fmt=json3 从 Youtube 获取的原样返回) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}。 json 格式不可配合视频直接播放，需要其他软件进行进一步处理（把词拼成句子，转成 srt 格式）
 // @license  MIT
 // ==/UserScript==
 
-// 初次写于2021-2-21
 (function () {
   // 可配置项
   var NO_SUBTITLE = '无自动字幕';
@@ -26,41 +25,39 @@
   var youtube_playerResponse_1c7 = null; // for auto subtitle
   unsafeWindow.caption_array = []; // store all subtitle
 
-  // trigger when first load
   $(document).ready(function () {
-    start();
+    make_sure_it_load_properly_before_continue();
   });
 
-  // Explain this function: we repeatly try if certain HTML element exist, 
-  // if it does, we call init()
-  // if it doesn't, stop trying after certain time
-  function start() {
+  async function wait_until_element_exists(element_identifier) {
     var retry_count = 0;
     var RETRY_LIMIT = 30;
-    // use "setInterval" is because "$(document).ready()" still not enough, still too early
-    // 330 work for me.
-    if (new_material_design_version()) {
-      var material_checkExist = setInterval(function () {
-        if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
-          init();
-          clearInterval(material_checkExist);
-        }
-        retry_count = retry_count + 1;
-        if (retry_count > RETRY_LIMIT) {
-          clearInterval(material_checkExist);
-        }
-      }, 330);
-    } else {
-      var checkExist = setInterval(function () {
-        if ($('#watch7-headline').length) {
-          init();
-          clearInterval(checkExist);
-        }
-        retry_count = retry_count + 1;
-        if (retry_count > RETRY_LIMIT) {
-          clearInterval(checkExist);
+    return new Promise(function (resolve, reject) {
+      var intervalID = setInterval(function () {
+        try {
+          var element = document.querySelector(element_identifier);
+          if (element != null) {
+            resolve(true);
+          } else {
+            retry_count = retry_count + 1;
+            // console.log(`重试次数 ${retry_count}`);
+            if (retry_count > RETRY_LIMIT) {
+              clearInterval(intervalID);
+              reject(false);
+            }
+          }
+        } catch (error) {
+          reject(false);
         }
       }, 330);
+    });
+  }
+
+  async function make_sure_it_load_properly_before_continue() {
+    var id = new_Youtube_2022_UI_element_identifier();
+    var result = await wait_until_element_exists(id);
+    if (result) {
+      init_UI();
     }
   }
 
@@ -78,7 +75,7 @@
     // if use click to another page, init again to get correct subtitle
     if (first_load === false) {
       remove_subtitle_download_button();
-      init();
+      init_UI();
     }
   });
 
@@ -89,7 +86,7 @@
       remove_subtitle_download_button();
       var checkExist = setInterval(function () {
         if ($('#watch7-headline').length) {
-          init();
+          init_UI();
           clearInterval(checkExist);
         }
       }, 330);
@@ -128,16 +125,26 @@
     $(HASH_BUTTON_ID).remove();
   }
 
-  function init() {
-    inject_our_script();
+  // 初始化
+  function init_UI() {
+    var html_element = get_main_UI_element();
+
+    var old_anchor_element = document.getElementById("watch7-headline");
+    if (old_anchor_element != null) {
+      old_anchor_element.appendChild(html_element);
+    }
+
+    if (new_Youtube_2022_UI_element()) {
+      new_Youtube_2022_UI_element().appendChild(html_element);
+    }
+
     first_load = false;
   }
 
-  function inject_our_script() {
+  function get_main_UI_element() {
     var div = document.createElement('div'),
       select = document.createElement('select'),
-      option = document.createElement('option'),
-      controls = document.getElementById('watch7-headline'); // Youtube video title DIV
+      option = document.createElement('option');
 
     var css_div = `display: table; 
     margin-top:4px;
@@ -175,16 +182,6 @@
 
     div.appendChild(select); // put <select> into <div>
 
-    // put the div into page: new material design
-    var title_element = document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer');
-    if (title_element) {
-      $(title_element[0]).after(div);
-    }
-    // put the div into page: old version
-    if (controls) {
-      controls.appendChild(div);
-    }
-
     load_language_list(select);
 
     // <a> element is for download
@@ -193,6 +190,8 @@
     a.setAttribute("id", "ForSubtitleDownload");
     var body = document.getElementsByTagName('body')[0];
     body.appendChild(a);
+
+    return div;
   }
 
   // trigger when user select <option>
@@ -498,6 +497,17 @@
         return error
       }
     });
+  }
+
+  // 我们用这个元素判断是不是 2022 年新 UI 。
+  // return Element;
+  function new_Youtube_2022_UI_element() {
+    return document.querySelector(new_Youtube_2022_UI_element_identifier());
+  }
+
+  function new_Youtube_2022_UI_element_identifier() {
+    var document_querySelector = "#owner.item.style-scope.ytd-watch-metadata";
+    return document_querySelector;
   }
 
 })();
