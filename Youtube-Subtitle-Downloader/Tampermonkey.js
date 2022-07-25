@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v33
+// @name           Youtube Subtitle Downloader v34
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2021 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        33
+// @version        34
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   Download Subtitles
@@ -194,8 +194,9 @@
       old_anchor_element.appendChild(html_element);
     }
 
-    if (new_Youtube_2022_UI_element()) {
-      new_Youtube_2022_UI_element().appendChild(html_element);
+    var anchor = document.querySelector('#above-the-fold')
+    if (anchor) {
+      anchor.appendChild(html_element);
     }
 
     first_load = false;
