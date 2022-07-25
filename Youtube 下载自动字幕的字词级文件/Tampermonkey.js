@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           Youtube 下载自动字幕 (字词级) v5
+// @name           Youtube 下载自动字幕 (字词级) v6
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        5
+// @version        6
 // @grant GM_xmlhttpRequest
 // @namespace https://greasyfork.org/users/5711
 // @description   （下载 .json 文件）字词级字幕仅适用于自动字幕（也就是机器用语音转文字识别出来的字幕）（完整字幕没有字词级的）下载字词级的意义是方便分句。可下载两种格式：原版 (&fmt=json3 从 Youtube 获取的原样返回) 和简化版 {startTime: "开始时间(毫秒)", endTime: "结束时间(毫秒)", text: "文字"}。 json 格式不可配合视频直接播放，需要其他软件进行进一步处理（把词拼成句子，转成 srt 格式）
@@ -134,8 +134,9 @@
       old_anchor_element.appendChild(html_element);
     }
 
-    if (new_Youtube_2022_UI_element()) {
-      new_Youtube_2022_UI_element().appendChild(html_element);
+    var anchor = document.querySelector('#above-the-fold')
+    if (anchor) {
+      anchor.appendChild(html_element);
     }
 
     first_load = false;
