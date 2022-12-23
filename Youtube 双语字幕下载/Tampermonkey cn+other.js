@@ -1,85 +1,91 @@
 // ==UserScript==
-// @name           Youtube 双语字幕下载 v13 (中文+任选的一门双语,比如英语) (v13 开始自动字幕不再支持双语，自动字幕只能下载翻译后的中文)
+// @name           Youtube 双语字幕下载 v14 (中文+任选的一门双语,比如英语) (v13 开始自动字幕不再支持双语，自动字幕只能下载翻译后的中文)
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        13
+// @version        14
 // @copyright      Zheng Cheng
-// @grant GM_xmlhttpRequest
+// @grant         GM_xmlhttpRequest
+// @grant         unsafeWindow
 // @description   字幕格式是 "中文 \n 英语"（\n 是换行符的意思）
 // @license       MIT
-// @namespace  https://greasyfork.org/users/5711
+// @namespace     https://greasyfork.org/users/5711
+// @require        https://code.jquery.com/jquery-1.12.4.min.js
+// @require      https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js
 // ==/UserScript==
 
 /*
-  TODO:
-    - [ ] 升级 v13 到 v14，修复一下因为 Youtube UI 改版导致界面没按钮了。
+使用提示:
+  如果本脚本不能使用，有一定概率是因为 jQuery 的 CDN 在你的网络环境下无法载入，
+  就是文件顶部的这一句有问题：
+  @require        https://code.jquery.com/jquery-1.12.4.min.js
 
-  使用提示:
-    如果本脚本不能使用，有一定概率是因为 jQuery 的 CDN 在你的网络环境下无法载入，
-    就是文件顶部的这一句有问题：
-    @require        https://code.jquery.com/jquery-1.12.4.min.js
+  解决办法：去网上随便找一个 jQuery 的 CDN 地址，替换掉这个，比如
+  https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
+  https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
 
-    解决办法：去网上随便找一个 jQuery 的 CDN 地址，替换掉这个，比如
-    https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
-    https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
+作者联系方式:
+  QQ 1003211008
+  邮件 guokrfans@gmail.com
+  Github@1c7
 
-  作者联系方式:
-    QQ 1003211008
-    邮件 guokrfans@gmail.com
-    Github@1c7
+本脚本使用场景:
+  Tampermonkey (Chrome 上的一款插件)
+  (意思是需要安装在 Tampermonkey 里来运行)
 
-  本脚本使用场景:
-    Tampermonkey (Chrome 上的一款插件)
-    (意思是需要安装在 Tampermonkey 里来运行)
+解决什么问题：
+  下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思。
 
-  解决什么问题：
-    下载中外双语的字幕，格式是 中文 \n 外语, \n 是换行符的意思。
-  
-  术语说明：
-    auto 自动字幕
-    closed 完整字幕 (或者叫人工字幕也可以)
+术语说明：
+  auto 自动字幕
+  closed 完整字幕 (或者叫人工字幕也可以)
 
-  原理说明: 
-    对于"完整字幕", Youtube 返回的时间轴完全一致，因此只需要结合在一起即可，相对比较简单。
-    对于"自动字幕"，中文是一个个句子，英文是一个个单词，格式不同，时间轴也不同
-    因此，会基于中文的句子时间（时间轴），把英文放进去
-  
-  特别感谢:
-    ytian(tianyebj)：解决英文字幕匹配错误的问题 (https://github.com/1c7/Youtube-Auto-Subtitle-Download/pull/11)
+原理说明: 
+  对于"完整字幕", Youtube 返回的时间轴完全一致，因此只需要结合在一起即可，相对比较简单。
+  对于"自动字幕"，中文是一个个句子，英文是一个个单词，格式不同，时间轴也不同
+  因此，会基于中文的句子时间（时间轴），把英文放进去
 
-  备忘:
-    如果要把字符串保存下来, 使用: 
-    downloadString(srt_string, "text/plain", file_name);
+特别感谢:
+  ytian(tianyebj)：解决英文字幕匹配错误的问题 (https://github.com/1c7/Youtube-Auto-Subtitle-Download/pull/11)
 
-  用于测试的视频: 
-    https://www.youtube.com/watch?v=JfBZfnkg1uM
-  
+备忘:
+  如果要把字符串保存下来, 使用: 
+  downloadString(srt_string, "text/plain", file_name);
+
+用于测试的视频: 
+  https://www.youtube.com/watch?v=JfBZfnkg1uM
+
+
+版本更新日志
+  2022-12-23 把 v13 升级到 v14，因为 Youtube 又更新 UI 了。
 
   2021-12-21 把 v12 升级到 v13
-    有多名用户分别在微博，微信，邮件，greasyfork, 四个渠道向我反馈了无法使用问题。
-    此时版本是 v12
-    测试视频1
-      https://www.youtube.com/watch?v=OWaFPsVa3ig&t=16s (有1个字幕，英语(自动生成))
-      绿色下拉菜单里选择 option "中文 + 英语 (自动生成)" 的确没有任何反应，无法下载。
-      实测发现: 英文字幕长度 284行，中文字幕长度 162行，没法一一对应，所以出错了。
-    测试视频2
-      https://www.youtube.com/watch?v=3RkhZgRNC1k (有2个字幕，英语（美国），英语(自动生成))
-      如果是中文+英语（美国） 那么两个都是885行，可以正常下载
-      但是 中文+英语（自动生成），英语是937行，中文是471行。
-    结论：
-      如果是中文+完整字幕，那么长度是一一对应的。没问题
-      如果是中文+自动生成字幕，那么长度不一样，就会有问题。
-    解决办法：
-      如果是自动字幕，只下载中文。
-      完整字幕不需要做额外修改，保留现在这样就行，可以正常工作。
+  有多名用户分别在微博，微信，邮件，greasyfork, 四个渠道向我反馈了无法使用问题。
+  此时版本是 v12
+  测试视频1
+    https://www.youtube.com/watch?v=OWaFPsVa3ig&t=16s (有1个字幕，英语(自动生成))
+    绿色下拉菜单里选择 option "中文 + 英语 (自动生成)" 的确没有任何反应，无法下载。
+    实测发现: 英文字幕长度 284行，中文字幕长度 162行，没法一一对应，所以出错了。
+  测试视频2
+    https://www.youtube.com/watch?v=3RkhZgRNC1k (有2个字幕，英语（美国），英语(自动生成))
+    如果是中文+英语（美国） 那么两个都是885行，可以正常下载
+    但是 中文+英语（自动生成），英语是937行，中文是471行。
+  结论：
+    如果是中文+完整字幕，那么长度是一一对应的。没问题
+    如果是中文+自动生成字幕，那么长度不一样，就会有问题。
+  解决办法：
+    如果是自动字幕，只下载中文。
+    完整字幕不需要做额外修改，保留现在这样就行，可以正常工作。
 */
-;(function () {
+;
+(function () {
+  'use strict'
+
   // Config
   var NO_SUBTITLE = '无字幕'
   var HAVE_SUBTITLE = '下载双语字幕 (中文+外语)'
   const NEW_LINE = '\n'
   const BUTTON_ID = 'youtube-dual-lang-downloader-by-1c7-last-update-2020-12-3'
+  const anchor_element = "#above-the-fold #title";
   // Config
 
   var HASH_BUTTON_ID = `#${BUTTON_ID}`
@@ -90,46 +96,10 @@
   unsafeWindow.caption_array = [] // store all subtitle
 
   // trigger when first load
-  $(document).ready(function () {
-    start()
-  })
-
-  // Explain this function: we repeatly try if certain HTML element exist,
-  // if it does, we call init()
-  // if it doesn't, stop trying after certain time
-  function start() {
-    var retry_count = 0
-    var RETRY_LIMIT = 20
-    // use "setInterval" is because "$(document).ready()" still not enough, still too early
-    // 330 work for me.
-    if (new_material_design_version()) {
-      var material_checkExist = setInterval(function () {
-        if (
-          document.querySelectorAll(
-            '.title.style-scope.ytd-video-primary-info-renderer'
-          ).length
-        ) {
-          init()
-          clearInterval(material_checkExist)
-        }
-        retry_count = retry_count + 1
-        if (retry_count > RETRY_LIMIT) {
-          clearInterval(material_checkExist)
-        }
-      }, 330)
-    } else {
-      var checkExist = setInterval(function () {
-        if ($('#watch7-headline').length) {
-          init()
-          clearInterval(checkExist)
-        }
-        retry_count = retry_count + 1
-        if (retry_count > RETRY_LIMIT) {
-          clearInterval(checkExist)
-        }
-      }, 330)
-    }
-  }
+  // $(document).ready(function () {
+  //   console.log('开始执行??');
+  //   start()
+  // })
 
   // trigger when loading new page
   // (actually this would also trigger when first loading, that's not what we want, that's why we need to use firsr_load === false)
@@ -209,16 +179,11 @@
   //   }
   // }
 
-  function init() {
-    inject_our_script()
-    first_load = false
-  }
 
   function inject_our_script() {
     var div = document.createElement('div'),
       select = document.createElement('select'),
-      option = document.createElement('option'),
-      controls = document.getElementById('watch7-headline') // Youtube video title DIV
+      option = document.createElement('option');
 
     div.setAttribute(
       'style',
@@ -272,10 +237,9 @@ padding: 4px;
     if (title_element) {
       $(title_element[0]).after(div)
     }
-    // Put the div into page: old version
-    if (controls) {
-      controls.appendChild(div)
-    }
+
+    // 把按钮加到页面上。
+    document.querySelector(anchor_element).appendChild(div)
 
     load_language_list(select)
 
@@ -774,4 +738,42 @@ padding: 4px;
     // 方法2：如果方法1失效用这个
     return ytplayer.config.args.title // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
   }
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  // 等待一个元素存在
+  // https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists
+  function waitForElm(selector) {
+    return new Promise((resolve) => {
+      if (document.querySelector(selector)) {
+        return resolve(document.querySelector(selector))
+      }
+
+      const observer = new MutationObserver((mutations) => {
+        if (document.querySelector(selector)) {
+          resolve(document.querySelector(selector))
+          observer.disconnect()
+        }
+      })
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      })
+    })
+  }
+
+  function init() {
+    // console.log('进入 init');
+    inject_our_script()
+    first_load = false
+  }
+
+  async function main() {
+    // console.log("[开始工作] Youtube 双语字幕下载");
+    await waitForElm(anchor_element)
+    init()
+  }
+
+  setTimeout(main, 2000);
 })()
