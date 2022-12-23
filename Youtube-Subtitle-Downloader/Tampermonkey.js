@@ -24,17 +24,10 @@
   Author :  Cheng Zheng (郑诚)
   Email  :  guokrfans@gmail.com
   Github :  https://github.com/1c7/Youtube-Auto-Subtitle-Download
-  If you want to improve the script, Github pull requests are welcome.
 
 [Note for Developers]
-  Few things before you read the code:
-  0. Some comments are written in Chinese.
-  1. Youtube has 2 interfaces: Material Design and The Old Design.
+  1. Some comments are written in Chinese.
   2. This code handles both "Auto" and "Closed" subtitles.
-
-[What is "Tampermonkey"?]
-  "Tampermonkey script" means that you needs to install a browser extension called "Tampermonkey" before installing this script.
-  Tempermonkey is available for most modern web browsers, such as Chrome, Firefox, Safari, Microsoft Edge, and Opera.
 
 [Test Video]
   https://www.youtube.com/watch?v=bkVsus8Ehxs
@@ -59,15 +52,17 @@
   Works best on Chrome + Tampermonkey. 
   There are plenty Chromium-based Browser, I do not guarantee this work on all of them;
 
-个别情况下不能用是因为 jQuery 的 CDN 无法载入，解决办法是修改这一行
-// @require https://code.jquery.com/jquery-1.12.4.min.js
-改成一个别的 jQuery 地址，比如
-https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
-https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
+备注: 
+  有时候不能用，是因为 jQuery 的 CDN 无法载入，解决办法是修改这一行
+  // @require https://code.jquery.com/jquery-1.12.4.min.js
+  改成一个别的 jQuery 地址，比如
+  https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.js
+  https://cdn.staticfile.org/jquery/1.12.4/jquery.min.js
 
 更新日志
-  2022年12月23号，升级到 v35
-  常规升级。把下载的下拉框挪到了标题下面，之前太靠下了，放到了描述的下面，现在挪上面去一点。
+
+## 2022年12月23号：升级到 v35
+  常规升级。把下载框挪到标题下面，之前太靠下了（放到了描述的下面）现在挪上去一点。
 */
 
 ;(function () {
