@@ -1,73 +1,45 @@
 // ==UserScript==
-// @name           Youtube 翻译中文字幕下载 v13
+// @name           Youtube 翻译中文字幕下载 v14
+// @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
-// @copyright      2018-2021 Cheng Zheng;
-// @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
+// @license        MIT
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        13
-// @grant GM_xmlhttpRequest
-// @namespace https://greasyfork.org/users/5711
-// @description Youtube 播放器右下角有个 Auto-tranlsate，可以把视频字幕翻成中文。这个脚本是下载这个中文字幕
+// @version        14
+// @grant          GM_xmlhttpRequest
+// @grant          unsafeWindow
+// @namespace      https://greasyfork.org/users/5711
 // ==/UserScript==
 
 /*
-  作者 : 郑诚
-  新浪微博: 糖醋陈皮 https://weibo.com/u/2004104451/home?wvr=5
-  邮箱 :  guokrfans@gmail.com
-  Github: https://github.com/1c7/Youtube-Auto-Subtitle-Download
+作者: 郑诚
+邮箱:  guokrfans@gmail.com
+Github: https://github.com/1c7/Youtube-Auto-Subtitle-Download
 
-  测试视频: 
-  https://www.youtube.com/watch?v=nGlQkaoIfBI   1门语言
-  https://www.youtube.com/watch?v=O5nskjZ_GoI   13门语言
-  https://www.youtube.com/watch?v=VfEz3DIbkvo   测试自动字幕（西班牙语）
-  https://www.youtube.com/watch?v=WSnKbcfsT1E
+测试视频: 
+https://www.youtube.com/watch?v=nGlQkaoIfBI   1门语言
+https://www.youtube.com/watch?v=O5nskjZ_GoI   13门语言
+https://www.youtube.com/watch?v=VfEz3DIbkvo   测试自动字幕（西班牙语）
+https://www.youtube.com/watch?v=WSnKbcfsT1E
+
+更新日志：
+  2022-12-23 v13 -> v14
+  修复按钮不出现的问题。
 */
 
+;
 (function () {
+
   // 配置项
   const NO_SUBTITLE = '无字幕';
   const HAVE_SUBTITLE = '下载翻译的中文字幕';
   const TEXT_LOADING = '载入中...';
   const BUTTON_ID = 'youtube-translate-to-chinese-subtitle-downloader-by-1c7'
+  const anchor_element = "#above-the-fold #title";
   // 配置项
 
   var HASH_BUTTON_ID = `#${BUTTON_ID}`
   var first_load = true;
-
-  // return true / false
-  // Detect [new version UI(material design)] OR [old version UI]
-  // I tested this, accurated.
-  function new_material_design_version() {
-    var old_title_element = document.getElementById('watch7-headline');
-    if (old_title_element) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  // trigger when first load (hit refresh button)
-  $(document).ready(function () {
-    // because document ready still not enough
-    // it's still too early, we have to wait certain element exist, then execute function.
-    if (new_material_design_version()) {
-      var material_checkExist = setInterval(function () {
-        if (document.querySelectorAll('.title.style-scope.ytd-video-primary-info-renderer').length) {
-          init();
-          clearInterval(material_checkExist);
-        }
-      }, 330);
-    } else {
-      var checkExist = setInterval(function () {
-        if ($('#watch7-headline').length) {
-          init();
-          clearInterval(checkExist);
-        }
-      }, 330);
-    }
-
-  });
 
   // trigger when loading new page (actually this would also trigger when first loading, that's not what we want, that's why we need to use firsr_load === false)
   // (new Material design version would trigger this "yt-navigate-finish" event. old version would not.)
@@ -84,12 +56,7 @@
   window.addEventListener("spfdone", function (e) {
     if (current_page_is_video_page()) {
       remove_subtitle_download_button();
-      var checkExist = setInterval(function () {
-        if ($('#watch7-headline').length) {
-          init();
-          clearInterval(checkExist);
-        }
-      }, 330);
+      init();
     }
 
   });
@@ -114,32 +81,13 @@
     $(HASH_BUTTON_ID).remove();
   }
 
-  function init() {
-    unsafeWindow.caption_array = [];
-    inject_our_script();
-    first_load = false;
-  }
+
 
   function inject_our_script() {
     var div = document.createElement('div'),
       select = document.createElement('select'),
-      option = document.createElement('option'),
-      controls = document.getElementById('watch7-headline'); // Youtube video title DIV
+      option = document.createElement('option');
 
-    if (new_material_design_version()) {
-      div.setAttribute('style', `display: table;
-margin-top:4px;
-border: 1px solid rgb(0, 183, 90);
-cursor: pointer; color: rgb(255, 255, 255);
-border-top-left-radius: 3px;
-border-top-right-radius: 3px;
-border-bottom-right-radius: 3px;
-border-bottom-left-radius: 3px;
-background-color: #00B75A;
-padding: 4px;
-padding-right: 8px;
-`);
-    } else {
       div.setAttribute('style', `display: table;
 margin-top:4px;
 border: 1px solid rgb(0, 183, 90);
@@ -152,7 +100,6 @@ background-color: #00B75A;
 padding: 3px;
 padding-right: 8px;
 `);
-    }
 
     div.id = BUTTON_ID;
 
@@ -177,10 +124,9 @@ padding-right: 8px;
     if (title_element) {
       $(title_element[0]).after(div);
     }
-    // put the div into page: old version
-    if (controls) {
-      controls.appendChild(div);
-    }
+
+    // 把按钮加到页面上。
+    document.querySelector(anchor_element).appendChild(div)
 
     load_language_list(select);
 
@@ -485,10 +431,10 @@ padding-right: 8px;
     for (let index = 0; index < events.length; index++) {
       const event = events[index];
 
-      if(event.segs === undefined){
+      if (event.segs === undefined) {
         continue
       }
-      if(event.segs.length === 1 && event.segs[0].utf8 === '\n'){
+      if (event.segs.length === 1 && event.segs[0].utf8 === '\n') {
         continue
       }
 
@@ -638,7 +584,7 @@ padding-right: 8px;
     return result_array
   }
 
-  function get_youtube_data(){
+  function get_youtube_data() {
     return document.getElementsByTagName("ytd-app")[0].data.playerResponse
   }
 
@@ -673,4 +619,43 @@ padding-right: 8px;
   function get_title() {
     return ytplayer.config.args.title;
   }
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  // 等待一个元素存在
+  // https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists
+  function waitForElm(selector) {
+    return new Promise((resolve) => {
+      if (document.querySelector(selector)) {
+        return resolve(document.querySelector(selector))
+      }
+
+      const observer = new MutationObserver((mutations) => {
+        if (document.querySelector(selector)) {
+          resolve(document.querySelector(selector))
+          observer.disconnect()
+        }
+      })
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      })
+    })
+  }
+
+  function init() {
+    console.log('进入 init');
+    unsafeWindow.caption_array = [];
+    inject_our_script();
+    first_load = false;
+  }
+
+  async function main() {
+    console.log('进入 main');
+    await waitForElm(anchor_element)
+    init()
+  }
+
+  setTimeout(main, 2000);
 })();
