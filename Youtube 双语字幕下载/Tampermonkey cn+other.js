@@ -764,13 +764,11 @@ padding: 4px;
   }
 
   function init() {
-    // console.log('进入 init');
     inject_our_script()
     first_load = false
   }
 
   async function main() {
-    // console.log("[开始工作] Youtube 双语字幕下载");
     await waitForElm(anchor_element)
     init()
   }
