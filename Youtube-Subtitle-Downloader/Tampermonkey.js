@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name           Youtube Subtitle Downloader v35
+// @name           Youtube Subtitle Downloader v36
 // @description    Download Subtitles
 // @include        https://*youtube.com/*
 // @author         Cheng Zheng
 // @copyright      2009 Tim Smart; 2011 gw111zz; 2014~2023 Cheng Zheng;
 // @license        GNU GPL v3.0 or later. http://www.gnu.org/copyleft/gpl.html
 // @require        https://code.jquery.com/jquery-1.12.4.min.js
-// @version        35
+// @version        36
 // @grant          GM_xmlhttpRequest
 // @grant         unsafeWindow
 // @namespace     https://greasyfork.org/users/5711
