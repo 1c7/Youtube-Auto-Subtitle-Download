@@ -665,11 +665,11 @@
       }
     }
     // 方法2：如果方法1失效用这个
-    return ytplayer.config.args.title // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
+    return ytplayer.bootstrapPlayerResponse.videoDetails.videoId // 这个会 delay, 如果页面跳转了，这个获得的标题还是旧的
   }
 
   function get_video_id() {
-    return ytplayer.config.args.video_id
+    return ytplayer.bootstrapPlayerResponse.videoDetails.videoId
   }
 
   // Usage: var result = await get(url)
