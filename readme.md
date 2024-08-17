@@ -1,3 +1,9 @@
+## English
+no longer maintain
+
+## 中文
+不再维护，因为无法带来收益，而且我自己也没有下载字幕的需求了，没钱也没需求，所以不管了，除非情况有所改变。
+
 # Download Youtube Subtitle (auto-generated & closed)
 ## After install, it look like this:  
 ![1](img/1.jpg)          
